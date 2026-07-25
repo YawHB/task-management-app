@@ -1,0 +1,66 @@
+#TASK PATH
+get:
+  tags:
+    - Task
+  summary: 'Get all tasks'
+  description: 'Returns a list of tasks'
+  operationId: 'getTasks'
+  parameters:
+    - name: sortBy
+      in: query
+      description: 'Field to sort by'
+      schema:
+        type: string
+        enum:
+          - createdAt
+          - dueDate
+          - taskTitle
+          - priority
+          - status
+        default: createdAt
+    - name: sortOrder
+      in: query
+      description: Sort direction (ascending or descending)
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+  responses:
+    '200':
+      description: 'Tasks were successfully fetched'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: './tasks.yaml'
+    '400':
+      description: 'Bad request. Unknown sortBy or sortOrder value.'
+    '500':
+      description: 'Internal Server Error'
+post:
+  tags:
+    - Task
+  summary: 'Create a new task'
+  description: 'Create a new task and returns the added task'
+  operationId: 'addTask'
+  requestBody:
+    required: true
+    description: The new task to add
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/task-create.yaml'
+  responses:
+    '201':
+      description: 'Task was successfully created'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/task.yaml'
+    '400':
+      description: 'Bad Request. Invalid or missing request data.'
+    '500':
+      description: 'Internal Server Error'

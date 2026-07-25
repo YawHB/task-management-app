@@ -1,0 +1,41 @@
+#UPDATE-TASK SCHEMA
+
+type: object
+description: Represents a task entry
+properties: ##### What properties should be required?? :O #####
+  taskId:
+    type: string
+    format: uuid
+    description: Unique ID of the task (UUID)
+  taskTitle:
+    type: string
+    description: Title of the task
+  description:
+    type: string
+    description: Describes the task
+  status:
+    $ref: './status.yaml'
+  priority:
+    $ref: './priority.yaml'
+  dueDate:
+    type: string
+    format: date
+    example: '2026-08-31'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2026-07-15T09:30:00Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2026-07-20T09:30:00Z'
+example:
+  taskId: '550e8400-e29b-41d4-a716-446655440000'
+  taskTitle: 'Complete quarterly review report'
+  description: 'Gather inputs from all stakeholders and submit final document'
+  status: 'in-progress'
+  priority: 'high'
+  dueDate: '2026-08-31'
+  createdAt: '2026-07-15T09:30:00Z'
+  updatedAt: '2026-07-20T09:30:00Z'
+

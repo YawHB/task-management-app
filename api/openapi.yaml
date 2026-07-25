@@ -1,0 +1,23 @@
+
+#ROOT
+openapi: 3.0.0
+info:
+  title: Task Management API (Sandbox)
+  description: 'Simple API for managing tasks — learning project'
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /api/tasks:
+    $ref: './paths/tasks.yaml'
+  /api/tasks/{id}:
+    $ref: './paths/tasks-id.yaml'
+
+components:
+  schemas:
+    Task:
+      $ref: './schemas/task.yaml'
+    Status:
+      $ref: './schemas/status.yaml'
+    Priority:
+      $ref: './schemas/priority.yaml'

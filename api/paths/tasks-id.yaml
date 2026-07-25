@@ -1,0 +1,52 @@
+#TASK-ID PATH
+
+get:
+  tags:
+    - Task
+  summary: 'Get a task by id'
+  description: 'Returns a specified task based on a task id'
+  operationId: 'getTaskById'
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: 'Unique identifier of the task'
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: 'Task was successfully fetched'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/task.yaml'
+    '400':
+      description: 'Bad Request. Task with this id does not exist.'
+    '500':
+      description: 'Internal Server Error'
+put:
+  tags:
+    - Task
+  summary: 'Update a single task'
+  description: 'Updates and returns a single task'
+  operationId: 'updateTask'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/task-update.yaml'
+  responses:
+    '200':
+      description: 'Task was successfully updated'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/task.yaml'
+    '400':
+      description: 'Bad Request. Task with this id does not exist.'
+    '500':
+      description: 'Internal Server Error'
+
+

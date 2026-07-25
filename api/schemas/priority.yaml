@@ -1,0 +1,9 @@
+#PRIORITY SCHEMA
+
+  type: string
+  enum:
+    - low
+    - medium
+    - high
+    - critical
+  description: 'Importance level of the task'

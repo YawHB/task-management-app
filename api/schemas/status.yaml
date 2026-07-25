@@ -1,0 +1,9 @@
+#STATUS SCHEMA
+
+  type: string
+  enum:
+    - todo
+    - in-progress
+    - done
+    - archived
+  description: 'Current stage of the task'

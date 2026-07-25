@@ -1,0 +1,35 @@
+#CREATE-TASK SCHEMA
+
+type: object
+required:
+  - createdBy
+  - taskTitle
+  - status
+  - priority
+
+properties:
+  taskTitle:
+    type: string
+  description:
+    type: string
+  parentTaskId:
+    type: string
+    format: uuid
+    nullable: true
+  projectId:
+     type: string
+     format: uuid
+  assigneeId:
+    type: string
+    format: uuid
+    nullable: true
+  createdBy:
+      type: string
+      format: uuid
+  status:
+    $ref: '../schemas/status.yaml'
+  priority:
+    $ref: '../schemas/priority.yaml'
+  dueDate:
+    type: string
+    format: date
