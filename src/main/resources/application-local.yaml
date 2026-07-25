@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: todo-task-spring-boot-proj
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/todoapp_db
+    driver-class-name: org.postgresql.Driver
+    username: user
+    password: pass
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      # create - create tables at a startup
+      # create-drop - create tables at a startup and drop then when service is down
+      # update - only alters tables
+      # validate - does nothing except checking your java entity class fields match the schema existing
+      # none - does nothing in terms of schema creation
+    show-sql: true
+
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    # validate-on-migration checks that files haven't been edited after they were already applied via checksum
+    validate-on-migrate: true
+    # if the database schema already has tables, it would tell Flyway to mark current state as version1
+    baseline-on-migrate: true
+
+server:
+  port: 8081
