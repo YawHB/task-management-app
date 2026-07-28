@@ -1,0 +1,42 @@
+# USER GET SCHEMA
+
+type: object
+description: 'Represents a user entry retrieved from the database'
+properties:
+  userId:
+    type: string
+    format: uuid
+    description: 'Unique ID for a user (UUID)'
+  firstName:
+    type: string
+    description: 'The first name of the user'
+  lastName:
+    type: string
+    description: 'The last name of the user'
+  email:
+    type: string
+    description: 'The user''s email'
+  profilePicture:
+    type: string
+    description: 'Picture of the user. If non provided, a default avatar will replace it'
+  isDeleted:
+    type: boolean
+    description: 'A soft delete of the user which can either be set to true or false'
+  userName:
+    type: string
+  keycloakId:
+    type: string
+example:
+  userId: "550e8400-e29b-41d4-a716-446655440000"
+  firstName: "Jane"
+  lastName: "Doe"
+  email: "jane.doe@example.com"
+  profilePicture: "/uploads/users/550e8400-e29b-41d4-a716-446655440000/avatar.png"
+  isDeleted: false
+  userName: "janedoe_dev"
+  keycloakId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+
+
+
+
+

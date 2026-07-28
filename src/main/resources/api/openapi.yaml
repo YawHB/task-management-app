@@ -12,6 +12,11 @@ paths:
     $ref: './paths/tasks.yaml'
   /api/tasks/{id}:
     $ref: './paths/tasks-id.yaml'
+  /api/users/:
+    $ref: './paths/users.yaml'
+
+  /api/users:
+    $ref: './paths/users.yaml'
 
 components:
   schemas:
@@ -20,4 +25,7 @@ components:
     Status:
       $ref: './schemas/status.yaml'
     Priority:
-      $ref: './schemas/priority.yaml'
+      $ref: './schemas/task/priority.yaml'
+    User:
+      $ref: "./schemas/user/user.yaml"
+

@@ -1,0 +1,26 @@
+#USER PATH
+
+post:
+  tags:
+    - User
+  summary: 'Create a new user'
+  description: 'Create a new user and return the added user'
+  operationId: 'addUser'
+  requestBody:
+    required: true
+    description: 'The new user to add'
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/user/user.yaml'
+  responses:
+    '201':
+      description: 'User was successfully created'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/user/user.yaml'
+    '400':
+      description: 'Bad request. invalid or missing request data'
+    '500':
+      description: 'Internal Server Error'
