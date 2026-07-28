@@ -32,9 +32,9 @@ paths:
     $ref: './paths/tasks-id.yaml'
 
 #USER
-  /api/users/:
-    $ref: './paths/users.yaml'
   /api/users:
+    $ref: './paths/users.yaml'
+  /api/users/{id}:
     $ref: './paths/users-id.yaml'
 
 components:
