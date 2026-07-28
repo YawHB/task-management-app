@@ -21,9 +21,9 @@ paths:
 components:
   schemas:
     Task:
-      $ref: './schemas/task.yaml'
+      $ref: './schemas/task/task.yaml'
     Status:
-      $ref: './schemas/status.yaml'
+      $ref: './schemas/task/status.yaml'
     Priority:
       $ref: './schemas/task/priority.yaml'
     User:

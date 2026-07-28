@@ -6,8 +6,7 @@
     taskId:
       type: string
       format: uuid
-      description: Unique ID of the task (UUID)
-
+      description: 'Unique ID of the task (UUID)'
     taskTitle:
       type: string
       description: Title of the task

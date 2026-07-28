@@ -48,18 +48,18 @@ post:
   operationId: 'addTask'
   requestBody:
     required: true
-    description: The new task to add
+    description: 'The new task to add'
     content:
       application/json:
         schema:
-          $ref: '../schemas/task-create.yaml'
+          $ref: '../schemas/task/task-create.yaml'
   responses:
     '201':
       description: 'Task was successfully created'
       content:
         application/json:
           schema:
-            $ref: '../schemas/task.yaml'
+            $ref: '../schemas/task/task.yaml'
     '400':
       description: 'Bad Request. Invalid or missing request data.'
     '500':

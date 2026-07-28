@@ -20,7 +20,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/task.yaml'
+            $ref: '../schemas/task/task.yaml'
     '400':
       description: 'Bad Request. Task with this id does not exist.'
     '500':
@@ -36,14 +36,14 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/task-update.yaml'
+          $ref: '../schemas/task/task-update.yaml'
   responses:
     '200':
       description: 'Task was successfully updated'
       content:
         application/json:
           schema:
-            $ref: '../schemas/task.yaml'
+            $ref: '../schemas/task/task.yaml'
     '400':
       description: 'Bad Request. Task with this id does not exist.'
     '500':

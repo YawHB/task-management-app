@@ -27,9 +27,9 @@ properties:
       type: string
       format: uuid
   status:
-    $ref: '../schemas/status.yaml'
+    $ref: './status.yaml'
   priority:
-    $ref: '../schemas/priority.yaml'
+    $ref: './priority.yaml'
   dueDate:
     type: string
     format: date
