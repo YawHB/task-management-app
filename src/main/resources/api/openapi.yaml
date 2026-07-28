@@ -37,6 +37,10 @@ paths:
   /api/users/{id}:
     $ref: './paths/users-id.yaml'
 
+#ORGANISATION
+  /api/organisations:
+    $ref: './paths/organisations.yaml'
+
 components:
   schemas:
     Task:
