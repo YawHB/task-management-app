@@ -23,16 +23,19 @@ tags:
       #responses:
        # '200':
         #  description: OK
+
+#TASK
 paths:
   /api/tasks:
     $ref: './paths/tasks.yaml'
   /api/tasks/{id}:
     $ref: './paths/tasks-id.yaml'
+
+#USER
   /api/users/:
     $ref: './paths/users.yaml'
-
   /api/users:
-    $ref: './paths/users.yaml'
+    $ref: './paths/users-id.yaml'
 
 components:
   schemas:

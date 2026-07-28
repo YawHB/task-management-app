@@ -1,0 +1,28 @@
+
+#USER-ID PATH
+get:
+  tags:
+    - User
+  summary: 'Get a user by id'
+  description: 'Returns a specified user based on a user id'
+  operationId: 'getUserById'
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: 'Unique identifier for the user'
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+    description: 'User was successfully fetched'
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/user/user.yaml'
+    '400':
+      description: 'Bad request. Invalid user id format'
+    '500':
+      description: 'Internal Server Error'
+

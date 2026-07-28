@@ -45,7 +45,7 @@ put:
           schema:
             $ref: '../schemas/task/task.yaml'
     '400':
-      description: 'Bad Request. Task with this id does not exist.'
+      description: 'Bad Request. Invalid task id format.'
     '500':
       description: 'Internal Server Error'
 
