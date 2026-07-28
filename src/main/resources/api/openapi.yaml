@@ -2,11 +2,27 @@
 #ROOT
 openapi: 3.0.0
 info:
-  title: Task Management API (Sandbox)
-  description: 'Simple API for managing tasks — learning project'
+  title: Task Management API
+  description: "API's for our task-management application"
   version: '1.0'
 servers:
   - url: https://api.server.test/v1
+tags:
+  - name: Task
+  - name: User
+  - name: Organisation
+  - name: Project
+
+
+#paths:
+  #/api/tasks:
+   # get:
+    #  tags:
+     #   - Task
+      #summary: List tasks
+      #responses:
+       # '200':
+        #  description: OK
 paths:
   /api/tasks:
     $ref: './paths/tasks.yaml'
