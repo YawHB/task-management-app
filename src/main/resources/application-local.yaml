@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       # create - create tables at a startup
       # create-drop - create tables at a startup and drop then when service is down
       # update - only alters tables

@@ -70,6 +70,11 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.6.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -122,7 +127,52 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.23.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- ONE root spec; it $refs the domain files, so this is all you list -->
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/openapi.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>com.task-management-app.api</apiPackage>
+                            <modelPackage>com.task-management-app.api.model</modelPackage>
+                            <configOptions>
+                                <library>spring-boot</library>
+                                <!-- Generate ONLY the interface(s), not controllers -->
+                                <interfaceOnly>true</interfaceOnly>
+                                <!-- Name each interface after its tag (Todo -> TodoApi) -->
+                                <useTags>true</useTags>
+                                <!-- Spring Boot 4.x: jakarta.* imports + SB4-compatible deps -->
+                                <useSpringBoot4>true</useSpringBoot4>
+                                <!-- Spring Boot 4 ships Jackson 3; keep model imports correct -->
+                                <useJackson3>true</useJackson3>
+                                <!-- Avoids needing the jackson-databind-nullable dependency -->
+                                <openApiNullable>false</openApiNullable>
+                                <!-- jakarta.validation constraints (@NotNull, @Size, ...) on params -->
+                                <useBeanValidation>true</useBeanValidation>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                            </configOptions>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-    </build>
 
+
+
+
+    </build>
 </project>
+
+

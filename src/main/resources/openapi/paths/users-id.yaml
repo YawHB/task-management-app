@@ -16,11 +16,11 @@ get:
         format: uuid
   responses:
     '200':
-    description: 'User was successfully fetched'
-    content:
-      application/json:
-        schema:
-          $ref: '../schemas/user/user.yaml'
+      description: 'User was successfully fetched'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/user/userDTO.yaml'
     '400':
       description: 'Bad request. Invalid user id format'
     '500':

@@ -35,7 +35,7 @@ get:
           schema:
             type: array
             items:
-              $ref: './tasks.yaml'
+              $ref: '../schemas/task/task.yaml'
     '400':
       description: 'Bad request. Unknown sortBy or sortOrder value.'
     '500':

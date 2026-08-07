@@ -1,7 +1,10 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.UserApi;
+import com.task_management_app.api.model.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +22,43 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
-public class UserController {
+public class UserController implements UserApi {
 
     private final UserFacadeImpl userFacadeService;
+
+    @Override
+    public ResponseEntity<UserDTO> addUser(UserDTO userDTO) {
+        User newUser = new User();
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setProfilePicture(userDTO.getProfilePicture());
+        newUser.setDeleted(false);
+        newUser.setUsername(userDTO.getUserName());
+
+        var createdUser = userFacadeService.addUser(newUser);
+        UserDTO resolvedDTO = new UserDTO();
+        resolvedDTO.userId(createdUser.getId());
+        resolvedDTO.firstName(createdUser.getFirstName());
+        resolvedDTO.lastName(createdUser.getLastName());
+        resolvedDTO.email(createdUser.getEmail());
+        resolvedDTO.profilePicture(createdUser.getProfilePicture());
+        resolvedDTO.isDeleted(createdUser.isDeleted());
+        resolvedDTO.userName(createdUser.getUsername());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resolvedDTO);
+
+
+
+    }
+
+    @Override
+    public ResponseEntity<UserDTO> getUserById(UUID id) {
+        return null;
+    }
+
+
+   /*
 
     @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -60,6 +97,8 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    */
 }
 
 

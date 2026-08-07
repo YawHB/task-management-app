@@ -12,14 +12,14 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/user/user.yaml'
+          $ref: '../schemas/user/userDTO.yaml'
   responses:
     '201':
       description: 'User was successfully created'
       content:
         application/json:
           schema:
-            $ref: '../schemas/user/user.yaml'
+            $ref: '../schemas/user/userDTO.yaml'
     '400':
       description: 'Bad request. invalid or missing request data'
     '500':
