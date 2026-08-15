@@ -1,0 +1,17 @@
+
+#ORGANISATION SCHEMA
+
+type: object
+description: Represents a organisation entry
+properties:
+  name:
+    type: string
+    description: 'name of the organisation'
+
+    #add list of projects here as a property
+
+example:
+  name: "John's organisation"
+
+
+

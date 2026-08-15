@@ -14,15 +14,7 @@ tags:
   - name: Project
 
 
-#paths:
-  #/api/tasks:
-   # get:
-    #  tags:
-     #   - Task
-      #summary: List tasks
-      #responses:
-       # '200':
-        #  description: OK
+
 
 #TASK
 paths:
@@ -38,6 +30,8 @@ paths:
     $ref: './paths/users-id.yaml'
 
 #ORGANISATION
+  /api/organisations:
+    $ref: './paths/organisations.yaml'
   /api/organisations/{id}:
     $ref: './paths/organisations-id.yaml'
 

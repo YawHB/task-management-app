@@ -1,4 +1,4 @@
-package com.todoapp.organisation.model;
+package com.todoapp.organisation;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -20,4 +20,6 @@ public class Organisation {
 
     @NotBlank
     private String name;
+
+    private UUID creatorId;
 }

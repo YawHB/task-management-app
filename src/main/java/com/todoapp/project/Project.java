@@ -1,6 +1,6 @@
 package com.todoapp.project;
 
-import com.todoapp.organisation.model.Organisation;
+import com.todoapp.organisation.Organisation;
 import com.todoapp.tasks.model.TodoTask;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

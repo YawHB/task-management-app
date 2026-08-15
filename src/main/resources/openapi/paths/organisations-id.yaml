@@ -20,7 +20,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/organisation/organisation.yaml'
+            $ref: '../schemas/organisation/organisationDTO.yaml'
     '400':
       description: 'Bad request. Invalid organisation id format'
     '404':
