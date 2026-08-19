@@ -1,17 +1,28 @@
 
 #ORGANISATION SCHEMA
 
+
+#ORGANISATION RESPONSE SCHEMA
+
 type: object
-description: Represents a organisation entry
+description: Represents an organisation entry
 properties:
   name:
     type: string
     description: 'name of the organisation'
+  projects:
+    type: array
+    description: 'Projects belonging to the organisation'
+    items: { } # replace with ../projects/projectDTO.yaml when I have created the file
+  users:
+    type: array
+    description: 'Users belonging to the organisation'
+    items:
+      $ref: '../user/userDTO.yaml'
 
-    #add list of projects here as a property
 
 example:
   name: "John's organisation"
-
-
+  projects: [ ]
+  users: [ ]
 
