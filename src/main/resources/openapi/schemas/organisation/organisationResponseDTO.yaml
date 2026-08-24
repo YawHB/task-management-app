@@ -1,0 +1,29 @@
+
+#ORGANISATION RESPONSE SCHEMA
+
+type: object
+description: 'Represents a detailed overview of an organisation entry '
+properties:
+  organisationId:
+    type: string
+    format: uuid
+    description: 'Unique ID for an Organisation'
+  name:
+    type: string
+    description: 'name of the organisation'
+  projects:
+    type: array
+    description: 'Projects belonging to the organisation'
+    items: { } # replace with ../projects/projectDTO.yaml when I have created the file
+  users:
+    type: array
+    description: 'Users belonging to the organisation'
+    items:
+      $ref: '../user/userDTO.yaml'
+
+
+example:
+  name: "John's organisation"
+  projects: [ ]
+  users: [ ]
+

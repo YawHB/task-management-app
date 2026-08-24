@@ -6,7 +6,7 @@ info:
   description: "API's for our task-management application"
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
+  - url: 'http://localhost:8081'
 tags:
   - name: Task
   - name: User
