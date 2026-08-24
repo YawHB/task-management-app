@@ -1,6 +1,6 @@
 package com.todoapp.project;
 
-import com.todoapp.organisation.Organisation;
+
 import com.todoapp.tasks.model.TodoTask;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -29,9 +29,11 @@ public class Project {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    //TODO - the Organisation entity is not accessible in other packages. consider using the org's ID instead
+    /*@ManyToOne
     @JoinColumn(name ="organisation_id", nullable = false)
     private Organisation organisation;
+     */
 
     @OneToMany(mappedBy = "project")
     private List<TodoTask> tasks;
