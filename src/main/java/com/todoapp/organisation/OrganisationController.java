@@ -29,9 +29,15 @@ import java.util.UUID;
 
     @Override
     public ResponseEntity<OrganisationDTO> getOrganisationById(UUID id) {
-        return null;
+        OrganisationDTO organisationDTO = organisationFacade.findOrganisationById(id);
+        return ResponseEntity.ok(organisationDTO);
     }
 }
+
+
+
+
+
 
 
 

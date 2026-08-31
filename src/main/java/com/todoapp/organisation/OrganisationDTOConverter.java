@@ -4,7 +4,7 @@ import com.task_management_app.api.model.OrganisationDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrganisationDTOConverter {
+ class OrganisationDTOConverter {
 
     public Organisation toEntity(OrganisationDTO organisationDTO) {
         Organisation organisation = new Organisation();
