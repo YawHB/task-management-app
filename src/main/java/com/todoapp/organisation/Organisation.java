@@ -23,8 +23,4 @@ import java.util.UUID;
     private String name;
 
     private UUID creatorId;
-
-    private List<UUID> projectIds;
-
-
 }

@@ -33,6 +33,11 @@ paths:
   /api/organisations/{id}:
     $ref: './paths/organisations-id.yaml'
 
+  #PROJECT
+  /api/projects:
+    $ref: './paths/projects.yaml'
+
+
 components:
   schemas:
     Task:
@@ -43,4 +48,5 @@ components:
       $ref: './schemas/task/priority.yaml'
     User:
       $ref: "./schemas/user/userDTO.yaml"
+
 
