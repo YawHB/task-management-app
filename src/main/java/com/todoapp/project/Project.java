@@ -35,6 +35,8 @@ public class Project {
     private Organisation organisation;
      */
 
+    private UUID organisationId;
+
     @OneToMany(mappedBy = "project")
     private List<TodoTask> tasks;
 

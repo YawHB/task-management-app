@@ -14,8 +14,6 @@ tags:
   - name: Project
 
 
-
-
 #TASK
 paths:
   /api/tasks:
