@@ -4,7 +4,6 @@ import com.task_management_app.api.model.OrganisationDTO;
 //import com.task_management_app.api.model.Organisation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
