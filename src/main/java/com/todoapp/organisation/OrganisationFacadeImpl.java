@@ -1,11 +1,10 @@
 package com.todoapp.organisation;
 
 import com.task_management_app.api.model.OrganisationDTO;
-//import com.task_management_app.api.model.Organisation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,8 +19,7 @@ import java.util.UUID;
     @Override
     public Organisation addOrganisation(OrganisationDTO organisationDTO) {
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the repository to save an organisation object");
-        //  return organisationRepository.save((organisationDTO));
-        com.todoapp.organisation.Organisation organisation = organisationDTOConverter.toEntity(organisationDTO);
+        Organisation organisation = organisationDTOConverter.toEntity(organisationDTO);
         return organisationRepository.save(organisation);
     }
 
@@ -32,6 +30,12 @@ import java.util.UUID;
             return organisationDTOConverter.toDTO(organisation.get());
         }
         throw new RuntimeException();
+    }
+
+    @Override
+    public boolean existsById(UUID organisationId) {
+        Optional<Organisation> exists = organisationRepository.findById(organisationId);
+        return exists.isPresent();
     }
 }
 
