@@ -17,9 +17,9 @@ properties:
     description: 'name of the project'
   createdAt:
     type: string
-    format: date
-    description: 'Creation date'
-    example: '2026-01-01'
+    format: date-time
+    description: 'Creation date and time'
+    example: '2026-01-01T14:30:00'
   users:
     type: array
     description: 'Users assigned to the project'

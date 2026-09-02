@@ -31,15 +31,6 @@ public class ProjectDTOConverter {
         projectDTO.setName(project.getName());
        //projectDTO.setCreatedAt(project.getCreatedAt());
         return projectDTO;
-
-        /*
-        project id
-        org id
-        name
-        createdAt
-        users
-         */
-
     }
 }
 

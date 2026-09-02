@@ -1,7 +1,5 @@
 package com.todoapp.project;
 
-
-import com.todoapp.tasks.model.TodoTask;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -30,8 +27,4 @@ public class Project {
     private LocalDateTime createdAt;
 
     private UUID organisationId;
-
-
-
-
 }
