@@ -18,7 +18,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/project/projectDTO.yaml'
+          $ref: '../schemas/project/ProjectPost.yaml'
 
   responses:
     '201':
