@@ -2,6 +2,7 @@ package com.todoapp.organisation;
 
 import com.task_management_app.api.OrganisationApi;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.exceptions.OrganisationNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @Slf4j
- class OrganisationController implements OrganisationApi {
+class OrganisationController implements OrganisationApi {
 
     private OrganisationFacade organisationFacade;
     private OrganisationDTOConverter organisationDTOConverter;
@@ -29,21 +30,12 @@ import java.util.UUID;
 
     @Override
     public ResponseEntity<OrganisationDTO> getOrganisationById(UUID id) {
-        OrganisationDTO organisationDTO = organisationFacade.findOrganisationById(id);
-        return ResponseEntity.ok(organisationDTO);
+        try {
+            OrganisationDTO organisationDTO = organisationFacade.findOrganisationById(id);
+            return ResponseEntity.ok(organisationDTO);
+        } catch (OrganisationNotFoundException exception) {
+            log.error("[getOrganisationById] - " + exception.getMessage());
+            return ResponseEntity.notFound().build();
+        }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
