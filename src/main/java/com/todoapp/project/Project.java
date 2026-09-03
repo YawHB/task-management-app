@@ -1,7 +1,5 @@
 package com.todoapp.project;
 
-
-import com.todoapp.tasks.model.TodoTask;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -26,19 +23,8 @@ public class Project {
     @NotBlank(message = "Project name must be specified")
     private String name;
 
-    @CreationTimestamp
+   @CreationTimestamp
     private LocalDateTime createdAt;
 
-    //TODO - the Organisation entity is not accessible in other packages. consider using the org's ID instead
-    /*@ManyToOne
-    @JoinColumn(name ="organisation_id", nullable = false)
-    private Organisation organisation;
-     */
-
     private UUID organisationId;
-
-    @OneToMany(mappedBy = "project")
-    private List<TodoTask> tasks;
-
-
 }

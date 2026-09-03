@@ -13,4 +13,7 @@ public interface OrganisationFacade  {
 
     OrganisationDTO findOrganisationById(UUID id);
 
+   boolean existsById(UUID organisationId);
+
+
 }

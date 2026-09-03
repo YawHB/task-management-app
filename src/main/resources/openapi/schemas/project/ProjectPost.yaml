@@ -1,0 +1,19 @@
+#PROJECT POST SCHEMA
+
+type: object
+description: 'Represents a post project request'
+required:
+  - name
+properties:
+  #organisationId:
+   #format: uuid
+    #description: 'The id of the organisation, the project belongs to'
+
+  name:
+    type: string
+    description: 'name of the project'
+example:
+  name: "John's project 1"
+  #organisationId: "bd241a86-baea-488b-8f62-4cd4d931c588"
+
+

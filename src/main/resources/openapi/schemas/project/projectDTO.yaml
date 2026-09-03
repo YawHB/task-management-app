@@ -1,0 +1,36 @@
+
+#PROJECT RESPONSE SCHEMA
+
+type: object
+description: 'Represents a detailed overview of a project entry'
+properties:
+  projectId:
+    type: string
+    format: uuid
+    description: 'Unique ID for a Project'
+  organisationId:
+    type: string
+    format: uuid
+    description: 'The organisation ID which the project resides in'
+  name:
+    type: string
+    description: 'name of the project'
+  createdAt:
+    type: string
+    format: date-time
+    description: 'Creation date and time'
+    example: '2026-01-01T14:30:00'
+  users:
+    type: array
+    description: 'Users assigned to the project'
+    items:
+      $ref: '../user/userDTO.yaml'
+
+example:
+  #Add id and description in example
+  projectId: "100e8400-e29b-41d4-a716-446655440011"
+  organisationId: "550e8400-e29b-41d4-a716-446655440000"
+  name: "John's project 1"
+  createdAt: '2026-01-01'
+  users: [ ]
+
