@@ -1,9 +1,10 @@
 package com.todoapp.organisation;
 
 import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.OrganisationNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,12 +25,12 @@ import java.util.UUID;
     }
 
     @Override
-    public OrganisationDTO findOrganisationById(UUID id) {
+    public OrganisationDTO findOrganisationById(UUID id) throws OrganisationNotFoundException {
         Optional<Organisation> organisation = organisationRepository.findById(id);
         if (organisation.isPresent()) {
             return organisationDTOConverter.toDTO(organisation.get());
         }
-        throw new RuntimeException(); //TODO create Exception handling
+        throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
 
     @Override
