@@ -29,7 +29,7 @@ import java.util.UUID;
         if (organisation.isPresent()) {
             return organisationDTOConverter.toDTO(organisation.get());
         }
-        throw new RuntimeException();
+        throw new RuntimeException(); //TODO create Exception handling
     }
 
     @Override
