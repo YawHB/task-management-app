@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,5 +18,9 @@ import java.util.UUID;
                 " VALUES (:activeSince, :id, :organisationId, :userId)", nativeQuery = true)
  void addUserToOrganisation(LocalDateTime activeSince, UUID id, UUID organisationId, @Valid UUID userId);
 
- //boolean userExistInOrganisation(UUID orgId, UUID userId);  //TODO - need custom query to find if a user already exist in organisations_users
+ @Query(value = "SELECT COUNT (*) > 0 FROM organisations_users " +
+                "WHERE organisations_users.organisation_id = :orgId " +
+                "AND organisations_users.user_id = :userId",
+                nativeQuery = true)
+ boolean userExistInOrganisation(@Param("orgId") UUID orgId,@Param("userId") UUID userId);
 }

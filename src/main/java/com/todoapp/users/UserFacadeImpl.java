@@ -1,6 +1,8 @@
 package com.todoapp.users;
 
 import com.task_management_app.api.model.UserDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ import java.util.UUID;
             return userDTOConverter.toDTO(foundUser.get());
         }
         log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
-        return null; //TODO Add exception handling
+        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
     }
 }
 

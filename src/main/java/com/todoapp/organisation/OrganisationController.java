@@ -43,8 +43,17 @@ class OrganisationController implements OrganisationApi {
 
     @Override
     public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
+        try{
         log.info("[OrganisationController - addUserToOrganisation] - Calling org facade ");
          UserDTO addedUser = organisationFacade.addUserToOrganisation(id, userEmail);
          return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
+        } catch (UserExistsInOrganisationException exception) {
+            log.error("[addUserToOrganisation] - " +exception.getMessage() );
+            return ResponseEntity.badRequest().build();
+        } catch (UserNotFoundException exception) {
+            log.error("[addUserToOrganisation - ] " + exception.getMessage());
+            return ResponseEntity.badRequest().build();
+
+        }
     }
 }
