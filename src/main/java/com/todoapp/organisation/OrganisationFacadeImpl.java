@@ -4,6 +4,7 @@ import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptions.UserExistsInOrganisationException;
 import com.todoapp.users.UserFacade;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.UUID;
     private OrganisationDTOConverter organisationDTOConverter;
     private UserFacade userFacade;
 
-    @Override
+
     public Organisation addOrganisation(OrganisationDTO organisationDTO) {
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the repository to save an organisation object");
         Organisation organisation = organisationDTOConverter.toEntity(organisationDTO);

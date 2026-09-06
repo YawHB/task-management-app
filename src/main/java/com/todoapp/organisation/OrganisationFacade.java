@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public interface OrganisationFacade  {
 
-    Organisation addOrganisation(OrganisationDTO organisationDTO);
-
     OrganisationDTO findOrganisationById(UUID id) throws OrganisationNotFoundException;
 
    boolean existsById(UUID organisationId);
