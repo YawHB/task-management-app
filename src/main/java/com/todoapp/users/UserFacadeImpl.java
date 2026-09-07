@@ -1,5 +1,6 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.model.OrganisationDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
  class UserFacadeImpl implements UserFacade {
 
     private final UserRepository userRepository;
+    private final UserDTOConverter userDTOConverter;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -27,6 +29,10 @@ import java.util.UUID;
 
      public void deleteTask(UUID id) {
         userRepository.deleteById(id);
+    }
+
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+        return userDTOConverter.toDTOList(userRepository.findOrganisationsByUserId(userId));
     }
 }
 

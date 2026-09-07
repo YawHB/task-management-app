@@ -1,6 +1,7 @@
 package com.todoapp.users;
 
 import com.task_management_app.api.UserApi;
+import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class UserController implements UserApi {
 
     private final UserFacadeImpl userFacadeService;
+    private final UserFacadeImpl userService;
     private final UserDTOConverter userDTOConverter;
 
     @Override
@@ -24,12 +26,16 @@ public class UserController implements UserApi {
 
         User createdUser = userFacadeService.addUser(userDTOConverter.toEntity(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body( userDTOConverter.toDTO(createdUser));
-
     }
 
     @Override
     public ResponseEntity<UserDTO> getUserById(UUID id) {
         return null;
+    }
+
+    @Override
+    public ResponseEntity<List<OrganisationDTO>> getOrganisationByUserId(UUID userId) {
+       return ResponseEntity.status(HttpStatus.OK).body( userService.getOrganisationsByUserId(userId));
     }
 
 

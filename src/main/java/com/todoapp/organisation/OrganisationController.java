@@ -2,6 +2,7 @@ package com.todoapp.organisation;
 
 import com.task_management_app.api.OrganisationApi;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.OrganisationNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,11 @@ class OrganisationController implements OrganisationApi {
         Organisation organisation = organisationFacade.addOrganisation(organisationDTO);
         log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
         return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTOConverter.toDTO(organisation));
+    }
+
+
+    public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
+        return null;
     }
 
     @Override

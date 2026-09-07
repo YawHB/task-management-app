@@ -1,7 +1,12 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
+import com.todoapp.users.repository.OrganisationProjection;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserDTOConverter {
@@ -28,5 +33,16 @@ public class UserDTOConverter {
         userDTO.userName(user.getUsername());
 
         return userDTO;
+    }
+
+    public List<OrganisationDTO> toDTOList(List<OrganisationProjection>  projections){
+        List<OrganisationDTO> organisationDTOList = new ArrayList<>();
+        for(OrganisationProjection projection : projections) {
+            OrganisationDTO dto = new OrganisationDTO();
+            dto.setOrganisationId(projection.getOrganisationId());
+            dto.setName(projection.getOrganisationName());
+            organisationDTOList.add(dto);
+        }
+        return organisationDTOList;
     }
 }
