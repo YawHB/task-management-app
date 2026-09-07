@@ -26,6 +26,8 @@ paths:
     $ref: './paths/users.yaml'
   /api/users/{id}:
     $ref: './paths/users-id.yaml'
+  /api/users/{user-id}/organisations:
+    $ref: './paths/users-user-id-organisations.yaml'
 
 #ORGANISATION
   /api/organisations:
