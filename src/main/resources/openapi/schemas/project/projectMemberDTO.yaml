@@ -1,0 +1,16 @@
+# POST PROJECT-MEMBER SCHEMA
+type: object
+required:
+  - projectName
+  - email
+properties:
+  projectName:
+    type: string
+  email:
+    type: string
+    format: email
+
+example:
+  projectName: 'My project'
+  email: 'member@mail.com'
+
