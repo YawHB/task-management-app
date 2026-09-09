@@ -2,10 +2,12 @@ package com.todoapp.project;
 
 
 import com.task_management_app.api.ProjectApi;
+import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptions.UserAlreadyInProjectException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,8 @@ import java.util.UUID;
 @Slf4j
 public class ProjectController implements ProjectApi {
 
-    ProjectFacade projectFacade;
+    private final ProjectFacade projectFacade;
+    private final ProjectFacadeImpl projectService;
 
     @Override
     public ResponseEntity<ProjectDTO> addProject(UUID organisationId, ProjectPost ProjectPost) {
@@ -33,7 +36,20 @@ public class ProjectController implements ProjectApi {
             log.error("[ProjectController - addProject] - " + exception.getMessage());
             return ResponseEntity.badRequest().build();
         }
+    }
 
+    @Override
+    public ResponseEntity<ProjectMemberDTO> addProjectMember( UUID organisationId, ProjectMemberDTO projectMemberDTO) {
+        try{
+            log.info("[ProjectController - addProjectMember] - calling projectService with org id and ");
+        ProjectMemberDTO pmDto = projectService.addProjectMember(organisationId, projectMemberDTO);
+        log.info("[ProjectController - addProjectMember] - return a 201 status response to client. user added to project");
+        return ResponseEntity.status(HttpStatus.CREATED).body(pmDto);
+        } catch (UserAlreadyInProjectException exception) {
+            log.error("[ProjectController - addProjectMember] - returns a 409 status response. conflict"
+                    + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }
 
