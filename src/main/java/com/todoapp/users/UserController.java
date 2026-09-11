@@ -1,6 +1,7 @@
 package com.todoapp.users;
 
 import com.task_management_app.api.UserApi;
+import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -47,10 +48,13 @@ public class UserController implements UserApi {
         resolvedDTO.userName(createdUser.getUsername());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(resolvedDTO);
-
-
-
     }
+
+   /* @Override
+    public ResponseEntity<List<OrganisationDTO>> getOrganisationByUserId(UUID userId) {
+        return null;
+    }
+    */
 
     @Override
     public ResponseEntity<UserDTO> getUserById(UUID id) {
