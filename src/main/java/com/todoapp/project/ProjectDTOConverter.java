@@ -34,6 +34,13 @@ public class ProjectDTOConverter {
         projectDTO.setCreatedAt(offsetDateTime);
         return projectDTO;
     }
+
+    public ProjectDTO toDTOFromList(ProjectSummaryProjection project) { //PREPLY - I dont like duplication and name of method
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setProjectId(project.getId());
+        projectDTO.setName(project.getName());
+        return projectDTO;
+    }
 }
 
 
