@@ -24,7 +24,13 @@ import java.util.UUID;
         return userRepository.findAll();
     }
 
-     public Optional<User> findUserById(UUID id) {
+    @Override
+    public boolean existById(UUID userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.isPresent();
+    }
+
+    public Optional<User> findUserById(UUID id) {
         return userRepository.findById(id);
     }
 

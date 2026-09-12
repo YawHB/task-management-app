@@ -27,4 +27,12 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
                    " VALUES (:projectId, :userId)",
                    nativeQuery = true)
     void saveProjectUser(UUID projectId, UUID userId);
+
+
+    @Modifying
+    @Query(value = "DELETE FROM projects_users " +
+                   "WHERE project_id = :projectId " +
+                   "AND user_id = :userId",
+                    nativeQuery = true)
+    void removeUserFromProject(UUID projectId, UUID userId);
 }

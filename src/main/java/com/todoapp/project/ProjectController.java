@@ -56,4 +56,10 @@ public class ProjectController implements ProjectApi {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @Override
+    public ResponseEntity<Void> removeProjectUser(UUID organisationId, UUID projectId, UUID userId)  {
+        projectService.removeProjectUser(organisationId, projectId, userId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -77,7 +77,23 @@ public class ProjectFacadeImpl implements ProjectFacade{
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project not found - throwing PROJECT NOT FOUND IN ORG exception");
         throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
       }
+
+      @Transactional
+    public void removeProjectUser(UUID organisationId, UUID projectId, UUID userId) {
+//TODO - needs exception handling for all three scenarios
+            boolean organisationExist = organisationFacade.existsById(organisationId);
+            boolean projectExist = this.existById(projectId);
+            boolean userExist = userFacade.existById(userId);
+
+          projectRepository.removeUserFromProject(projectId, userId);
     }
+
+    @Override
+    public boolean existById(UUID projectId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        return project.isPresent();
+    }
+}
 
 
 
