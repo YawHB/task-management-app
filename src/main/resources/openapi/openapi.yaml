@@ -34,7 +34,7 @@ paths:
     $ref: './paths/organisations-id.yaml'
 
   #PROJECT
-  /api/projects/{organisationId}:
+  /api/organisations/{organisationId}/projects:
     $ref: './paths/projects.yaml'
 
 

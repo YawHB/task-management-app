@@ -1,5 +1,39 @@
 # PROJECT PATH
 
+get:
+  tags:
+    - Project
+  summary: 'Get all the projects assigned to a member, within a given organisation'
+  operationId: getProjectsForMemberInOrganisation
+  parameters:
+    - name: organisationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        description: 'Id of the current organisation'
+    - name: userId
+      in: query
+      required: true
+      schema:
+        type: string
+        format: uuid
+        description: 'Id of the member sending the request'
+  responses:
+    '200':
+      description: 'Projects for member fetched successfully'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../schemas/project/projectDTO.yaml'
+    '404':
+      description: 'Organisation or user not found'
+    '409':
+      description: 'User not member of organisation'
+
 post:
   tags:
     - Project
