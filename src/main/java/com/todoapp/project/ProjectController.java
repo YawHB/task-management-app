@@ -5,10 +5,7 @@ import com.task_management_app.api.ProjectApi;
 import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptions.UserAlreadyInProjectException;
-import com.todoapp.exceptions.UserProjectConflictException;
+import com.todoapp.exceptions.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,5 +52,18 @@ public class ProjectController implements ProjectApi {
                     + exception.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteProject(UUID id) {
+        try{
+        projectService.deleteProject(id);
+            log.info("[ProjectController - deleteProject] - calling projectService");
+        } catch (ProjectNotFoundException exception) {
+            log.error("[ProjectController - deleteProject] - Returns a 404 project not found❌");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        log.info("[ProjectController - deleteProject] - Project deleted. Returns 204 project deleted✅");
+        return ResponseEntity.noContent().build();
     }
 }
