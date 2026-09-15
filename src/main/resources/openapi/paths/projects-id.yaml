@@ -1,0 +1,25 @@
+# #PROJECT-ID PATH
+
+delete:
+  tags:
+    - Project
+  summary: 'Delete a project by id'
+  operationId: 'deleteProject'
+  parameters:
+    - name: projectId
+      in: path
+      required: true
+      description: 'Unique identifier of the project to be deleted'
+      schema:
+        type: string
+        format: uuid
+
+
+  responses:
+    '204':
+      description: 'Project was successfully deleted'
+    '404':
+      description: 'The project you requested does not exist'
+
+
+
