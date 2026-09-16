@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -20,5 +21,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +
             "WHERE ou.user_id = :userId",
             nativeQuery = true)
+
     List<OrganisationProjection> findOrganisationsByUserId(@Param("userId")UUID userId);
+    Optional<User> findByEmail(String userEmail);
 }
