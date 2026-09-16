@@ -6,7 +6,6 @@ import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
 import com.todoapp.exceptions.*;
-import com.todoapp.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptions.UserNotMemberOfOrganisationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +41,7 @@ public class ProjectController implements ProjectApi {
 
 
     @Override
-    public ResponseEntity<List<ProjectDTO>> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
+    public ResponseEntity<List<ProjectDTO>> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId){
         log.info("[ProjectController - getProjectsForMemberInOrganisation] - calling projectService with org id and user id");
         try{
         List<ProjectDTO> projects = projectService.getProjectsForMemberInOrganisation(organisationId, userId);
