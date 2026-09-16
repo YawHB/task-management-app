@@ -1,5 +1,9 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.UserNotFoundException;
+import com.todoapp.organisation.OrganisationFacade;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.UserNotFoundException;
@@ -18,7 +22,6 @@ import java.util.UUID;
 
     private final UserRepository userRepository;
     private final UserDTOConverter userDTOConverter;
-
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -46,6 +49,13 @@ import java.util.UUID;
 
     public void deleteTask(UUID id) {
         userRepository.deleteById(id);
+    }
+
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+
+      userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
+
+        return userDTOConverter.toDTOList(userRepository.findOrganisationsByUserId(userId));
     }
 }
 
