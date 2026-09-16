@@ -42,6 +42,8 @@ paths:
   #PROJECT
   /api/projects/{organisationId}:
     $ref: './paths/projects.yaml'
+  /api/organisations/{organisationId}/projects/{projectId}/users/{userId}:
+    $ref: './paths/projects-id-users-id.yaml'
 
 
 components:

@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface ProjectFacade {
 
     ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException;
+    boolean existById(UUID projectId);
    // ProjectDTO getProjectByName(String name);
 
 

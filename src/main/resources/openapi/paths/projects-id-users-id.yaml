@@ -1,0 +1,38 @@
+#PROJECT-ID-USER-ID PATH
+
+delete:
+  tags:
+    - Project
+  summary: 'Removes a member from project'
+  description: 'Removes a member from the list of users of a given project'
+  operationId: 'removeProjectUser'
+  parameters:
+    - name: organisationId
+      in: path
+      required: true
+      description: 'The id of the organisation, with which the project exist'
+      schema:
+        type: string
+        format: uuid
+    - name: projectId
+      in: path
+      required: true
+      description: 'The id of the project, the user will be removed from'
+      schema:
+        type: string
+        format: uuid
+    - name: userId
+      in: path
+      required: true
+      description: 'The id of the member that is being removed from the project'
+      schema:
+        type: string
+        format: uuid
+
+  responses:
+    '204':
+      description: 'Successfully removed user from project'
+    '404':
+      description: 'The resource requested, does not exist'
+
+

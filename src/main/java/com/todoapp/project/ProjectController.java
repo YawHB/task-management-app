@@ -5,10 +5,7 @@ import com.task_management_app.api.ProjectApi;
 import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptions.UserAlreadyInProjectException;
-import com.todoapp.exceptions.UserProjectConflictException;
+import com.todoapp.exceptions.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,5 +52,22 @@ public class ProjectController implements ProjectApi {
                     + exception.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @Override
+    public ResponseEntity<Void> removeProjectUser(UUID organisationId, UUID projectId, UUID userId) {
+        try{
+        log.info("[ProjectController - removeProjectUser] - calling project service");
+        projectService.removeProjectUser(organisationId, projectId, userId);
+        log.info("[ProjectController - removeProjectUser] - return a success noContent(204) ResponseEntity✅");
+        return ResponseEntity.noContent().build();
+        }catch (OrganisationNotFoundException exception) {
+            log.error("[ProjectController - removeProjectUser] - return 404 status response for organisation ❌"+ exception.getMessage());
+        } catch (ProjectNotFoundException exception) {
+            log.error("[ProjectController - removeProjectUser] - return 404 status response for project ❌"+ exception.getMessage());
+        } catch (UserNotFoundException exception) {
+            log.error("[ProjectController - removeProjectUser] - return 404 status response for user ❌"+ exception.getMessage());
+        }
+        return ResponseEntity.notFound().build();
     }
 }
