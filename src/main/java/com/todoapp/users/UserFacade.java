@@ -18,4 +18,6 @@ public interface UserFacade {
 
 
     void deleteTask(UUID id);
+
+UserDTO findUserByEmail(String userEmail);
 }
