@@ -2,16 +2,15 @@ package com.todoapp.project;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
-
-
-
 
     @Query(value = "SELECT COUNT(*) > 0 " +
                    "FROM organisations_users " +
@@ -41,4 +40,27 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
             nativeQuery = true)
     List<ProjectSummaryProjection> findProjectsForMemberInOrganisation(UUID organisationId, UUID userId);
 
+    Optional<Project> findByName(String name);
+
+    @Query(value = "SELECT created_at, id, organisation_id, name " +
+                   "FROM project " +
+                   "WHERE organisation_id = :organisationId " +
+                   "AND name = :name", nativeQuery = true
+    )
+    Optional<Project> findProjectByOrganisationIdAndName(UUID organisationId, String name);
+
+
+    @Modifying
+    @Query(value = "INSERT INTO projects_users (project_id, user_id)" +
+                   " VALUES (:projectId, :userId)",
+                   nativeQuery = true)
+    void saveProjectUser(UUID projectId, UUID userId);
+
+
+    @Modifying
+    @Query(value = "DELETE FROM projects_users " +
+                   "WHERE project_id = :projectId " +
+                   "AND user_id = :userId",
+                    nativeQuery = true)
+    void removeUserFromProject(UUID projectId, UUID userId);
 }
