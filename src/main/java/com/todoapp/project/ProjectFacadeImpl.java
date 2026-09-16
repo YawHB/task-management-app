@@ -53,12 +53,8 @@ public class ProjectFacadeImpl implements ProjectFacade{
     public List<ProjectDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling OrganisationFacade to check if organisation exist");
-        if(!organisationFacade.existsById(organisationId)) {
-            log.error("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - organisation DOES NOT exist❌");
-            throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-        } else {
-            log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - organisation exist✅");
-        }
+        if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
         boolean userExist = projectRepository.userExistInOrganisation(organisationId, userId);
         if(!userExist) {
