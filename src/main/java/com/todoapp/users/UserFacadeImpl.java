@@ -1,5 +1,8 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.model.UserDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.UserNotFoundException;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.UserNotFoundException;
@@ -49,6 +52,18 @@ import java.util.UUID;
 
     public void deleteTask(UUID id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDTO findUserByEmail(String userEmail) {
+        log.info("[UserFacadeImpl - findUserByEmail] - calling user repo to fetch user by email");
+        Optional<User> foundUser = userRepository.findByEmail(userEmail);
+        if(foundUser.isPresent()) {
+        log.info("[UserFacadeImpl - findUserByEmail] - user found. returns a userDTO");
+            return userDTOConverter.toDTO(foundUser.get());
+        }
+        log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
+        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
     }
 
     public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
