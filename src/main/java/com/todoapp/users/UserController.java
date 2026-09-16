@@ -3,7 +3,9 @@ package com.todoapp.users;
 import com.task_management_app.api.UserApi;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
+import com.todoapp.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class UserController implements UserApi {
 
     private final UserFacadeImpl userFacadeService;
@@ -34,52 +37,14 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<OrganisationDTO>> getOrganisationByUserId(UUID userId) {
+    public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {
+        try{
        return ResponseEntity.status(HttpStatus.OK).body( userService.getOrganisationsByUserId(userId));
-    }
-
-
-   /*
-
-    @GetMapping("")
-    public ResponseEntity<List<User>> getAllUsers() {
-       return ResponseEntity.ok(userFacadeService.getAllUsers());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable UUID id){
-       Optional<User> existingUser = userFacadeService.findUserById(id);
-       if(existingUser.isPresent()) {
-           return ResponseEntity.ok().body(existingUser.get());
-       }
-       return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("")
-    public ResponseEntity<User> addUser(@NonNull @RequestBody User user) {
-         User newUser = userFacadeService.addUser(user);
-        return ResponseEntity.ok(newUser);
-    }
-
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable @NonNull UUID id, @RequestBody User updatedUser) {
-            if(userFacadeService.findUserById(id).isEmpty()) {
-                throw new RuntimeException("User object not found");
-            }
-           return userFacadeService.addUser(updatedUser);
-    }
-
-    @DeleteMapping("/{id}")
-    public  ResponseEntity<Void> deleteUser(@PathVariable @NonNull UUID id){
-        Optional<User> existingUser = userFacadeService.findUserById(id);
-        if(existingUser.isPresent()) {
-            userFacadeService.deleteTask(id);
-            return ResponseEntity.noContent().build();
+        } catch (UserNotFoundException exception) {
+            log.error("[UserController - getOrganisationsByUserId] - User Not found");
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
-
-    */
 }
 
 

@@ -1,6 +1,9 @@
 package com.todoapp.users;
 
 import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.UserNotFoundException;
+import com.todoapp.organisation.OrganisationFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,9 @@ import java.util.UUID;
     }
 
     public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+
+      userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
+
         return userDTOConverter.toDTOList(userRepository.findOrganisationsByUserId(userId));
     }
 }

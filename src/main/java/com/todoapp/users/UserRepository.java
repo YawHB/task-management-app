@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
 
+
+
     @Query(value = "SELECT o.id AS organisationId, o.name AS organisationName " +
             "FROM organisation o " +
             "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +

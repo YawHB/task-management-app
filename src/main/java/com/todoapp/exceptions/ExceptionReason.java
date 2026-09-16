@@ -2,7 +2,9 @@ package com.todoapp.exceptions;
 
 public enum ExceptionReason {
 
-    ORG_NOT_FOUND_BY_ID("Organisation not found by this id");
+    ORG_NOT_FOUND_BY_ID("Organisation not found by this id"),
+    USER_NOT_FOUND_BY_ID("User not found by this id");
+
 
     private String value;
 
