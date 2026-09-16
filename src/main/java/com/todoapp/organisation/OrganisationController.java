@@ -31,6 +31,11 @@ class OrganisationController implements OrganisationApi {
         return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTOConverter.toDTO(organisation));
     }
 
+
+    public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
+        return null;
+    }
+
     @Override
     public ResponseEntity<OrganisationDTO> getOrganisationById(UUID id) {
         try {

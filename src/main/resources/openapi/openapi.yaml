@@ -26,6 +26,10 @@ paths:
     $ref: './paths/users.yaml'
   /api/users/{id}:
     $ref: './paths/users-id.yaml'
+  /api/organisations/{organisationId}/projects/users:
+    $ref: './paths/organisations-id-projects-users.yaml'
+  /api/users/{user-id}/organisations:
+    $ref: './paths/users-user-id-organisations.yaml'
 
 #ORGANISATION
   /api/organisations:
@@ -50,5 +54,7 @@ components:
       $ref: './schemas/task/priority.yaml'
     User:
       $ref: "./schemas/user/userDTO.yaml"
+    #ProjectMemberDTO:
+     # $ref: './schemas/project/addProjectMembershipDTO.yaml'
 
 

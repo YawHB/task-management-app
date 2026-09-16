@@ -1,10 +1,10 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.model.UserDTO;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import com.task_management_app.api.model.UserDTO;
-
 
 public interface UserFacade {
      List<User> getAllUsers();
@@ -13,6 +13,9 @@ public interface UserFacade {
 
 
     User addUser(User user);
+
+    UserDTO getUserByEmail(String email);
+
 
     void deleteTask(UUID id);
 

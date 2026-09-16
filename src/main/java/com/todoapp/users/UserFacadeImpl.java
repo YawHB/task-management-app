@@ -3,6 +3,13 @@ package com.todoapp.users;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.UserNotFoundException;
+import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.UserNotFoundException;
+import com.todoapp.organisation.OrganisationFacade;
+import com.task_management_app.api.model.UserDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +38,19 @@ import java.util.UUID;
         return userRepository.save(user);
     }
 
-     public void deleteTask(UUID id) {
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
+      Optional<User> foundUser = userRepository.findByEmail(email);
+      if(foundUser.isPresent()) {
+        log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling userDTOConverter to convert user toDTO");
+          return userDTOConverter.toDTO(foundUser.get());
+      }
+        log.info("[UserFacadeImpl - getUserByEmail] - user not found. throwing user not found exception");
+        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
+    }
+
+    public void deleteTask(UUID id) {
         userRepository.deleteById(id);
     }
 
@@ -45,6 +64,13 @@ import java.util.UUID;
         }
         log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
+    }
+
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+
+      userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
+
+        return userDTOConverter.toDTOList(userRepository.findOrganisationsByUserId(userId));
     }
 }
 

@@ -1,13 +1,19 @@
 package com.todoapp.project;
 
 import com.task_management_app.api.model.ProjectDTO;
+import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectPost;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.OrganisationNotFoundException;
+import com.task_management_app.api.model.UserDTO;
+import com.todoapp.exceptions.*;
 import com.todoapp.organisation.OrganisationFacade;
+import com.todoapp.users.UserFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -16,9 +22,11 @@ import java.util.UUID;
 @Slf4j
 public class ProjectFacadeImpl implements ProjectFacade{
 
-    ProjectDTOConverter projectDTOConverter;
-    ProjectRepository projectRepository;
-    OrganisationFacade organisationFacade;
+    private final ProjectDTOConverter projectDTOConverter;
+    private final ProjectRepository projectRepository;
+
+    private final OrganisationFacade organisationFacade;
+    private final UserFacade userFacade;
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
 
@@ -31,12 +39,45 @@ public class ProjectFacadeImpl implements ProjectFacade{
           log.info("[ProjectFacadeImpl - addProject] - returns Project object");
           return projectDTOConverter.toDTO(createdProject);
       }
-
-          System.out.println("ADD EXCEPTION HERE"); //TODO - ADD EXCEPTION HERE
+          System.out.println("ADD EXCEPTION HERE");
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-
-
     }
-}
+
+    @Transactional
+    public ProjectMemberDTO addProjectMember(UUID organisationId, ProjectMemberDTO projectMemberDTO) {
+        log.info("[projectFacadeImpl - addProjectMember] - calling userFacade to get user by email");
+
+       try{
+           UserDTO foundUser =  userFacade.getUserByEmail(projectMemberDTO.getEmail());
+        log.info("[projectFacadeImpl - addProjectMember] - calling private method getProjectByOrganisationIdAndName");
+       ProjectDTO foundProject = getProjectByOrganisationIdAndName( organisationId, projectMemberDTO.getProjectName());
+           log.info("[projectFacadeImpl - addProjectMember] - calling saveProjectUser in repo with org and project IDs");
+           projectRepository.saveProjectUser(foundProject.getProjectId(), foundUser.getUserId());
+       } catch (DataIntegrityViolationException exception) {
+           log.info("[projectFacadeImpl - addProjectMember] - user already exists in project. throwing USER ALREADY MEMBER OF PROJECT");
+           throw new UserAlreadyInProjectException(ExceptionReason.USER_ALREADY_MEMBER_OF_PROJECT.getValue());
+       } catch (ProjectNotFoundException exception) {
+           log.error("[ProjectFacadeImpl - addProjectMember] - caught ProjectNotFoundException");
+           throw new UserProjectConflictException(exception.getMessage());
+       } catch (UserNotFoundException exception) {
+           throw new UserProjectConflictException(exception.getMessage());
+       }
+        log.info("[projectFacadeImpl - addProjectMember] - user added to project. returning project name and user email to controller");
+        return new ProjectMemberDTO(projectMemberDTO.getProjectName(), projectMemberDTO.getEmail());
+    }
+
+    private ProjectDTO getProjectByOrganisationIdAndName(UUID organisationId, String projectName) {
+        log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - calling project repo to find project in current organisation");
+        Optional<Project> foundProject = projectRepository.findProjectByOrganisationIdAndName(organisationId, projectName);
+        if(foundProject.isPresent()) {
+            log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project found - calling converter method, toDTO");
+            return projectDTOConverter.toDTO(foundProject.get());
+
+        }
+        log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project not found - throwing PROJECT NOT FOUND IN ORG exception");
+        throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
+      }
+    }
+
 
 

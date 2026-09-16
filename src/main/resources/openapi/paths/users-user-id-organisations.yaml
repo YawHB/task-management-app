@@ -1,0 +1,24 @@
+get:
+  tags:
+    - User
+  summary: 'Get all organisations for a user'
+  description: 'Returns all organisations that a given user is a member of'
+  operationId: 'getOrganisationsByUserId'
+  parameters:
+    - name: user-id
+      in: path
+      required: true
+      description: 'Unique identifier for the user'
+      schema:
+        type: string
+        format: uuid
+
+  responses:
+    '200':
+      description: Organisations belonging to the user
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../schemas/organisation/organisationDTO.yaml'
