@@ -3,7 +3,6 @@ package com.todoapp.organisation;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.OrganisationNotFoundException;
-//import com.task_management_app.api.model.Organisation;
 
 
 import java.util.Optional;
@@ -16,5 +15,5 @@ public interface OrganisationFacade  {
    boolean existsById(UUID organisationId);
 
 
-    UserDTO addUserToOrganisation(UUID id, String userEmail);
+    UserDTO addUserToOrganisation(UUID id, String userEmail) throws OrganisationNotFoundException;
 }
