@@ -35,9 +35,9 @@ public class ProjectDTOConverter {
         return projectDTO;
     }
 
-    public ProjectDTO toDTOFromList(ProjectSummaryProjection project) { //PREPLY - I dont like duplication and name of method
+    public ProjectDTO toDTO(ProjectSummaryProjection project) {
         ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setProjectId(project.getId());
+        projectDTO.setProjectId(project.getProjectId());
         projectDTO.setName(project.getName());
         return projectDTO;
     }

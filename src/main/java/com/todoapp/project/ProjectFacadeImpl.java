@@ -10,7 +10,6 @@ import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.todoapp.organisation.OrganisationFacade;
 import com.todoapp.users.UserFacade;
-import com.todoapp.users.UserFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,25 +55,20 @@ public class ProjectFacadeImpl implements ProjectFacade{
         if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
-        boolean userExist = projectRepository.userExistInOrganisation(organisationId, userId);
-        if(!userExist) {
-            log.error("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - user was not found in organisation❌ - throwing USER_NOT_MEMBER_OF_ORG exception");
-            throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
-        }
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - User exist in organisation✅");
+        boolean isMember = projectRepository.userExistInOrganisation(organisationId, userId);
+        if(!isMember) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
-        List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId); //PREPLY - Do we need to store the returned value and handle something?
+        List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId);
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - project list returned. Creating empty projectDTOs list");
         List<ProjectDTO> projectDTOs = new ArrayList<>();
 
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -looping through projects to convert into projectDTOs");
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -looping through projects to convert into projectDTOs🟢");
         for (ProjectSummaryProjection p : projects) {
-            projectDTOs.add(projectDTOConverter.toDTOFromList(p));
+            projectDTOs.add(projectDTOConverter.toDTO(p));
         }
-
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return projectDTOs list to controller");
         return projectDTOs;
-
     }
 
     @Transactional
@@ -112,8 +106,6 @@ public class ProjectFacadeImpl implements ProjectFacade{
         throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
       }
 
-
-
     @Transactional
     public void removeProjectUser(UUID organisationId, UUID projectId, UUID userId) throws OrganisationNotFoundException {
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling organisationFacade to check if org exist by id");
@@ -132,49 +124,6 @@ public class ProjectFacadeImpl implements ProjectFacade{
         Optional<Project> project = projectRepository.findById(projectId);
         return project.isPresent();
     }
-
-    /*  @Transactional
-    public void removeProjectUser(UUID organisationId, UUID projectId, UUID userId) throws OrganisationNotFoundException {
-        log.info("[ProjectFacadeImpl - removeProjectUser] - calling organisationFacade to check if org exist by id");
-          if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-        log.info("[ProjectFacadeImpl - removeProjectUser] - calling existById to check if project exist by id");
-          if(!this.existById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
-        log.info("[ProjectFacadeImpl - removeProjectUser] - calling userFacade to check if user exist by id");
-          if(!userFacade.existById(userId)) throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling OrganisationFacade to check if organisation exist");
-        if(!organisationFacade.existsById(organisationId)) {
-        log.error("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - organisation DOES NOT exist❌");
-            throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-        } else {
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - organisation exist✅");
-        }
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
-        boolean userExist = projectRepository.userExistInOrganisation(organisationId, userId);
-        if(!userExist) {
-        log.error("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - user was not found in organisation❌ - throwing USER_NOT_MEMBER_OF_ORG exception");
-        throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
-        }
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - User exist in organisation✅");
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
-        List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId); //PREPLY - Do we need to store the returned value and handle something?
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - project list returned. Creating empty projectDTOs list");
-        List<ProjectDTO> projectDTOs = new ArrayList<>();
-
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -looping through projects to convert into projectDTOs");
-            for (ProjectSummaryProjection p : projects) {
-                projectDTOs.add(projectDTOConverter.toDTOFromList(p));
-            }
-
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return projectDTOs list to controller");
-        return projectDTOs;
-        log.info("[ProjectFacadeImpl - removeProjectUser] - All objects exist. Calling projectRepository to remove user from project");
-          projectRepository.removeUserFromProject(projectId, userId);
-    }
-
-
-
-     */
-}
+ }
 
 
