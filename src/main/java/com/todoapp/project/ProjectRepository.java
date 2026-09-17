@@ -19,6 +19,12 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
                     nativeQuery = true)
     boolean userExistInOrganisation(UUID organisationId, UUID userId);
 
+    @Query(value = "SELECT COUNT(*) > 0 " +
+                   "FROM project " +
+                   "WHERE name = :name",
+                   nativeQuery = true)
+    boolean existsByName(String name );
+
 
     @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.project_id, " +
                    "PROJECT_FILTERED_BY_ORG.name " +

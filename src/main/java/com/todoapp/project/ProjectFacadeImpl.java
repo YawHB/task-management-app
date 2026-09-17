@@ -13,6 +13,7 @@ import com.todoapp.users.UserFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class ProjectFacadeImpl implements ProjectFacade{
 
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
+        log.info("[ProjectFacadeImpl - addProject] - validates that request body contains project name)");
+        if(projectPost.getName().isBlank()) throw new InvalidRequestBodyException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
+       if(projectRepository.existsByName(projectPost.getName()))  throw new DuplicateProjectNameException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
 
         log.info("[ProjectFacadeImpl - addProject] - checks if organisation exists by its id (OBS: missing error handling on fail)");
       if(organisationFacade.existsById(organisationId)) {
