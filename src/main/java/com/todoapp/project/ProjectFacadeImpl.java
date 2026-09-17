@@ -28,10 +28,12 @@ import java.util.UUID;
 @Slf4j
 public class ProjectFacadeImpl implements ProjectFacade{
 
-    ProjectDTOConverter projectDTOConverter;
-    ProjectRepository projectRepository;
-    OrganisationFacade organisationFacade;
+    private final ProjectDTOConverter projectDTOConverter;
+    private final ProjectRepository projectRepository;
+
+    private final OrganisationFacade organisationFacade;
     private final UserFacade userFacade;
+
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
 
@@ -104,6 +106,16 @@ public class ProjectFacadeImpl implements ProjectFacade{
         }
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project not found - throwing PROJECT NOT FOUND IN ORG exception");
         throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
+    }
+
+    public void deleteProject(UUID id) {
+        log.info("[ProjectService- deleteProject] - calling projectRepository to find project by id");
+        if (!projectRepository.existsById(id)) {
+        log.error("[ProjectService- deleteProject] - Project NOT found in repository");
+            throw new ProjectNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+        }
+        log.info("[ProjectService- deleteProject] - calling projectRepository to delete project by id");
+        projectRepository.deleteById(id);
       }
 
     @Transactional
@@ -125,5 +137,6 @@ public class ProjectFacadeImpl implements ProjectFacade{
         return project.isPresent();
     }
  }
+
 
 

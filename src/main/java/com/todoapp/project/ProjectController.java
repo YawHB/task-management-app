@@ -23,6 +23,7 @@ public class ProjectController implements ProjectApi {
 
     ProjectFacade projectFacade;
     ProjectFacadeImpl projectService;
+    private final ProjectFacadeImpl projectFacade2;
 
     @Override
     public ResponseEntity<ProjectDTO> addProject(UUID organisationId, ProjectPost ProjectPost) {
@@ -72,6 +73,19 @@ public class ProjectController implements ProjectApi {
                     + exception.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteProject(UUID id) {
+        try{
+        projectService.deleteProject(id);
+            log.info("[ProjectController - deleteProject] - calling projectService");
+        } catch (ProjectNotFoundException exception) {
+            log.error("[ProjectController - deleteProject] - Returns a 404 project not found❌");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        log.info("[ProjectController - deleteProject] - Project deleted. Returns 204 project deleted✅");
+        return ResponseEntity.noContent().build();
     }
 
     @Override
