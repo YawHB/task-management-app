@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface UserFacade {
      List<User> getAllUsers();
 
-    Optional<User> findUserById(UUID id);
+   boolean existById(UUID id);
 
 
     User addUser(User user);
@@ -18,4 +18,6 @@ public interface UserFacade {
 
 
     void deleteTask(UUID id);
+
+UserDTO findUserByEmail(String userEmail);
 }
