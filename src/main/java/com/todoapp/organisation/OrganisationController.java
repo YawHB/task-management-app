@@ -50,11 +50,15 @@ class OrganisationController implements OrganisationApi {
          UserDTO addedUser = organisationFacade.addUserToOrganisation(id, userEmail);
          return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
         } catch (UserExistsInOrganisationException exception) {
-            log.error("[addUserToOrganisation] - " +exception.getMessage() );
+            log.error("[OrganisationController - addUserToOrganisation.] - " +exception.getMessage() );
             return ResponseEntity.badRequest().build();
         } catch (UserNotFoundException exception) {
-            log.error("[addUserToOrganisation - ] " + exception.getMessage());
-            return ResponseEntity.badRequest().build();
+            log.error("[OrganisationController - addUserToOrganisation ] -  " + exception.getMessage());
+            return ResponseEntity.notFound().build();
+
+        } catch (OrganisationNotFoundException exception) {
+            log.error("[OrganisationController - addUserToOrganisation] -  " + exception.getMessage());
+            return ResponseEntity.notFound().build();
 
         }
     }

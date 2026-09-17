@@ -3,6 +3,9 @@ package com.todoapp.project;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectPost;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptions.UserNotMemberOfOrganisationException;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.todoapp.organisation.OrganisationFacade;
@@ -11,6 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -27,6 +33,7 @@ public class ProjectFacadeImpl implements ProjectFacade{
 
     private final OrganisationFacade organisationFacade;
     private final UserFacade userFacade;
+
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
 
@@ -39,8 +46,31 @@ public class ProjectFacadeImpl implements ProjectFacade{
           log.info("[ProjectFacadeImpl - addProject] - returns Project object");
           return projectDTOConverter.toDTO(createdProject);
       }
-          System.out.println("ADD EXCEPTION HERE");
+
+          System.out.println("ADD EXCEPTION HERE"); //TODO - ADD EXCEPTION HERE
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+    }
+
+    public List<ProjectDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
+
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling OrganisationFacade to check if organisation exist");
+        if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
+        boolean isMember = projectRepository.userExistInOrganisation(organisationId, userId);
+        if(!isMember) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
+        List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId);
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - project list returned. Creating empty projectDTOs list");
+        List<ProjectDTO> projectDTOs = new ArrayList<>();
+
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -looping through projects to convert into projectDTOs🟢");
+        for (ProjectSummaryProjection p : projects) {
+            projectDTOs.add(projectDTOConverter.toDTO(p));
+        }
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return projectDTOs list to controller");
+        return projectDTOs;
     }
 
     @Transactional
@@ -66,7 +96,7 @@ public class ProjectFacadeImpl implements ProjectFacade{
         return new ProjectMemberDTO(projectMemberDTO.getProjectName(), projectMemberDTO.getEmail());
     }
 
-    private ProjectDTO getProjectByOrganisationIdAndName(UUID organisationId, String projectName) {
+     private ProjectDTO getProjectByOrganisationIdAndName(UUID organisationId, String projectName) {
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - calling project repo to find project in current organisation");
         Optional<Project> foundProject = projectRepository.findProjectByOrganisationIdAndName(organisationId, projectName);
         if(foundProject.isPresent()) {
@@ -76,8 +106,37 @@ public class ProjectFacadeImpl implements ProjectFacade{
         }
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project not found - throwing PROJECT NOT FOUND IN ORG exception");
         throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
-      }
     }
+
+    public void deleteProject(UUID id) {
+        log.info("[ProjectService- deleteProject] - calling projectRepository to find project by id");
+        if (!projectRepository.existsById(id)) {
+        log.error("[ProjectService- deleteProject] - Project NOT found in repository");
+            throw new ProjectNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+        }
+        log.info("[ProjectService- deleteProject] - calling projectRepository to delete project by id");
+        projectRepository.deleteById(id);
+      }
+
+    @Transactional
+    public void removeProjectUser(UUID organisationId, UUID projectId, UUID userId) throws OrganisationNotFoundException {
+        log.info("[ProjectFacadeImpl - removeProjectUser] - calling organisationFacade to check if org exist by id");
+        if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+        log.info("[ProjectFacadeImpl - removeProjectUser] - calling existById to check if project exist by id");
+        if(!this.existById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
+        log.info("[ProjectFacadeImpl - removeProjectUser] - calling userFacade to check if user exist by id");
+        if(!userFacade.existById(userId)) throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+
+        log.info("[ProjectFacadeImpl - removeProjectUser] - All objects exist. Calling projectRepository to remove user from project");
+        projectRepository.removeUserFromProject(projectId, userId);
+    }
+
+    @Override
+    public boolean existById(UUID projectId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        return project.isPresent();
+    }
+ }
 
 
 
