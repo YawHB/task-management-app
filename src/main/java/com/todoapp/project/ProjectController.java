@@ -23,22 +23,28 @@ public class ProjectController implements ProjectApi {
 
     ProjectFacade projectFacade;
     ProjectFacadeImpl projectService;
-    private final ProjectFacadeImpl projectFacade2;
 
     @Override
     public ResponseEntity<ProjectDTO> addProject(UUID organisationId, ProjectPost ProjectPost) {
 
-        try{
+        try {
             log.info("[ProjectController - addProject] - calling facade");
             ProjectDTO projectDTO = projectFacade.addProject(organisationId, ProjectPost);
             log.info("[ProjectController - addProject] - Returns response to the client");
             return ResponseEntity.status(HttpStatus.CREATED).body(projectDTO);
         } catch (OrganisationNotFoundException exception) {
             log.error("[ProjectController - addProject] - " + exception.getMessage());
+            return ResponseEntity.notFound().build();
+        } catch (InvalidRequestBodyException exception) {
+            log.error("[ProjectController - addProjectMember] - invalid request body"
+                    + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (DuplicateProjectNameException exception) {
+            log.error("[ProjectController - addProjectMember] -duplicate project name"
+                    + exception.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
-
 
 
     @Override
@@ -73,6 +79,7 @@ public class ProjectController implements ProjectApi {
                     + exception.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
     }
 
     @Override
