@@ -32,10 +32,6 @@ class OrganisationController implements OrganisationApi {
     }
 
 
-    public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
-        return null;
-    }
-
     @Override
     public ResponseEntity<OrganisationDTO> getOrganisationById(UUID id) {
         try {
