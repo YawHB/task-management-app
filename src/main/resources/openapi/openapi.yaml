@@ -26,16 +26,26 @@ paths:
     $ref: './paths/users.yaml'
   /api/users/{id}:
     $ref: './paths/users-id.yaml'
+  /api/organisations/{organisationId}/projects/users:
+    $ref: './paths/organisations-id-projects-users.yaml'
+  /api/users/{user-id}/organisations:
+    $ref: './paths/users-user-id-organisations.yaml'
 
 #ORGANISATION
   /api/organisations:
     $ref: './paths/organisations.yaml'
   /api/organisations/{id}:
     $ref: './paths/organisations-id.yaml'
+  /api/organisations/{id}/users:
+    $ref: './paths/organisations-id-users.yaml'
 
   #PROJECT
-  /api/projects/{organisationId}:
+  /api/organisations/{organisationId}/projects:
     $ref: './paths/projects.yaml'
+  /api/projects/{projectId}:
+    $ref: './paths/projects-id.yaml'
+  /api/organisations/{organisationId}/projects/{projectId}/users/{userId}:
+    $ref: './paths/projects-id-users-id.yaml'
 
 
 #components:
@@ -48,5 +58,7 @@ paths:
     #  $ref: './schemas/task/priority.yaml'
    # User:
    #   $ref: "./schemas/user/userDTO.yaml"
+   # ProjectMemberDTO:
+     # $ref: './schemas/project/addProjectMembershipDTO.yaml'
 
 

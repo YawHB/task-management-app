@@ -1,0 +1,34 @@
+#  PROJECT MEMBER PATH
+post:
+  tags:
+    - Project
+  summary: 'Add an existing org member to a project'
+  operationId: 'addProjectMember'
+  parameters:
+    - name: organisationId
+      in: path
+      required: true
+      description: 'Unique identifier for the organisation'
+      schema:
+          type: string
+          format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/project/projectMemberDTO.yaml'
+
+  responses:
+    '201':
+      description: 'Member added to the project successfully'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/project/projectMemberDTO.yaml'
+    '404':
+      description: 'The user or project does not exist'
+    '409':
+      description: 'The user is already part of this project'
+
+

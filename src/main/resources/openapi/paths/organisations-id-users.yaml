@@ -1,0 +1,35 @@
+
+#ORGANISATION-ID-USER PATH
+post:
+  tags:
+    - Organisation
+  summary: 'Add a user to an organisation by user-email'
+  description: 'Returns the user added to the organisation'
+  operationId: 'addUserToOrganisation'
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: 'Unique identifier for the organisation'
+      schema:
+        type: string
+        format: uuid
+    - name: userEmail
+      in: query
+      type: string
+      description: 'The email of the user you want to add to the organisation'
+      schema:
+        type: string
+        format: email
+  responses:
+    '201':
+      description: 'The user was successfully added to your organisation'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/user/userDTO.yaml'
+    '404':
+      description: 'Invalid user email. No user with this email exist in the system'
+    '500':
+      description: 'Internal Server Error'
+
