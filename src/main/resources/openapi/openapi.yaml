@@ -38,15 +38,15 @@ paths:
     $ref: './paths/projects.yaml'
 
 
-components:
-  schemas:
-    Task:
-      $ref: './schemas/task/task.yaml'
-    Status:
-      $ref: './schemas/task/status.yaml'
-    Priority:
-      $ref: './schemas/task/priority.yaml'
-    User:
-      $ref: "./schemas/user/userDTO.yaml"
+#components:
+ # schemas:
+ #   Task:
+   #   $ref: './schemas/task/task.yaml'
+  #  Status:
+   #   $ref: './schemas/task/status.yaml'
+   # Priority:
+    #  $ref: './schemas/task/priority.yaml'
+   # User:
+   #   $ref: "./schemas/user/userDTO.yaml"
 
 
