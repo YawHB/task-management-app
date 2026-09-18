@@ -6,6 +6,8 @@ import com.todoapp.exceptions.OrganisationNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,9 +28,12 @@ import java.util.UUID;
 
     @Override
     public OrganisationDTO findOrganisationById(UUID id) throws OrganisationNotFoundException {
+        log.info("[OrganisationFacadeImpl - findOrganisationById] - calling org repo to find org by id");
         Optional<Organisation> organisation = organisationRepository.findById(id);
         if (organisation.isPresent()) {
-            return organisationDTOConverter.toDTO(organisation.get());
+        log.info("[OrganisationFacadeImpl - findOrganisationById] - calling org repo to get org details(projects + users)");
+           List<OrganisationDetailsProjection> organisationDetailsProjection = organisationRepository.findOrganisationWithProjectsAndMembers(id);
+            return organisationDTOConverter.toDTO(organisationDetailsProjection);
         }
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
