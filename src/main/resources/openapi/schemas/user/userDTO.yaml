@@ -32,14 +32,11 @@ properties:
   keycloakId:
     type: string
 example:
-  userId: "550e8400-e29b-41d4-a716-446655440000"
   firstName: "Jane"
   lastName: "Doe"
   email: "jane.doe@example.com"
   profilePicture: "/uploads/users/550e8400-e29b-41d4-a716-446655440000/avatar.png"
-  isDeleted: false
-  userName: "janedoe_dev"
-  keycloakId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  userName: "jane_doe01"
 
 
 

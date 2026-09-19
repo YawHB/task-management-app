@@ -1,0 +1,10 @@
+type: object
+description: 'dfif'
+properties:
+  creatorId:
+    type: string
+    format: uuid
+  firstName:
+    type: string
+  lastName:
+    type: string

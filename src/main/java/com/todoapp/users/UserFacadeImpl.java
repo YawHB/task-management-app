@@ -1,15 +1,10 @@
 package com.todoapp.users;
 
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.UserNotFoundException;
+import com.todoapp.exceptions.*;
 import com.task_management_app.api.model.OrganisationDTO;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.UserNotFoundException;
 import com.todoapp.organisation.OrganisationFacade;
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
