@@ -41,6 +41,7 @@ import java.util.UUID;
     }
 
     public User addUser(User user) {
+        log.info("[UserService - addUser] - calling userRepository to save user");
         return userRepository.save(user);
     }
 

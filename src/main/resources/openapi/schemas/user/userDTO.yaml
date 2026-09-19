@@ -6,7 +6,6 @@ required:
   - firstName
   - lastName
   - email
-  - isDeleted
 properties:
   userId:
     type: string

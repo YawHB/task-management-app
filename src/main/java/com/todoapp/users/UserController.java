@@ -27,7 +27,10 @@ public class UserController implements UserApi {
     @Override
     public ResponseEntity<UserDTO> addUser(UserDTO userDTO) {
 
-        User createdUser = userFacadeService.addUser(userDTOConverter.toEntity(userDTO));
+        log.info("[UserController - addUser] - calling toEntity");
+        User user = userDTOConverter.toEntity(userDTO);
+        log.info("[UserController - addUser] - calling userService to add user");
+        User createdUser = userFacadeService.addUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body( userDTOConverter.toDTO(createdUser));
     }
 
