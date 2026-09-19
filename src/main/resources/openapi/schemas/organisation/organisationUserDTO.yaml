@@ -1,0 +1,38 @@
+# USER IN ORGANISATION SCHEMA
+
+type: object
+description: 'Represents an user as it relates to the organisation detailed view.
+              Contains selected properties from UserDTO and additional
+              organisation-related properties needed to provide the relevant
+              context for the detailed organisation view.'
+properties:
+  userId:
+    type: string
+    format: uuid
+    description: 'ID of the user'
+  firstName:
+    type: string
+    description: 'First name of the user'
+  lastName:
+    type: string
+    description: 'Last name of the user'
+  email:
+    type: string
+    format: email
+    description: 'Email address of the user'
+  organisationId:
+    type: string
+    format: uuid
+    description: 'Reference to the parent organisation'
+  activeSince:
+    type: string
+    format: date-time
+    description: 'Timestamp when the user became active in this organisation'
+
+example:
+  userId: "6ba7b811-9dad-11d1-80b4-00c04fd430c8"
+  firstName: "John"
+  lastName: "Doe"
+  email: "john.doe@example.com"
+  organisationId: "550e8400-e29b-41d4-a716-446655440000"
+  activeSince: "2023-10-15T09:30:00Z"

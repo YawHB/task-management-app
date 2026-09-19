@@ -48,17 +48,17 @@ paths:
     $ref: './paths/projects-id-users-id.yaml'
 
 
-components:
-  schemas:
-    Task:
-      $ref: './schemas/task/task.yaml'
-    Status:
-      $ref: './schemas/task/status.yaml'
-    Priority:
-      $ref: './schemas/task/priority.yaml'
-    User:
-      $ref: "./schemas/user/userDTO.yaml"
-    #ProjectMemberDTO:
+#components:
+ # schemas:
+ #   Task:
+   #   $ref: './schemas/task/task.yaml'
+  #  Status:
+   #   $ref: './schemas/task/status.yaml'
+   # Priority:
+    #  $ref: './schemas/task/priority.yaml'
+   # User:
+   #   $ref: "./schemas/user/userDTO.yaml"
+   # ProjectMemberDTO:
      # $ref: './schemas/project/addProjectMembershipDTO.yaml'
 
 
