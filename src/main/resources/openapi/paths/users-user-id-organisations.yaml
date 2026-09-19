@@ -21,4 +21,4 @@ get:
           schema:
             type: array
             items:
-              $ref: '../schemas/organisation/organisationDTO.yaml'
+              $ref: '../schemas/organisation/organisationDetailsDTO.yaml'

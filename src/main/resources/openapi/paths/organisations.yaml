@@ -10,7 +10,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/organisation/organisationDTO.yaml'
+          $ref: '../schemas/organisation/organisationDetailsDTO.yaml'
   responses:
     '201':
       description: Organisation created successfully
@@ -23,7 +23,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/organisation/organisationDTO.yaml'
+            $ref: '../schemas/organisation/organisationDetailsDTO.yaml'
           example:
             organisationId: '550e8400-e29b-41d4-a716-446655440000'
             name: "John's organisation"
