@@ -1,0 +1,7 @@
+type: object
+properties:
+  organisationName:
+    type: string
+    description: 'name of the organisation'
+required:
+  - organisationName

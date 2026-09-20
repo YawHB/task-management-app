@@ -11,8 +11,10 @@ properties:
   name:
     type: string
     description: 'name of the organisation'
-  creator:
-    $ref: './organisationCreator.yaml'
+  creatorId:
+    type: string
+
+    #$ref: './organisationCreator.yaml'
 
   #projects:
     #type: array
