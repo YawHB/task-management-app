@@ -1,7 +1,9 @@
 package com.todoapp.organisation;
 
 import com.task_management_app.api.OrganisationApi;
+import com.task_management_app.api.model.AddOrganisationRequestDTO;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptions.UserExistsInOrganisationException;
@@ -24,18 +26,18 @@ class OrganisationController implements OrganisationApi {
     private OrganisationDTOConverter organisationDTOConverter;
 
     @Override
-    public ResponseEntity<OrganisationDTO> addOrganisation(OrganisationDTO organisationDTO) {
+    public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO addOrgReqDTO) {
         log.info("[OrganisationController - addOrganisation] - calling facade");
-        Organisation organisation = organisationService.addOrganisation(organisationDTO);
+        Organisation organisation = organisationService.addOrganisation(addOrgReqDTO);
         log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
         return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTOConverter.toDTO(organisation));
     }
 
 
     @Override
-    public ResponseEntity<OrganisationDTO> getOrganisationById(UUID id) {
+    public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) {
         try {
-            OrganisationDTO organisationDTO = organisationFacade.findOrganisationById(id);
+            OrganisationDetailsDTO organisationDTO = organisationFacade.findOrganisationById(id);
             return ResponseEntity.ok(organisationDTO);
         } catch (OrganisationNotFoundException exception) {
             log.error("[getOrganisationById] - " + exception.getMessage());

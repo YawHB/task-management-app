@@ -1,5 +1,6 @@
 package com.todoapp.users;
 
+import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.task_management_app.api.model.OrganisationDTO;
@@ -68,7 +69,7 @@ import java.util.UUID;
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
     }
 
-    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+    public List<OrganisationDetailsDTO> getOrganisationsByUserId(UUID userId) {
 
       userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
 

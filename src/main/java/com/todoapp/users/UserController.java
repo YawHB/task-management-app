@@ -2,6 +2,7 @@ package com.todoapp.users;
 
 import com.task_management_app.api.UserApi;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {
+    public ResponseEntity<List<OrganisationDetailsDTO>> getOrganisationsByUserId(UUID userId) {
         try{
        return ResponseEntity.status(HttpStatus.OK).body( userService.getOrganisationsByUserId(userId));
         } catch (UserNotFoundException exception) {

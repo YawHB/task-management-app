@@ -15,9 +15,9 @@ import java.util.List;
 @AllArgsConstructor
  class OrganisationDTOConverter {
 
-    public Organisation toEntity(OrganisationDTO organisationDTO) {
+    public Organisation toEntity(AddOrganisationRequestDTO addOrgReqDTO) {
         Organisation organisation = new Organisation();
-        organisation.setName(organisationDTO.getName());
+        organisation.setName(addOrgReqDTO.getOrganisationName());
 
         return organisation;
     }
@@ -33,15 +33,15 @@ import java.util.List;
     }
 
 
-    public OrganisationDTO toDTO(List<OrganisationDetailsProjection> organisationDetailsList) {
+    public OrganisationDetailsDTO toDTO(List<OrganisationDetailsProjection> organisationDetailsList) {
         log.info("[OrganisationDTO - toDTO] - populating the organisationDTO object");
 
-        OrganisationDTO organisationDTO = new OrganisationDTO();
+        OrganisationDetailsDTO organisationDetailsDTO = new OrganisationDetailsDTO();
         List<OrganisationProjectDTO> projects = new ArrayList<>();
         List<OrganisationUserDTO> users = new ArrayList<>();
 
-        organisationDTO.setOrganisationId(organisationDetailsList.getFirst().getOrganisationId());
-        organisationDTO.setName(organisationDetailsList.getFirst().getOrganisationName());
+        organisationDetailsDTO.setOrganisationId(organisationDetailsList.getFirst().getOrganisationId());
+        organisationDetailsDTO.setName(organisationDetailsList.getFirst().getOrganisationName());
         for(OrganisationDetailsProjection organisationDetail : organisationDetailsList) {
 
             if(projectIsUnique(projects, organisationDetail)) {
@@ -68,9 +68,9 @@ import java.util.List;
             users.add(organisationUserDTO);
             }
         }
-        organisationDTO.setProjects(projects);
-        organisationDTO.setUsers(users);
-        return organisationDTO;
+        organisationDetailsDTO.setProjects(projects);
+        organisationDetailsDTO.setUsers(users);
+        return organisationDetailsDTO;
     }
 
     private boolean projectIsUnique(List<OrganisationProjectDTO> projects, OrganisationDetailsProjection organisationDetail) {

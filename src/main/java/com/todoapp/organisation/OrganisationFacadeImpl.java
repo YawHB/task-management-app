@@ -1,6 +1,8 @@
 package com.todoapp.organisation;
 
+import com.task_management_app.api.model.AddOrganisationRequestDTO;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.OrganisationNotFoundException;
@@ -25,14 +27,15 @@ import java.util.UUID;
     private UserFacade userFacade;
 
 
-    public Organisation addOrganisation(OrganisationDTO organisationDTO) {
+    public Organisation addOrganisation(AddOrganisationRequestDTO addOrgReqDTO) {
+        log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationDTOConverter ");
+        Organisation organisation = organisationDTOConverter.toEntity(addOrgReqDTO);
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the repository to save an organisation object");
-        Organisation organisation = organisationDTOConverter.toEntity(organisationDTO);
         return organisationRepository.save(organisation);
     }
 
     @Override
-    public OrganisationDTO findOrganisationById(UUID id) throws OrganisationNotFoundException {
+    public OrganisationDetailsDTO findOrganisationById(UUID id) throws OrganisationNotFoundException {
         log.info("[OrganisationFacadeImpl - findOrganisationById] - calling org repo to find org by id");
         Optional<Organisation> organisation = organisationRepository.findById(id);
         if (organisation.isPresent()) {
