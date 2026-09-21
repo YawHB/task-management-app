@@ -11,6 +11,8 @@ public interface UserFacade {
 
    boolean existById(UUID id);
 
+   boolean userExistInOrganisation(UUID userId, UUID organisationId);
+
 
     User addUser(User user);
 

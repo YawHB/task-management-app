@@ -78,6 +78,9 @@ public class ProjectController implements ProjectApi {
             log.error("[ProjectController - addProjectMember] - returns a 404 status response "
                     + exception.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (UserNotMemberOfOrganisationException exception) {
+            log.error("[ProjectController - addProjectMember]. " + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }

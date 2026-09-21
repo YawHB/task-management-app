@@ -2,7 +2,7 @@
 post:
   tags:
     - Project
-  summary: 'Add an existing org member to a project'
+  summary: 'Add an organisation member to a project'
   operationId: 'addProjectMember'
   parameters:
     - name: organisationId

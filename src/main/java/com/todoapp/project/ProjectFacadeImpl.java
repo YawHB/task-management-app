@@ -83,6 +83,10 @@ public class ProjectFacadeImpl implements ProjectFacade{
 
        try{
            UserDTO foundUser =  userFacade.getUserByEmail(projectMemberDTO.getEmail());
+        log.info("[projectFacadeImpl - addProjectMember] - calling userFacade to check if user exist in org");
+        if(!userFacade.userExistInOrganisation(foundUser.getUserId(), organisationId))
+            throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+
         log.info("[projectFacadeImpl - addProjectMember] - calling private method getProjectByOrganisationIdAndName");
        ProjectDTO foundProject = getProjectByOrganisationIdAndName( organisationId, projectMemberDTO.getProjectName());
            log.info("[projectFacadeImpl - addProjectMember] - calling saveProjectUser in repo with org and project IDs");

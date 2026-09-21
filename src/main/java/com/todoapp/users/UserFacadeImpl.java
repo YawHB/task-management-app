@@ -32,6 +32,11 @@ import java.util.UUID;
         return user.isPresent();
     }
 
+    @Override
+    public boolean userExistInOrganisation(UUID userId, UUID organisationId) {
+       return  userRepository.existsByOrganisationIdAndUserId(userId, organisationId);
+    }
+
     public Optional<User> findUserById(UUID id) {
         return userRepository.findById(id);
     }
