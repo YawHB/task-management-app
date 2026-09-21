@@ -1,12 +1,9 @@
 package com.todoapp.project;
 
-import com.task_management_app.api.model.ProjectDTO;
-import com.task_management_app.api.model.ProjectMemberDTO;
-import com.task_management_app.api.model.ProjectPost;
+import com.task_management_app.api.model.*;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptions.UserNotMemberOfOrganisationException;
-import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.todoapp.organisation.OrganisationFacade;
 import com.todoapp.users.UserFacade;
@@ -55,26 +52,22 @@ public class ProjectFacadeImpl implements ProjectFacade{
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
 
-    public List<ProjectDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
+    public List<ProjectSummaryDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling OrganisationFacade to check if organisation exist");
         if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
+        // TODO - ❌ userExistInOrganisation should be called through organisationFacade. This has nothing to to with the project repository
         boolean isMember = projectRepository.userExistInOrganisation(organisationId, userId);
         if(!isMember) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
         List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId);
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - project list returned. Creating empty projectDTOs list");
-        List<ProjectDTO> projectDTOs = new ArrayList<>();
-
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -looping through projects to convert into projectDTOs🟢");
-        for (ProjectSummaryProjection p : projects) {
-            projectDTOs.add(projectDTOConverter.toDTO(p));
-        }
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return projectDTOs list to controller");
-        return projectDTOs;
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling toDTO");
+        List<ProjectSummaryDTO> projectSummaryDTOS = projectDTOConverter.toDTO(projects);
+        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return a list of projectSummaryDTOs to controller");
+        return projectSummaryDTOS;
     }
 
     @Transactional

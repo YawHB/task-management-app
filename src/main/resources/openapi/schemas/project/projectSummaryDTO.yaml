@@ -1,0 +1,19 @@
+
+#PROJECT RESPONSE SCHEMA
+
+type: object
+description: 'Represents a simple, summarised version of a project entry'
+properties:
+  projectId:
+    type: string
+    format: uuid
+    description: 'Unique ID for a Project'
+  projectName:
+    type: string
+    description: 'name of the project'
+
+example:
+  projectId: "100e8400-e29b-41d4-a716-446655440011"
+  name: "John's project 1"
+
+

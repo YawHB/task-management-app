@@ -28,7 +28,7 @@ get:
           schema:
             type: array
             items:
-              $ref: '../schemas/project/projectDTO.yaml'
+              $ref: '../schemas/project/projectSummaryDTO.yaml'
     '404':
       description: 'Organisation or user not found'
     '409':

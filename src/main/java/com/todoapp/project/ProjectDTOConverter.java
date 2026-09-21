@@ -2,11 +2,14 @@ package com.todoapp.project;
 
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
+import com.task_management_app.api.model.ProjectSummaryDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -35,11 +38,17 @@ public class ProjectDTOConverter {
         return projectDTO;
     }
 
-    public ProjectDTO toDTO(ProjectSummaryProjection project) {
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setProjectId(project.getProjectId());
-        projectDTO.setName(project.getName());
-        return projectDTO;
+    public List<ProjectSummaryDTO> toDTO(List<ProjectSummaryProjection> projects) {
+        log.info("[ProjectFacadeImpl - ProjectDTOConverter] -looping through projects to convert into projectSummaryDTOs");
+        List<ProjectSummaryDTO> projectSummaryDTOS = new ArrayList<>();
+        for( ProjectSummaryProjection p : projects) {
+        ProjectSummaryDTO projectSummaryDTO = new ProjectSummaryDTO();
+        projectSummaryDTO.setProjectId(p.getProjectId());
+        projectSummaryDTO.setProjectName(p.getName());
+        projectSummaryDTOS.add(projectSummaryDTO);
+        }
+
+        return projectSummaryDTOS;
     }
 }
 

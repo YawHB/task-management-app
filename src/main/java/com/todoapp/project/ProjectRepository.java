@@ -48,12 +48,11 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
 
     Optional<Project> findByName(String name);
 
-    @Query(value = "SELECT created_at, id, organisation_id, name " +
-                   "FROM project " +
+    @Query(value = "SELECT p.created_at, p.id, organisation_id, p.name " +
+                   "FROM project AS p " +
                    "WHERE organisation_id = :organisationId " +
-                   "AND name = :name", nativeQuery = true
-    )
-    Optional<Project> findProjectByOrganisationIdAndName(UUID organisationId, String name);
+                   "AND p.name = :name", nativeQuery = true
+    ) Optional<Project> findProjectByOrganisationIdAndName(UUID organisationId, String name);
 
 
     @Modifying

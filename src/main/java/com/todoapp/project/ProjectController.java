@@ -5,6 +5,7 @@ import com.task_management_app.api.ProjectApi;
 import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
+import com.task_management_app.api.model.ProjectSummaryDTO;
 import com.todoapp.exceptions.*;
 import com.todoapp.exceptions.UserNotMemberOfOrganisationException;
 import lombok.AllArgsConstructor;
@@ -48,10 +49,10 @@ public class ProjectController implements ProjectApi {
 
 
     @Override
-    public ResponseEntity<List<ProjectDTO>> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId){
-        log.info("[ProjectController - getProjectsForMemberInOrganisation] - calling projectService with org id and user id");
+    public ResponseEntity<List<ProjectSummaryDTO>> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId){
         try{
-        List<ProjectDTO> projects = projectService.getProjectsForMemberInOrganisation(organisationId, userId);
+        log.info("[ProjectController - getProjectsForMemberInOrganisation] - calling projectService with org id and user id");
+        List<ProjectSummaryDTO> projects = projectService.getProjectsForMemberInOrganisation(organisationId, userId);
         log.info("[ProjectController - getProjectsForMemberInOrganisation] - returning status code OK with the list of projectDTOs");
        return ResponseEntity.status(HttpStatus.OK).body(projects);
 
