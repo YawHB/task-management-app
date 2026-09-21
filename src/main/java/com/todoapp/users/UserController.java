@@ -41,7 +41,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<OrganisationDetailsDTO>> getOrganisationsByUserId(UUID userId) {
+    public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {
         try{
        return ResponseEntity.status(HttpStatus.OK).body( userService.getOrganisationsByUserId(userId));
         } catch (UserNotFoundException exception) {

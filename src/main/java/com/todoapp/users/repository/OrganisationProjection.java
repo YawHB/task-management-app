@@ -6,4 +6,5 @@ public interface OrganisationProjection {
 
     UUID getOrganisationId();
     String getOrganisationName();
+    UUID getCreatorId();
 }

@@ -45,15 +45,16 @@ public class UserDTOConverter {
         return userDTO;
     }
 
-    public List<OrganisationDetailsDTO> toDTOList(List<OrganisationProjection>  projections){
-        List<OrganisationDetailsDTO> orgDetailsDTOList = new ArrayList<>();
+    public List<OrganisationDTO> toDTOList(List<OrganisationProjection>  projections){
+        List<OrganisationDTO> orgDTOList = new ArrayList<>();
         for(OrganisationProjection projection : projections) {
-            OrganisationDetailsDTO dto = new OrganisationDetailsDTO();
+            OrganisationDTO dto = new OrganisationDTO();
             dto.setOrganisationId(projection.getOrganisationId());
             dto.setName(projection.getOrganisationName());
-            orgDetailsDTOList.add(dto);
+            dto.setCreatorId(projection.getCreatorId());
+            orgDTOList.add(dto);
         }
-        return orgDetailsDTOList;
+        return orgDTOList;
     }
 
 

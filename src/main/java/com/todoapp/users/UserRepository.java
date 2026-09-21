@@ -16,10 +16,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 
 
-    @Query(value = "SELECT o.id AS organisationId, o.name AS organisationName " +
-            "FROM organisation o " +
-            "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +
-            "WHERE ou.user_id = :userId",
+    @Query(value = "SELECT o.id AS organisationId, o.name AS organisationName, " +
+                   "o.creator_id AS creatorId " +
+                   "FROM organisation AS o " +
+                   "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +
+                   "WHERE ou.user_id = :userId",
             nativeQuery = true)
 
     List<OrganisationProjection> findOrganisationsByUserId(@Param("userId")UUID userId);

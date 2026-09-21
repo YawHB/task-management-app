@@ -13,20 +13,12 @@ properties:
     description: 'name of the organisation'
   creatorId:
     type: string
-
-    #$ref: './organisationCreator.yaml'
-
-  #projects:
-    #type: array
-    #description: 'Projects belonging to the organisation'
-    #items: { } # replace with ../projects/projectDTO.yaml when I have created the file
-  #users:
-    #type: array
-    #description: 'Users belonging to the organisation'
-    #items:
-      #$ref: '../user/userDTO.yaml'
+    format: uuid
 
 example:
   name: "John's organisation"
+  organisationId: 'e400ef72-1419-4861-940d-dc641c8bb76c'
+  creatorId: '4a391180-9c47-43db-a381-7113e3f6f8a7'
+
 
 

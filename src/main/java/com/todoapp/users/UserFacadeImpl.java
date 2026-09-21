@@ -74,7 +74,7 @@ import java.util.UUID;
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
     }
 
-    public List<OrganisationDetailsDTO> getOrganisationsByUserId(UUID userId) {
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
 
       userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
 
