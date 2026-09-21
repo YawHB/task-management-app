@@ -61,4 +61,11 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
                    "AND user_id = :userId",
                     nativeQuery = true)
     void removeUserFromProject(UUID projectId, UUID userId);
+
+    @Query(value = "SELECT COUNT(*) > 0 " +
+            "FROM projects_users " +
+            "WHERE project_id = :projectId " +
+            "AND user_id = :userId",
+            nativeQuery = true)
+    boolean userExistInProject(UUID projectId, UUID userId);
 }

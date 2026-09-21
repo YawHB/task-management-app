@@ -129,6 +129,8 @@ public class ProjectFacadeImpl implements ProjectFacade{
         if(!this.existById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling userFacade to check if user exist by id");
         if(!userFacade.existById(userId)) throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+        if(!organisationFacade.userExistInOrganisation(organisationId, userId)) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+        if(!projectRepository.userExistInProject(projectId, userId)) throw new UserNotMemberOfProjectException(ExceptionReason.USER_NOT_MEMBER_OF_PROJECT.getValue());
 
         log.info("[ProjectFacadeImpl - removeProjectUser] - All objects exist. Calling projectRepository to remove user from project");
         projectRepository.removeUserFromProject(projectId, userId);

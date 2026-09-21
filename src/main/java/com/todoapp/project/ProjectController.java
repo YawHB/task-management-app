@@ -108,10 +108,19 @@ public class ProjectController implements ProjectApi {
         return ResponseEntity.noContent().build();
         }catch (OrganisationNotFoundException exception) {
             log.error("[ProjectController - removeProjectUser] - return 404 status response for organisation ❌"+ exception.getMessage());
+
         } catch (ProjectNotFoundException exception) {
             log.error("[ProjectController - removeProjectUser] - return 404 status response for project ❌"+ exception.getMessage());
+
         } catch (UserNotFoundException exception) {
             log.error("[ProjectController - removeProjectUser] - return 404 status response for user ❌"+ exception.getMessage());
+
+        } catch (UserNotMemberOfOrganisationException exception) {
+            log.error("[ProjectController - removeProjectUser] - user not member of organisation ❌"+ exception.getMessage());
+
+        } catch (UserNotMemberOfProjectException exception) {
+            log.error("[ProjectController - removeProjectUser] - user not member of project ❌"+ exception.getMessage());
+
         }
         return ResponseEntity.notFound().build();
     }

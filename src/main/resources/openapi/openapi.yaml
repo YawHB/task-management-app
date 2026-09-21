@@ -10,8 +10,9 @@ servers:
 tags:
   - name: Task
   - name: User
-  - name: Organisation
   - name: Project
+  - name: Organisation
+
 
 
 #TASK
@@ -31,6 +32,14 @@ paths:
   /api/users/{user-id}/organisations:
     $ref: './paths/users-user-id-organisations.yaml'
 
+  #PROJECT
+  /api/organisations/{organisationId}/projects:
+    $ref: './paths/projects.yaml'
+  /api/projects/{projectId}:
+    $ref: './paths/projects-id.yaml'
+  /api/organisations/{organisationId}/projects/{projectId}/users/{userId}:
+    $ref: './paths/projects-id-users-id.yaml'
+
 #ORGANISATION
   /api/organisations:
     $ref: './paths/organisations.yaml'
@@ -39,13 +48,7 @@ paths:
   /api/organisations/{id}/users:
     $ref: './paths/organisations-id-users.yaml'
 
-  #PROJECT
-  /api/organisations/{organisationId}/projects:
-    $ref: './paths/projects.yaml'
-  /api/projects/{projectId}:
-    $ref: './paths/projects-id.yaml'
-  /api/organisations/{organisationId}/projects/{projectId}/users/{userId}:
-    $ref: './paths/projects-id-users-id.yaml'
+
 
 
 #components:
