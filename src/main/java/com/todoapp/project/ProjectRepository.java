@@ -13,13 +13,6 @@ import java.util.UUID;
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
 
     @Query(value = "SELECT COUNT(*) > 0 " +
-                   "FROM organisations_users " +
-                   "WHERE organisation_id = :organisationId " +
-                   "AND user_id = :userId",
-                    nativeQuery = true)
-    boolean userExistInOrganisation(UUID organisationId, UUID userId);
-
-    @Query(value = "SELECT COUNT(*) > 0 " +
                    "FROM project " +
                    "WHERE name = :name",
                    nativeQuery = true)

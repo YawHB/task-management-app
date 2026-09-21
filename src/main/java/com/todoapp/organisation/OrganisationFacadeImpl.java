@@ -71,8 +71,11 @@ import java.util.UUID;
         return userDTO;
         }
         throw new UserExistsInOrganisationException(ExceptionReason.USER_ALREADY_EXIST_IN_ORG.getValue());
+    }
 
-
+    @Override
+    public boolean userExistInOrganisation(UUID organisationId, UUID userId) {
+       return organisationRepository.userExistInOrganisation(organisationId,userId);
     }
 }
 

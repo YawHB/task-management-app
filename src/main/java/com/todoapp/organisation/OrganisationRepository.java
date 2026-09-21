@@ -20,11 +20,13 @@ import java.util.UUID;
                 " VALUES (:activeSince, :id, :organisationId, :userId)", nativeQuery = true)
  void addUserToOrganisation(LocalDateTime activeSince, UUID id, UUID organisationId, @Valid UUID userId);
 
- @Query(value = "SELECT COUNT (*) > 0 FROM organisations_users " +
-                "WHERE organisations_users.organisation_id = :orgId " +
-                "AND organisations_users.user_id = :userId",
-                nativeQuery = true)
- boolean userExistInOrganisation(@Param("orgId") UUID orgId,@Param("userId") UUID userId);
+
+ @Query(value = "SELECT COUNT(*) > 0 " +
+         "FROM organisations_users " +
+         "WHERE organisation_id = :organisationId " +
+         "AND user_id = :userId",
+         nativeQuery = true)
+ boolean userExistInOrganisation(UUID organisationId, UUID userId);
 
  @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.organisation_id, " +
                 "o.name, " +

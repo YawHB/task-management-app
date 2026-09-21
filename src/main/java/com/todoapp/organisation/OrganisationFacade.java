@@ -17,4 +17,6 @@ public interface OrganisationFacade  {
 
 
     UserDTO addUserToOrganisation(UUID id, String userEmail) throws OrganisationNotFoundException;
+
+    boolean userExistInOrganisation(UUID organisationId, UUID userId);
 }
