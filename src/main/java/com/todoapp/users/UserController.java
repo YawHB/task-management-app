@@ -22,14 +22,12 @@ import java.util.UUID;
 @Slf4j
 public class UserController implements UserApi {
 
-    private final UserFacadeImpl userFacadeService;
     private final UserFacadeImpl userService;
-    private final UserDTOConverter userDTOConverter;
 
     @Override
     public ResponseEntity<UserDTO> addUser(UserDTO userDTO) {
         log.info("[UserController - addUser] - calling userService to add user");
-        UserDTO createdUser = userFacadeService.addUser(userDTO);
+        UserDTO createdUser = userService.addUser(userDTO);
         log.info("[UserController - addUser] - returning the created user to client");
         return ResponseEntity.status(HttpStatus.CREATED).body( (createdUser));
     }
