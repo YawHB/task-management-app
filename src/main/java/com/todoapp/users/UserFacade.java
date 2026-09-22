@@ -14,7 +14,7 @@ public interface UserFacade {
    boolean userExistInOrganisation(UUID userId, UUID organisationId);
 
 
-    User addUser(User user);
+    UserDTO addUser(UserDTO userDTO);
 
     UserDTO getUserByEmail(String email);
 

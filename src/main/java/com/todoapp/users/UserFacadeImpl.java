@@ -41,9 +41,16 @@ import java.util.UUID;
         return userRepository.findById(id);
     }
 
-    public User addUser(User user) {
+    public UserDTO addUser(UserDTO userDTO) {
+
+        log.info("[UserService - addUser] - calling toEntity ");
+        User user = userDTOConverter.toEntity(userDTO);
         log.info("[UserService - addUser] - calling userRepository to save user");
-        return userRepository.save(user);
+        User createdUser = userRepository.save(user);
+        log.info("[UserService - addUser] - return the created user as a userDTO");
+         return userDTOConverter.toDTO(createdUser);
+
+
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.task_management_app.api.UserApi;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
+import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,10 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<UserDTO> addUser(UserDTO userDTO) {
-
-        log.info("[UserController - addUser] - calling toEntity");
-        User user = userDTOConverter.toEntity(userDTO);
         log.info("[UserController - addUser] - calling userService to add user");
-        User createdUser = userFacadeService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body( userDTOConverter.toDTO(createdUser));
+        UserDTO createdUser = userFacadeService.addUser(userDTO);
+        log.info("[UserController - addUser] - returning the created user to client");
+        return ResponseEntity.status(HttpStatus.CREATED).body( (createdUser));
     }
 
     @Override
