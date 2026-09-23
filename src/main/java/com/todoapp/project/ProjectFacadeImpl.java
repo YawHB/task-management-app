@@ -58,10 +58,8 @@ public class ProjectFacadeImpl implements ProjectFacade{
         if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
-        // TODO - ❌ userExistInOrganisation should be called through organisationFacade. This has nothing to to with the project repository
         boolean isMember = organisationFacade.userExistInOrganisation(organisationId, userId);
 
-       // boolean isMember = projectRepository.userExistInOrganisation(organisationId, userId);
         if(!isMember) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");

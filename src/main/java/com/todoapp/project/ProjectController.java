@@ -22,7 +22,6 @@ import java.util.UUID;
 @Slf4j
 public class ProjectController implements ProjectApi {
 
-    ProjectFacade projectFacade;
     ProjectFacadeImpl projectService;
 
     @Override
@@ -30,7 +29,7 @@ public class ProjectController implements ProjectApi {
 
         try {
             log.info("[ProjectController - addProject] - calling facade");
-            ProjectDTO projectDTO = projectFacade.addProject(organisationId, ProjectPost);
+            ProjectDTO projectDTO = projectService.addProject(organisationId, ProjectPost);
             log.info("[ProjectController - addProject] - Returns response to the client");
             return ResponseEntity.status(HttpStatus.CREATED).body(projectDTO);
         } catch (OrganisationNotFoundException exception) {
