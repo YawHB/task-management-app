@@ -3,6 +3,8 @@ package com.todoapp.project;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
 import com.task_management_app.api.model.ProjectSummaryDTO;
+import com.todoapp.project.facade.ProjectSummaryProjection;
+import com.todoapp.project.internal.model.Project;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

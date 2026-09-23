@@ -1,6 +1,8 @@
 package com.todoapp.organisation;
 
 import com.task_management_app.api.model.*;
+import com.todoapp.organisation.facade.OrganisationDetailsProjection;
+import com.todoapp.organisation.internal.model.Organisation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,7 @@ import java.util.List;
 @Component
 @Slf4j
 @AllArgsConstructor
- class OrganisationDTOConverter {
+ public class OrganisationDTOConverter {
 
     public Organisation toEntity(AddOrganisationRequestDTO addOrgReqDTO) {
         Organisation organisation = new Organisation();

@@ -2,7 +2,8 @@ package com.todoapp.users;
 
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.users.repository.OrganisationProjection;
+import com.todoapp.users.internal.model.User;
+import com.todoapp.users.facade.OrganisationProjection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
