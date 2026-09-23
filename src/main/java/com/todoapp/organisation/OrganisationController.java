@@ -23,7 +23,6 @@ class OrganisationController implements OrganisationApi {
 
     private OrganisationFacade organisationFacade;
     private OrganisationFacadeImpl organisationService;
-    private OrganisationDTOConverter organisationDTOConverter;
 
     @Override
     public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
@@ -37,7 +36,7 @@ class OrganisationController implements OrganisationApi {
     @Override
     public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) {
         try {
-            OrganisationDetailsDTO organisationDTO = organisationFacade.findOrganisationById(id);
+            OrganisationDetailsDTO organisationDTO = organisationService.findOrganisationById(id);
             return ResponseEntity.ok(organisationDTO);
         } catch (OrganisationNotFoundException exception) {
             log.error("[getOrganisationById] - " + exception.getMessage());

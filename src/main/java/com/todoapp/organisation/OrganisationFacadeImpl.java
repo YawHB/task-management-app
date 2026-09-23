@@ -64,7 +64,6 @@ import java.util.UUID;
                 ()-> new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue()));
 
 
-        //TODO - remember to add invalid email exception as well
         boolean userAlreadyAdded = organisationRepository.userExistInOrganisation(organisationId, userDTO.getUserId());
 
         if(!userAlreadyAdded) {
