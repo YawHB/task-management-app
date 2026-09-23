@@ -26,11 +26,11 @@ class OrganisationController implements OrganisationApi {
     private OrganisationDTOConverter organisationDTOConverter;
 
     @Override
-    public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO addOrgReqDTO) {
+    public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
         log.info("[OrganisationController - addOrganisation] - calling facade");
-        Organisation organisation = organisationService.addOrganisation(addOrgReqDTO);
+        OrganisationDTO organisationDTO = organisationService.addOrganisation(orgRequestDTO);
         log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
-        return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTOConverter.toDTO(organisation));
+        return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
     }
 
 

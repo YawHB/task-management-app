@@ -27,11 +27,13 @@ import java.util.UUID;
     private UserFacade userFacade;
 
 
-    public Organisation addOrganisation(AddOrganisationRequestDTO addOrgReqDTO) {
+    public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationDTOConverter ");
-        Organisation organisation = organisationDTOConverter.toEntity(addOrgReqDTO);
+        Organisation organisation = organisationDTOConverter.toEntity(orgRequestDTO);
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the repository to save an organisation object");
-        return organisationRepository.save(organisation);
+        Organisation newOrganisation = organisationRepository.save(organisation);
+        log.info("[OrganisationFacadeImpl - addOrganisation] - calling the toDTO to populate organisationDTO for the controller");
+        return organisationDTOConverter.toDTO(newOrganisation);
     }
 
     @Override
