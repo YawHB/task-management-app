@@ -1,11 +1,8 @@
 package com.todoapp.users;
 
-import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.task_management_app.api.model.OrganisationDTO;
-import com.todoapp.organisation.OrganisationFacade;
-import com.task_management_app.api.model.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,9 +34,6 @@ import java.util.UUID;
        return  userRepository.existsByOrganisationIdAndUserId(userId, organisationId);
     }
 
-    public Optional<User> findUserById(UUID id) {
-        return userRepository.findById(id);
-    }
 
     public UserDTO addUser(UserDTO userDTO) {
 
@@ -85,7 +79,7 @@ import java.util.UUID;
 
       userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
 
-        return userDTOConverter.toDTOList(userRepository.findOrganisationsByUserId(userId));
+        return userDTOConverter.toDTO(userRepository.findOrganisationsByUserId(userId));
     }
 }
 

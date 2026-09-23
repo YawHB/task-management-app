@@ -1,7 +1,6 @@
 package com.todoapp.users;
 
 import com.task_management_app.api.model.OrganisationDTO;
-import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.users.repository.OrganisationProjection;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class UserDTOConverter {
         return userDTO;
     }
 
-    public List<OrganisationDTO> toDTOList(List<OrganisationProjection>  projections){
+    public List<OrganisationDTO> toDTO(List<OrganisationProjection>  projections){
         List<OrganisationDTO> orgDTOList = new ArrayList<>();
         for(OrganisationProjection projection : projections) {
             OrganisationDTO dto = new OrganisationDTO();
