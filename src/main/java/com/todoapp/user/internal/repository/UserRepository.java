@@ -1,7 +1,7 @@
-package com.todoapp.users.internal.repository;
+package com.todoapp.user.internal.repository;
 
-import com.todoapp.users.facade.OrganisationProjection;
-import com.todoapp.users.internal.model.User;
+import com.todoapp.user.facade.OrganisationProjection;
+import com.todoapp.user.internal.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

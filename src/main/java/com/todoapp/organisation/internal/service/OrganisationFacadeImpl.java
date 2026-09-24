@@ -1,9 +1,6 @@
 package com.todoapp.organisation.internal.service;
 
-import com.task_management_app.api.model.AddOrganisationRequestDTO;
-import com.task_management_app.api.model.OrganisationDTO;
-import com.task_management_app.api.model.OrganisationDetailsDTO;
-import com.task_management_app.api.model.UserDTO;
+import com.task_management_app.api.model.*;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptions.UserExistsInOrganisationException;
@@ -12,7 +9,7 @@ import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.organisation.internal.model.Organisation;
-import com.todoapp.users.facade.UserFacade;
+import com.todoapp.user.facade.UserFacade;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

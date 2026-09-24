@@ -11,7 +11,7 @@ import com.todoapp.project.internal.repository.ProjectRepository;
 import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.project.facade.ProjectSummaryProjection;
 import com.todoapp.project.internal.model.Project;
-import com.todoapp.users.facade.UserFacade;
+import com.todoapp.user.facade.UserFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,14 +35,15 @@ public class ProjectFacadeImpl implements ProjectFacade {
     private final OrganisationFacade organisationFacade;
     private final UserFacade userFacade;
 
+
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
         log.info("[ProjectFacadeImpl - addProject] - validates that request body contains project name)");
         if(projectPost.getName().isBlank()) throw new InvalidRequestBodyException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
-       if(projectRepository.existsByName(projectPost.getName()))  throw new DuplicateProjectNameException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
+        if(projectRepository.existsByName(projectPost.getName()))  throw new DuplicateProjectNameException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
 
         log.info("[ProjectFacadeImpl - addProject] - checks if organisation exists by its id (OBS: missing error handling on fail)");
-      if(organisationFacade.existsById(organisationId)) {
+        if(organisationFacade.existsById(organisationId)) {
           log.info("[ProjectFacadeImpl - addProject] - returns a project from the project DTO converter ");
           Project project = projectDTOConverter.toEntity(organisationId, projectPost);
           log.info("[ProjectFacadeImpl - addProject] - saves Project object ");

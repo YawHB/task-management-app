@@ -1,4 +1,4 @@
-package com.todoapp.tasks.internal;
+package com.todoapp.task.internal;
 
 public enum Priority {
     LOW,

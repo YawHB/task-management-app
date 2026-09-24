@@ -1,4 +1,4 @@
-package com.todoapp.tasks.internal.model;
+package com.todoapp.task.internal.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +34,6 @@ public class TaskComment {
 
     @ManyToOne()
     @JoinColumn(name = "task_id", nullable = false)
-    private TodoTask task;
+    private Task task;
 
 }

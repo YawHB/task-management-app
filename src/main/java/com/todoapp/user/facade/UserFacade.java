@@ -1,7 +1,7 @@
-package com.todoapp.users.facade;
+package com.todoapp.user.facade;
 
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.users.internal.model.User;
+import com.todoapp.user.internal.model.User;
 
 import java.util.List;
 import java.util.UUID;

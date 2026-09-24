@@ -1,4 +1,4 @@
-package com.todoapp.tasks.internal.model;
+package com.todoapp.task.internal.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -31,7 +31,7 @@ private String color;
         joinColumns = @JoinColumn(name = "label_id"),
         inverseJoinColumns = @JoinColumn(name = "task_id")
 )
-    private List<TodoTask> tasks;
+    private List<Task> tasks;
 
 }
 

@@ -1,4 +1,4 @@
-package com.todoapp.users.facade;
+package com.todoapp.user.facade;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package com.todoapp.users.internal.model;
+package com.todoapp.user.internal.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

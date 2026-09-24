@@ -1,12 +1,12 @@
-package com.todoapp.users.internal.service;
+package com.todoapp.user.internal.service;
 
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.task_management_app.api.model.OrganisationDTO;
-import com.todoapp.users.UserDTOConverter;
-import com.todoapp.users.internal.repository.UserRepository;
-import com.todoapp.users.facade.UserFacade;
-import com.todoapp.users.internal.model.User;
+import com.todoapp.user.UserDTOConverter;
+import com.todoapp.user.internal.repository.UserRepository;
+import com.todoapp.user.facade.UserFacade;
+import com.todoapp.user.internal.model.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,7 @@ import java.util.UUID;
 
     private final UserRepository userRepository;
     private final UserDTOConverter userDTOConverter;
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

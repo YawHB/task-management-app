@@ -1,7 +1,7 @@
-package com.todoapp.tasks.internal.controller;
+package com.todoapp.task.internal.controller;
 
-import com.todoapp.tasks.internal.model.TodoTask;
-import com.todoapp.tasks.internal.service.TodoTaskService;
+import com.todoapp.task.internal.model.Task;
+import com.todoapp.task.internal.service.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,25 +15,25 @@ import java.util.UUID;
 // RestController = Controller + ResponseBody
 @RequestMapping("/tasks")
 @AllArgsConstructor
-public class TodoTaskController {
+public class TaskController {
 
-    private final TodoTaskService todoTaskService;
+    private final TaskService taskService;
 
     // api = endpoint
     @GetMapping("")
-    public ResponseEntity<List<TodoTask>> getAllTasks() {
-        return ResponseEntity.ok(todoTaskService.getAllTasks());
+    public ResponseEntity<List<Task>> getAllTasks() {
+        return ResponseEntity.ok(taskService.getAllTasks());
     }
 
     @PostMapping("")
-    public ResponseEntity<Void> addTask(@RequestBody TodoTask todoTask) {
-        todoTaskService.saveTask(todoTask);
+    public ResponseEntity<Void> addTask(@RequestBody Task task) {
+        taskService.saveTask(task);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TodoTask> findTaskById(@PathVariable UUID id){
-        Optional<TodoTask> existingTask = todoTaskService.findTaskById(id);
+    public ResponseEntity<Task> findTaskById(@PathVariable UUID id){
+        Optional<Task> existingTask = taskService.findTaskById(id);
         if(existingTask.isPresent()) {
             return ResponseEntity.ok(existingTask.get());
         }
@@ -43,9 +43,9 @@ public class TodoTaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id){
-        Optional<TodoTask> existingTask = todoTaskService.findTaskById(id);
+        Optional<Task> existingTask = taskService.findTaskById(id);
         if(existingTask.isPresent()) {
-         todoTaskService.deleteTask(id);
+         taskService.deleteTask(id);
          return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
