@@ -78,7 +78,6 @@ import java.util.List;
     private boolean projectIsUnique(List<OrganisationProjectDTO> projects, OrganisationDetailsProjection organisationDetail) {
         log.info("INSIDE PROJECT_IS_UNIQUE " + organisationDetail.getOrganisationId());
         for(OrganisationProjectDTO p : projects) {
-            if(projects.isEmpty()) return true;
            if(p.getProjectId().equals(organisationDetail.getProjectId()) ) return false;
         }
         return true;
@@ -86,7 +85,6 @@ import java.util.List;
 
     private boolean userIsUnique(List<OrganisationUserDTO> users, OrganisationDetailsProjection organisationDetail) {
         for(OrganisationUserDTO u : users) {
-            if(users.isEmpty()) return true;
             if(u.getUserId().equals(organisationDetail.getUserId())) return false;
         }
         return true;
