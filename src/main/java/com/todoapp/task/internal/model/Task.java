@@ -1,8 +1,7 @@
-package com.todoapp.tasks.internal.model;
+package com.todoapp.task.internal.model;
 
-import com.todoapp.project.internal.model.Project;
-import com.todoapp.tasks.internal.Priority;
-import com.todoapp.tasks.internal.Status;
+import com.todoapp.task.internal.Priority;
+import com.todoapp.task.internal.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Entity
 @Table(name = "todo_tasks")
-public class TodoTask {
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,9 +36,9 @@ public class TodoTask {
     //TODO - Can i point to parentTaks, just like this?
    private UUID parentTask;
 
-   @ManyToOne
-   @JoinColumn(name = "project_id")
-   private Project project;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private UUID project;
 
     private LocalDateTime dueDate;
 

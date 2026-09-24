@@ -64,8 +64,7 @@
             <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
 
-        <!-- Database-specific Flyway module (Choose the one matching your DB) -->
-        <!-- For PostgreSQL -->
+        <!-- Database-specific Flyway module  -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
@@ -74,6 +73,13 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
+        </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/com.tngtech.archunit/archunit -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
