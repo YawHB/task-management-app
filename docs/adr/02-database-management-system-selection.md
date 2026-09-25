@@ -1,8 +1,8 @@
 # Database Management System Selection
 
 
-> **Status:** 🟡 Proposed  
-> **Date:** 2026-07-23  
+> **Status:** 🟢 Accepted 
+> **Date:** 2026-07-23 
 > **ID:** #002  
 
 ---

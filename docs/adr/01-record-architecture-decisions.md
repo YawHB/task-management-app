@@ -1,7 +1,7 @@
 # Record Architecture Decisions
 
 
-> **Status:** 🟡 Proposed  
+> **Status:** 🟢 Accepted  
 > **Date:** 2026-07-23  
 > **ID:** #001
 
