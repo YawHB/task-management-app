@@ -2,7 +2,8 @@
 
 type: object
 required:
-  - createdBy
+  - projectId
+  - taskCreatorId
   - taskTitle
   - status
   - priority
@@ -23,7 +24,7 @@ properties:
     type: string
     format: uuid
     nullable: true
-  createdBy:
+  taskCreatorId:
       type: string
       format: uuid
   status:
