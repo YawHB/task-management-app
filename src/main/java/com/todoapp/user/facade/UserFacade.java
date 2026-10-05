@@ -11,6 +11,8 @@ public interface UserFacade {
 
    boolean existById(UUID id);
 
+   boolean userExistInProject(UUID userId, UUID projectId);
+
    boolean userExistInOrganisation(UUID userId, UUID organisationId);
 
 

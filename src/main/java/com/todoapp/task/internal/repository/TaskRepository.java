@@ -2,6 +2,7 @@ package com.todoapp.task.internal.repository;
 
 import com.todoapp.task.internal.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
@@ -9,5 +10,9 @@ import java.util.UUID;
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 
 
+    @Query(value = "SELECT COUNT(*) > 0 FROM todo_tasks " +
+                   "WHERE id = :taskId AND project_id = :projectId",
+                    nativeQuery = true)
+    boolean existByIdAndProjectId(UUID taskId, UUID projectId);
 }
 

@@ -1,5 +1,9 @@
 package com.todoapp.task.facade;
 
+import java.util.UUID;
+
 public interface TaskFacade {
-    public void someMethod();
+     boolean existById(UUID id);
+
+     boolean taskExistInProject(UUID taskId, UUID projectId);
 }

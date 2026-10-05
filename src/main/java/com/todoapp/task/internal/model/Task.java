@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -53,15 +54,12 @@ public class Task {
 
     private String description;
 
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-
-
 
     @ManyToMany(mappedBy = "tasks")
     private List<Label> labels;
