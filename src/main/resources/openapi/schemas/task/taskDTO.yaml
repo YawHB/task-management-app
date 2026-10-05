@@ -26,9 +26,9 @@
       type: string
       format: uuid
     status:
-      $ref: './status.yaml'
+      $ref: './statusDTO.yaml'
     priority:
-      $ref: './priority.yaml'
+      $ref: './priorityDTO.yaml'
     dueDate:
       type: string
       format: date
@@ -49,8 +49,8 @@
     projectId: '7c9e6679-7425-40de-944b-e07fc1f90ae7'
     assigneeId: '8f14e45f-ea7f-4f2b-8b2d-6d3f9c5a1b72'
     taskCreatorId: '9f86d081-884c-4d5f-9f6a-2c7e8b4d3a91'
-    status: 'in-progress'
-    priority: 'medium'
+    status: 'IN-PROGRESS'
+    priority: 'MEDIUM'
     dueDate: '2026-08-31'
     createdAt: '2026-07-15T09:30:00Z'
     updatedAt: '2026-07-20T09:30:00Z'
