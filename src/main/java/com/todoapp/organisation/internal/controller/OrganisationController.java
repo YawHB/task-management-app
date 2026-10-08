@@ -36,15 +36,11 @@ class OrganisationController implements OrganisationApi {
     }
 
 
+
     @Override
-    public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) {
-        try {
+    public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) throws OrganisationNotFoundException {
             OrganisationDetailsDTO organisationDTO = organisationService.findOrganisationById(id);
             return ResponseEntity.ok(organisationDTO);
-        } catch (OrganisationNotFoundException exception) {
-            log.error("[getOrganisationById] - " + exception.getMessage());
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @Override
