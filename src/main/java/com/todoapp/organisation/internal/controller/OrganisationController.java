@@ -29,13 +29,11 @@ class OrganisationController implements OrganisationApi {
 
     @Override
     public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
-        log.info("[OrganisationController - addOrganisation] - calling facade");
-        OrganisationDTO organisationDTO = organisationService.addOrganisation(orgRequestDTO);
-        log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
-        return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
+           log.info("[OrganisationController - addOrganisation] - calling facade");
+           OrganisationDTO organisationDTO = organisationService.addOrganisation(orgRequestDTO);
+           log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
+           return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
     }
-
-
 
     @Override
     public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) throws OrganisationNotFoundException {
@@ -45,21 +43,8 @@ class OrganisationController implements OrganisationApi {
 
     @Override
     public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
-        try {
             log.info("[OrganisationController - addUserToOrganisation] - Calling org facade ");
             UserDTO addedUser = organisationFacade.addUserToOrganisation(id, userEmail);
             return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
-        } catch (UserExistsInOrganisationException exception) {
-            log.error("[OrganisationController - addUserToOrganisation.] - " + exception.getMessage());
-            return ResponseEntity.badRequest().build();
-        } catch (UserNotFoundException exception) {
-            log.error("[OrganisationController - addUserToOrganisation ] -  " + exception.getMessage());
-            return ResponseEntity.notFound().build();
-
-        } catch (OrganisationNotFoundException exception) {
-            log.error("[OrganisationController - addUserToOrganisation] -  " + exception.getMessage());
-            return ResponseEntity.notFound().build();
-
-        }
     }
 }
