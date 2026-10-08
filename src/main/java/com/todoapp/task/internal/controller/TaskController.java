@@ -21,9 +21,6 @@ public class TaskController implements TaskApi {
 
     private final TaskFacadeImpl taskFacadeImpl;
 
-
-
-
     @Override
     public ResponseEntity<TaskDTO> addTask(AddTaskDTO addTaskDTO) {
         try{
@@ -45,6 +42,9 @@ public class TaskController implements TaskApi {
             return ResponseEntity.badRequest().build();
         } catch (InvalidDateRangeException exception) {
             log.error("addTask, - " + exception.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (InvalidStringException exception) {
+            log.error(".addTask - " + exception.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }

@@ -2,6 +2,7 @@ package com.todoapp.exceptions;
 
 public enum ExceptionReason {
 
+    INVALID_STRING("The string provided violates the required requirements"),
     ORG_NOT_FOUND_BY_ID("Organisation not found by this id"),
     PROJECT_NOT_FOUND("Project not found by this id"),
     USER_NOT_MEMBER_OF_ORG("Access denied - the selected user is not a member of this organisation"),

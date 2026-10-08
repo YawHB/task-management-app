@@ -3,6 +3,8 @@ import com.task_management_app.api.model.AddTaskDTO;
 import com.task_management_app.api.model.PriorityDTO;
 import com.task_management_app.api.model.StatusDTO;
 import com.task_management_app.api.model.TaskDTO;
+import com.todoapp.exceptions.ExceptionReason;
+import com.todoapp.exceptions.InvalidStringException;
 import com.todoapp.task.internal.Priority;
 import com.todoapp.task.internal.Status;
 import com.todoapp.task.internal.model.Task;
@@ -18,7 +20,7 @@ public class TaskDTOConverter {
         log.info("[TaskDTOConverer - toEntity] - mapping DTO -> entity");
         Task newTask = new Task();
 
-        newTask.setTitle(requestBody.getTaskTitle());
+        newTask.setTitle(notBlank(requestBody.getTaskTitle()));
         newTask.setDescription(requestBody.getDescription());
         newTask.setParentTaskId(requestBody.getParentTaskId());
         newTask.setProjectId(requestBody.getProjectId());
@@ -67,4 +69,17 @@ public class TaskDTOConverter {
     private PriorityDTO mapPriorityToDTO(Priority priority) {
         return PriorityDTO.valueOf(priority.name());
     }
+
+    private String notBlank(String string) {
+        log.info("[TaskDTOConverer - notBlank] - checking if string is blank");
+
+        if(string.isBlank()){
+        log.info("[TaskDTOConverer - notBlank] - STRING IS BLANK");
+            throw new InvalidStringException(ExceptionReason.INVALID_STRING.getValue());
+        }
+
+        return string;
+    }
 }
+
+
