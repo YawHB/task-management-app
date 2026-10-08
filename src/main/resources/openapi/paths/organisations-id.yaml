@@ -25,6 +25,10 @@ get:
       description: 'Bad request. Invalid organisation id format'
     '404':
       description: 'The organisation you request does not exist'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal Server Error'
 
