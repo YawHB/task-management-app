@@ -3,7 +3,7 @@ package com.todoapp.user.internal.controller;
 import com.task_management_app.api.UserApi;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.exceptions.UserNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.todoapp.user.internal.service.UserFacadeImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

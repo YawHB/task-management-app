@@ -1,10 +1,7 @@
 package com.todoapp.project.internal.service;
 
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptions.UserNotMemberOfOrganisationException;
-import com.todoapp.exceptions.*;
+import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.project.ProjectDTOConverter;
 import com.todoapp.project.internal.repository.ProjectRepository;

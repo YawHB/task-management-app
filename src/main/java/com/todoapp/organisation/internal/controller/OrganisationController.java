@@ -5,9 +5,9 @@ import com.task_management_app.api.model.AddOrganisationRequestDTO;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptions.UserExistsInOrganisationException;
-import com.todoapp.exceptions.UserNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.UserExistsInOrganisationException;
+import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.todoapp.organisation.internal.service.OrganisationFacadeImpl;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -48,12 +49,12 @@ class OrganisationController implements OrganisationApi {
 
     @Override
     public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
-        try{
-        log.info("[OrganisationController - addUserToOrganisation] - Calling org facade ");
-         UserDTO addedUser = organisationFacade.addUserToOrganisation(id, userEmail);
-         return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
+        try {
+            log.info("[OrganisationController - addUserToOrganisation] - Calling org facade ");
+            UserDTO addedUser = organisationFacade.addUserToOrganisation(id, userEmail);
+            return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
         } catch (UserExistsInOrganisationException exception) {
-            log.error("[OrganisationController - addUserToOrganisation.] - " +exception.getMessage() );
+            log.error("[OrganisationController - addUserToOrganisation.] - " + exception.getMessage());
             return ResponseEntity.badRequest().build();
         } catch (UserNotFoundException exception) {
             log.error("[OrganisationController - addUserToOrganisation ] -  " + exception.getMessage());
