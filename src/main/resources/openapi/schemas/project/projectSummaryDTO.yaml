@@ -12,8 +12,4 @@ properties:
     type: string
     description: 'name of the project'
 
-example:
-  projectId: "100e8400-e29b-41d4-a716-446655440011"
-  name: "John's project 1"
-
 

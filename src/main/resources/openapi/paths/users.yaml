@@ -32,5 +32,13 @@ post:
 
     '400':
       description: 'Bad request. invalid or missing request data'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
