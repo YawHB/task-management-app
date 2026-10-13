@@ -15,6 +15,7 @@ public enum ExceptionReason {
     USER_NOT_FOUND_BY_ID("User not found by this id"),
     INVALID_REQUEST_BODY("The request body is invalid. Check all properties are present and populated"),
     TASK_NOT_FOUND_IN_PROJECT("Task not found  in project by this id"),
+    TASK_TITLE_ALREADY_EXIST("The task title is already used in this project"),
     INVALID_DATE_RANGE("End date is before start date");
 
 

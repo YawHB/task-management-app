@@ -46,6 +46,9 @@ public class TaskController implements TaskApi {
         } catch (InvalidStringException exception) {
             log.error(".addTask - " + exception.getMessage());
             return ResponseEntity.badRequest().build();
+        } catch (TaskTitleAlreadyExistsException exception) {
+            log.error("add task - " + exception.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 

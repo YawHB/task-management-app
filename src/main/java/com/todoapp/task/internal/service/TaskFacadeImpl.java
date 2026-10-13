@@ -31,7 +31,7 @@ public class TaskFacadeImpl implements TaskFacade {
     public TaskDTO addTask(AddTaskDTO addTaskDTO){
 
         log.info("[TaskFacadeImpl - addTask] - calling validatePostRequest");
-        validatePostRequest(addTaskDTO);
+        this.validatePostRequest(addTaskDTO);
         log.info("[TaskFacadeImpl - addTask] - calling toEntity");
        Task task = taskDTOConverter.toEntity(addTaskDTO);
         log.info("[TaskFacadeImpl - addTask] -  calling repo to save task");
@@ -60,6 +60,11 @@ public class TaskFacadeImpl implements TaskFacade {
         log.info("[TaskFacadeImpl - validatePostRequest] - checking project id");
         if(!projectFacade.existById(projectId))
             throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
+
+        log.info("[TaskFacadeImpl - validatePostRequest] - IS TITLE UNIQUE");
+        if(taskRepository.taskTitleExistsInProject(projectId, requestBody.getTaskTitle())){
+             throw new TaskTitleAlreadyExistsException(ExceptionReason.TASK_TITLE_ALREADY_EXIST.getValue());
+         }
 
         log.info("[TaskFacadeImpl - validatePostRequest] - finding parent task in project if exist");
         if( parentTaskId != null && !this.taskExistInProject(parentTaskId,projectId ))
