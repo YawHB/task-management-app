@@ -2,7 +2,7 @@ package com.todoapp.organisation.facade;
 
 import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 
 
 import java.util.UUID;
