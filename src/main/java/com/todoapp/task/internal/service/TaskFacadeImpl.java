@@ -67,8 +67,8 @@ public class TaskFacadeImpl implements TaskFacade {
          }
 
         log.info("[TaskFacadeImpl - validatePostRequest] - finding parent task in project if exist");
-        if( parentTaskId != null && !this.taskExistInProject(parentTaskId,projectId ))
-            throw new TaskNotFoundInProjectException(ExceptionReason.TASK_NOT_FOUND_IN_PROJECT.getValue());
+        if( parentTaskId != null && this.taskExistInProject(parentTaskId,projectId ))
+            throw new ParentTaskNotFoundException(ExceptionReason.PARENT_TASK_NOT_FOUND_IN_PROJECT.getValue());
 
         log.info("[TaskFacadeImpl - validatePostRequest] - checking if user exist");
         if(assigneeId != null && !userFacade.existById(assigneeId))

@@ -31,7 +31,7 @@ public class TaskController implements TaskApi {
         } catch (ProjectNotFoundException exception) {
             log.error("addTask,." + exception.getMessage());
             return ResponseEntity.notFound().build();
-        } catch (TaskNotFoundInProjectException exception) {
+        } catch (ParentTaskNotFoundException exception) {
             log.error("addTask - "  + exception.getMessage());
             return ResponseEntity.notFound().build();
         }  catch (UserNotFoundException exception){
