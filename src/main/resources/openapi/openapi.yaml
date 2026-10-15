@@ -19,7 +19,7 @@ tags:
 paths:
   /api/tasks:
     $ref: './paths/tasks.yaml'
-  /api/tasks/{id}:
+  /api/projects/{projectId}/tasks/{taskId}:
     $ref: './paths/tasks-id.yaml'
 
 #USER
