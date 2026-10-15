@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,27 +29,17 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank
-    private String title;
+    @Column(name = "parent_task_id")
+    private UUID parentTaskId;
 
-    private String description;
+    @Column(name = "project_id")
+    private UUID projectId;
 
-    //TODO - Can i point to parentTaks, just like this?
-   private UUID parentTask;
+    @Column(name = "assignee_id")
+    private UUID assigneeId;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private UUID project;
-
-    private LocalDateTime dueDate;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "task")
-    private List<TaskComment> comments;
+    @Column(name = "task_creator_id")
+    private UUID taskCreatorId;
 
     @Enumerated(EnumType.STRING) // Stores the enum name as text in the database
     @Column(nullable = false)
@@ -57,6 +48,18 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Priority priority = Priority.MEDIUM;
+
+    @NotBlank
+    private String title;
+
+    private String description;
+
+    private LocalDate dueDate;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "tasks")
     private List<Label> labels;

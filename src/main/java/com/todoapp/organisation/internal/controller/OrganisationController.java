@@ -31,6 +31,7 @@ class OrganisationController implements OrganisationApi {
         log.info("[OrganisationController - addOrganisation] - calling facade");
         OrganisationDTO organisationDTO = organisationService.addOrganisation(orgRequestDTO);
         log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
+
         return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
     }
 
