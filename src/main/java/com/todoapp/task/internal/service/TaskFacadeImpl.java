@@ -40,6 +40,22 @@ public class TaskFacadeImpl implements TaskFacade {
         return taskDTOConverter.toDTO(newTask);
     }
 
+    public TaskDTO getTaskByInProject(UUID projectId, UUID taskId) {
+        log.info("[TaskFacadeImpl - getTaskInProject] - calling projectFacade to find project");
+      if(!projectFacade.existsById(projectId)) {
+          throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
+      }
+        log.info("[TaskFacadeImpl - getTaskInProject] - calling taskRepo to fetch task");
+        Optional<Task> task =  taskRepository.findByIdAndProjectId(projectId, taskId);
+        if(task.isEmpty()){
+            throw new TaskNotFoundInProjectException(ExceptionReason.TASK_NOT_FOUND_IN_PROJECT.getValue());
+        }
+
+        log.info("[TaskFacadeImpl - getTaskInProject] - calling DTO converter and return fetch task to controller");
+        return taskDTOConverter.toDTO(task.get());
+
+    }
+
 
     @Override
     public boolean existById(UUID id) {
@@ -58,7 +74,7 @@ public class TaskFacadeImpl implements TaskFacade {
         UUID parentTaskId = requestBody.getParentTaskId();
 
         log.info("[TaskFacadeImpl - validatePostRequest] - checking project id");
-        if(!projectFacade.existById(projectId))
+        if(!projectFacade.existsById(projectId))
             throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
 
         log.info("[TaskFacadeImpl - validatePostRequest] - IS TITLE UNIQUE");
@@ -82,4 +98,6 @@ public class TaskFacadeImpl implements TaskFacade {
         if(requestBody.getDueDate() != null && requestBody.getDueDate().isBefore(LocalDate.now()))
             throw new InvalidDateRangeException(ExceptionReason.INVALID_DATE_RANGE.getValue());
     }
+
+
 }

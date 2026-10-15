@@ -10,7 +10,14 @@ import java.util.UUID;
 public interface ProjectFacade {
 
     ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException;
-    boolean existById(UUID projectId);
+
+    /**
+
+     Checks whether a project exists with the specified ID.
+     @param projectId the UUID of the project to check
+     @return {@code true} if the project exists, {@code false} otherwise
+     */
+    boolean existsById(UUID projectId);
 
 
 
