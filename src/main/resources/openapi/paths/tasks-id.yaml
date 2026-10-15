@@ -4,10 +4,17 @@ get:
   tags:
     - Task
   summary: 'Get a task by id'
-  description: 'Returns a specified task based on a task id'
-  operationId: 'getTaskById'
+  description: 'Returns a specified task in a project based on a task- and project id'
+  operationId: 'getTaskByInProject'
   parameters:
-    - name: id
+    - name: projectId
+      in: path
+      required: true
+      description: 'Unique identifier of the project'
+      schema:
+        type: string
+        format: uuid
+    - name: taskId
       in: path
       required: true
       description: 'Unique identifier of the task'
@@ -20,7 +27,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/task/task.yaml'
+            $ref: '../schemas/task/taskDTO.yaml'
     '400':
       description: 'Bad Request. Task with this id does not exist.'
     '500':
@@ -36,14 +43,14 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/task/task-update.yaml'
+          $ref: '../schemas/task/updateTaskDTO.yaml'
   responses:
     '200':
       description: 'Task was successfully updated'
       content:
         application/json:
           schema:
-            $ref: '../schemas/task/task.yaml'
+            $ref: '../schemas/task/taskDTO.yaml'
     '400':
       description: 'Bad Request. Invalid task id format.'
     '500':

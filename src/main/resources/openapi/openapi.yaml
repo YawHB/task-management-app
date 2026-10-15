@@ -19,7 +19,7 @@ tags:
 paths:
   /api/tasks:
     $ref: './paths/tasks.yaml'
-  /api/tasks/{id}:
+  /api/projects/{projectId}/tasks/{taskId}:
     $ref: './paths/tasks-id.yaml'
 
 #USER
@@ -54,11 +54,11 @@ paths:
 #components:
  # schemas:
  #   Task:
-   #   $ref: './schemas/task/task.yaml'
+   #   $ref: './schemas/task/taskDTO.yaml'
   #  Status:
-   #   $ref: './schemas/task/status.yaml'
+   #   $ref: './schemas/task/statusDTO.yaml'
    # Priority:
-    #  $ref: './schemas/task/priority.yaml'
+    #  $ref: './schemas/task/priorityDTO.yaml'
    # User:
    #   $ref: "./schemas/user/userDTO.yaml"
    # ProjectMemberDTO:

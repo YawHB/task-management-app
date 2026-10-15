@@ -27,10 +27,15 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<OrganisationProjection> findOrganisationsByUserId(@Param("userId")UUID userId);
     Optional<User> findByEmail(String userEmail);
 
+    @Query(value = "SELECT COUNT(*) > 0 FROM projects_users " +
+                   "WHERE user_id = :assigneeId " +
+                   "AND project_id = :projectId",
+                    nativeQuery = true)
+    boolean userMemberOfProject(UUID assigneeId, UUID projectId);
 
     @Query(value = "SELECT COUNT(*) > 0 FROM organisations_users " +
                    "WHERE user_id = :userId "+
                    "AND organisation_id = :organisationId",
                     nativeQuery = true)
-    boolean existsByOrganisationIdAndUserId(UUID userId, UUID organisationId);
+    boolean userMemberOfOrganisation(UUID userId, UUID organisationId);
 }

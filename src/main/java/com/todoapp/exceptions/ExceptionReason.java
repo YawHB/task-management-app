@@ -2,17 +2,22 @@ package com.todoapp.exceptions;
 
 public enum ExceptionReason {
 
+    INVALID_STRING("The string provided violates the required requirements"),
     ORG_NOT_FOUND_BY_ID("Organisation not found by this id"),
     PROJECT_NOT_FOUND("Project not found by this id"),
     USER_NOT_MEMBER_OF_ORG("Access denied - the selected user is not a member of this organisation"),
-    USER_NOT_MEMBER_OF_PROJECT("The selected user is assigned this project. Nothing to remove"),
+    USER_NOT_MEMBER_OF_PROJECT("The selected user is not assigned this project"),
     USER_NOT_FOUND_BY_EMAIL("User not found by this email"),
     USER_ALREADY_EXIST_IN_ORG("The user with specified user id already exist in organisation with specified organisation id"),
     PROJECT_NOT_FOUND_IN_ORG("Project not found by this name in the specified organisation"),
     DUPLICATE_PROJECT_NAME("The project name already exist in the database. property name must be unique"),
     USER_ALREADY_MEMBER_OF_PROJECT("User already part of this project"),
     USER_NOT_FOUND_BY_ID("User not found by this id"),
-    INVALID_REQUEST_BODY("The request body is invalid. Check all properties are present and populated");
+    INVALID_REQUEST_BODY("The request body is invalid. Check all properties are present and populated"),
+    TASK_NOT_FOUND_IN_PROJECT("Task not found  in project by this id"),
+    PARENT_TASK_NOT_FOUND_IN_PROJECT("The associated parenttask does not exist in current project."),
+    TASK_TITLE_ALREADY_EXIST("The task title is already used in this project"),
+    INVALID_DATE_RANGE("End date is before start date");
 
 
     private String value;

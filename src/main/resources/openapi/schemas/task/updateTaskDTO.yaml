@@ -14,9 +14,9 @@ properties: ##### What properties should be required?? :O #####
     type: string
     description: Describes the task
   status:
-    $ref: './status.yaml'
+    $ref: './statusDTO.yaml'
   priority:
-    $ref: './priority.yaml'
+    $ref: './priorityDTO.yaml'
   dueDate:
     type: string
     format: date
