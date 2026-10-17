@@ -2,10 +2,16 @@
 get:
   tags:
     - Task
-  summary: 'Get all tasks'
-  description: 'Returns a list of tasks'
-  operationId: 'getTasks'
+  summary: 'Get all tasks for a project'
+  description: 'Returns a list of tasks for a given project'
+  operationId: 'getTasksByProject'
   parameters:
+    - name: projectId
+      in: path
+      description: 'Id of the specified project'
+      schema:
+        type: string
+        format: uuid
     - name: sortBy
       in: query
       description: 'Field to sort by'

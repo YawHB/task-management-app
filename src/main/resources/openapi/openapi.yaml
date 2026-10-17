@@ -17,7 +17,7 @@ tags:
 
 #TASK
 paths:
-  /api/tasks:
+  /api/project/{projectId}/tasks:
     $ref: './paths/tasks.yaml'
   /api/projects/{projectId}/tasks/{taskId}:
     $ref: './paths/tasks-id.yaml'
