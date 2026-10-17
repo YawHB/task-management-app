@@ -3,6 +3,8 @@ package com.todoapp.user.internal.service;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptions.*;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.organisation.facade.OrganisationFacade;
+import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.user.UserDTOConverter;
 import com.todoapp.user.facade.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
@@ -25,7 +27,6 @@ public class UserFacadeImpl implements UserFacade {
     private final UserDTOConverter userDTOConverter;
     private final UserMapper userMapper;
 
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -40,7 +41,6 @@ public class UserFacadeImpl implements UserFacade {
     public boolean userExistInOrganisation(UUID userId, UUID organisationId) {
         return userRepository.existsByOrganisationIdAndUserId(userId, organisationId);
     }
-
 
     public UserDTO addUser(UserDTO userDTO) {
         log.info("[UserService - addUser] - calling toEntity ");
@@ -80,17 +80,7 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
-
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
-
         return userDTOConverter.toDTO(userRepository.findOrganisationsByUserId(userId));
     }
 }
-
-
-
-
-
-
-
-
