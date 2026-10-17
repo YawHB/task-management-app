@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 @Slf4j
 public class UserDTOConverter {
+
     public User toEntity(UserDTO userDTO) {
         log.info("[UserDTOConverter - toEntity] - converting dto to User obj");
         User newUser = new User();

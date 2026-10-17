@@ -34,9 +34,8 @@ public class Task {
     private String description;
 
     //TODO - Can i point to parentTaks, just like this?
-   private UUID parentTask;
+    private UUID parentTask;
 
-    @ManyToOne
     @JoinColumn(name = "project_id")
     private UUID project;
 
