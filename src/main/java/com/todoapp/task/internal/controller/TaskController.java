@@ -3,6 +3,7 @@ package com.todoapp.task.internal.controller;
 import com.task_management_app.api.TaskApi;
 import com.task_management_app.api.model.*;
 import com.todoapp.exceptions.*;
+import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.task.internal.service.TaskFacadeImpl;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class TaskController implements TaskApi {
 
     private final TaskFacadeImpl taskFacadeImpl;
+    private final ProjectFacade projectFacade;
 
     @Override
     public ResponseEntity<TaskDTO> addTask(AddTaskDTO addTaskDTO) {
@@ -69,11 +71,11 @@ public class TaskController implements TaskApi {
         }
     }
 
-
     @Override
-    public ResponseEntity<List<TaskDTO>> getTasks(String sortBy, String sortOrder) {
-        return null;
+    public ResponseEntity<List<TaskDTO>> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
+      return null;
     }
+
 
     @Override
     public ResponseEntity<TaskDTO> updateTask(UpdateTaskDTO updateTaskDTO) {
