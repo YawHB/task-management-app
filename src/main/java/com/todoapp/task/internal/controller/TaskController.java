@@ -73,9 +73,15 @@ public class TaskController implements TaskApi {
 
     @Override
     public ResponseEntity<List<TaskSummaryDTO>> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
+        try{
+
         log.info("[TaskController - getTasksByProject] - calling taskFacadeImpl");
         List<TaskSummaryDTO> taskDTOList = taskFacadeImpl.getTasksByProject(projectId, sortBy, sortOrder);
         return ResponseEntity.status(HttpStatus.OK).body(taskDTOList);
+        } catch (ProjectNotFoundException exception) {
+            log.error("get tasks by project - " + exception.getMessage());
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

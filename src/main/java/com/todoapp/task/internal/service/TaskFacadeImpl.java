@@ -73,6 +73,8 @@ public class TaskFacadeImpl implements TaskFacade {
     }
 
     public List<TaskSummaryDTO> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
+        log.info("[TaskFacadeImpl - getTasksByProject] - calling projectFacade to check if project exists");
+        if(!projectFacade.existsById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
         log.info("[TaskFacadeImpl - getTasksByProject] - converting the string direction (asc/desc) to an ENUM ASC/DESC");
         Sort.Direction direction = Sort.Direction.fromString(sortOrder);
         log.info("[TaskFacadeImpl - getTasksByProject] - creating a sort object, with direction and property to sort by");
@@ -81,7 +83,6 @@ public class TaskFacadeImpl implements TaskFacade {
         List<TaskSummaryProjection> tasks = taskRepository.findTasksInProject(projectId, sort);
         log.info("[TaskFacadeImpl - getTasksByProject] - converts the list of fetched Tasks to taskDTOs in taskDTOConverter ");
         return taskDTOConverter.toDTO(tasks);
-
     }
 
 
