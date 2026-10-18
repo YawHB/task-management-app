@@ -20,7 +20,7 @@ get:
         enum:
           - createdAt
           - dueDate
-          - taskTitle
+          - title
           - priority
           - status
         default: createdAt
@@ -41,7 +41,7 @@ get:
           schema:
             type: array
             items:
-              $ref: '../schemas/task/taskDTO.yaml'
+              $ref: '../schemas/task/taskSummaryDTO.yaml'
     '400':
       description: 'Bad request. Unknown sortBy or sortOrder value.'
     '500':

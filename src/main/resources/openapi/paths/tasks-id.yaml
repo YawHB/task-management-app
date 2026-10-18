@@ -5,7 +5,7 @@ get:
     - Task
   summary: 'Get a task by id'
   description: 'Returns a specified task in a project based on a task- and project id'
-  operationId: 'getTaskByInProject'
+  operationId: 'getTaskByIdInProject'
   parameters:
     - name: projectId
       in: path
