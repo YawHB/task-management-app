@@ -108,33 +108,86 @@ public class TaskFacadeImpl implements TaskFacade {
         UUID projectId = requestBody.getProjectId();
         UUID parentTaskId = requestBody.getParentTaskId();
 
-        log.info("[TaskFacadeImpl - validatePostRequest] - checking project id");
-        if(!projectFacade.existsById(projectId))
-            throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
-
-        log.info("[TaskFacadeImpl - validatePostRequest] - IS TITLE UNIQUE");
-        if(taskRepository.taskTitleExistsInProject(projectId, requestBody.getTaskTitle())){
-             throw new TaskTitleAlreadyExistsException(ExceptionReason.TASK_TITLE_ALREADY_EXIST.getValue());
-         }
-
-        log.info("[TaskFacadeImpl - validatePostRequest] - finding parent task in project if exist");
-        if( parentTaskId != null && !this.taskExistInProject(parentTaskId,projectId ))
-            throw new ParentTaskNotFoundException(ExceptionReason.PARENT_TASK_NOT_FOUND_IN_PROJECT.getValue());
-
-        log.info("[TaskFacadeImpl - validatePostRequest] - checking if user exist");
-        if(assigneeId != null && !userFacade.existById(assigneeId))
-            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-
-        log.info("[TaskFacadeImpl - validatePostRequest] - checking if user is member of project");
-        if( assigneeId != null && !userFacade.userExistInProject(assigneeId, projectId))
-            throw new UserNotMemberOfProjectException(ExceptionReason.USER_NOT_MEMBER_OF_PROJECT.getValue());
-
-        log.info("[TaskFacadeImpl - validatePostRequest] - checking if due date is after creation");
-        if(requestBody.getDueDate() != null && requestBody.getDueDate().isBefore(LocalDate.now()))
-            throw new InvalidDateRangeException(ExceptionReason.INVALID_DATE_RANGE.getValue());
+        validateProjectExists(projectId);
+        validateTaskTitleIsUnique(projectId, requestBody.getTaskTitle());
+        validateParentTaskExistsInProject(parentTaskId, projectId);
+        validateAssigneeExists(assigneeId);
+        validateAssigneeIsMemberOfProject(assigneeId, projectId);
+        validateDueDate(requestBody.getDueDate());
     }
 
-    public static String toSnakeCase(String input) {
+    private void validateUpdateAssignee(UUID projectId, UUID taskId, UUID assigneeId ){
+        validateProjectExists(projectId);
+        validateTaskExistInProject(projectId, taskId);
+        validateAssigneeIsMemberOfProject(assigneeId, projectId);
+
+    }
+
+
+    private void validateProjectExists(UUID projectId) {
+        log.info("[TaskFacadeImpl - validateProjectExists] - checking project id");
+
+        if (!projectFacade.existsById(projectId)) {
+            throw new ProjectNotFoundException(
+                    ExceptionReason.PROJECT_NOT_FOUND.getValue());
+        }
+    }
+
+    private void validateTaskExistInProject(UUID projectId, UUID taskId) {
+        log.info("[TaskFacadeImpl - validateTaskTitleIsUnique] - validate if task exist in project");
+
+        if (!taskRepository.existByIdAndProjectId(taskId, projectId)){
+            throw new TaskNotFoundInProjectException(ExceptionReason.TASK_NOT_FOUND_IN_PROJECT.getValue());
+        }
+    }
+
+    private void validateTaskTitleIsUnique(UUID projectId, String taskTitle) {
+        log.info("[TaskFacadeImpl - validateTaskTitleIsUnique] - checking task title uniqueness");
+
+        if (taskRepository.taskTitleExistsInProject(projectId, taskTitle)) {
+            throw new TaskTitleAlreadyExistsException(
+                    ExceptionReason.TASK_TITLE_ALREADY_EXIST.getValue());
+        }
+    }
+
+    private void validateParentTaskExistsInProject(UUID parentTaskId, UUID projectId) {
+        log.info("[TaskFacadeImpl - validateParentTaskExistsInProject] - checking parent task");
+
+        if (parentTaskId != null && !taskExistInProject(parentTaskId, projectId)) {
+            throw new ParentTaskNotFoundException(
+                    ExceptionReason.PARENT_TASK_NOT_FOUND_IN_PROJECT.getValue());
+        }
+    }
+
+    private void validateAssigneeExists(UUID assigneeId) {
+        log.info("[TaskFacadeImpl - validateAssigneeExists] - checking assignee");
+
+        if (assigneeId != null && !userFacade.existById(assigneeId)) {
+            throw new UserNotFoundException(
+                    ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+        }
+    }
+
+    private void validateAssigneeIsMemberOfProject(UUID assigneeId, UUID projectId) {
+        log.info("[TaskFacadeImpl - validateAssigneeIsMemberOfProject] - checking project membership");
+
+        if (assigneeId != null && !userFacade.userExistInProject(assigneeId, projectId)) {
+            throw new UserNotMemberOfProjectException(
+                    ExceptionReason.USER_NOT_MEMBER_OF_PROJECT.getValue());
+        }
+    }
+
+    private void validateDueDate(LocalDate dueDate) {
+        log.info("[TaskFacadeImpl - validateDueDate] - checking due date");
+
+        if (dueDate != null && dueDate.isBefore(LocalDate.now())) {
+            throw new InvalidDateRangeException(
+                    ExceptionReason.INVALID_DATE_RANGE.getValue());
+        }
+    }
+
+
+    private String toSnakeCase(String input) {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < input.length(); i++) {
