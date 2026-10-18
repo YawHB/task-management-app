@@ -19,6 +19,8 @@ tags:
 paths:
   /api/project/{projectId}/tasks:
     $ref: './paths/tasks.yaml'
+  /api/project/{projectId}/tasks/{taskId}/assignee:
+    $ref: './paths/task/task-assignee.yaml'
   /api/projects/{projectId}/tasks/{taskId}:
     $ref: './paths/tasks-id.yaml'
 

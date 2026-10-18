@@ -1,0 +1,9 @@
+type: object
+description: 'the assignee id to be added to the task'
+required:
+  - assigneeId
+properties:
+  assigneeId:
+    type: string
+    nullable: true
+    format: uuid
