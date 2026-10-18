@@ -4,6 +4,7 @@ import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -39,5 +40,11 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
                    " WHERE project_id = :projectId ",
                    nativeQuery = true)
     List<TaskSummaryProjection> findTasksInProject(UUID projectId, Sort sort);
+
+    @Modifying
+    @Query(value = "UPDATE todo_tasks SET assignee_id = :assigneeId " +
+                   "WHERE id = :taskId AND project_id = :projectId ",
+                   nativeQuery = true)
+    void updateTaskAssignee(UUID projectId, UUID taskId, UUID assigneeId);
 }
 

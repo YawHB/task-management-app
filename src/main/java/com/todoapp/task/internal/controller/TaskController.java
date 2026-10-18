@@ -90,5 +90,25 @@ public class TaskController implements TaskApi {
         return null;
     }
 
+    @Override
+    public ResponseEntity<TaskDTO> updateTaskAssignee(UUID projectId, UUID taskId, UpdateTaskAssigneeDTO updateTaskAssigneeDTO) {
+        try{
+
+        log.info("[TaskController - updateTaskAssignee] - calling taskFacadeImpl");
+        TaskDTO task = taskFacadeImpl.updateTaskAssignee(projectId, taskId, updateTaskAssigneeDTO);
+        log.info("[TaskController - updateTaskAssignee] - return taskDTO to client");
+     return ResponseEntity.status(HttpStatus.OK).body(task);
+        } catch (ProjectNotFoundException exception) {
+           log.error("TaskController - updateTaskAssignee " + exception.getMessage());
+        } catch (TaskNotFoundInProjectException exception) {
+           log.error("TaskController - updateTaskAssignee. " + exception.getMessage());
+        } catch (UserNotMemberOfProjectException exception) {
+           log.error("TaskController - updateTaskAssignee, " + exception.getMessage());
+        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+
+
 
 }
