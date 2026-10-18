@@ -4,10 +4,11 @@ import com.task_management_app.api.TaskApi;
 import com.task_management_app.api.model.*;
 import com.todoapp.exceptions.*;
 import com.todoapp.project.facade.ProjectFacade;
+import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.service.TaskFacadeImpl;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,12 +55,11 @@ public class TaskController implements TaskApi {
         }
     }
 
-    @Override
-    public ResponseEntity<TaskDTO> getTaskByInProject(UUID projectId, UUID taskId) {
-        try{
 
+    public ResponseEntity<TaskDTO> getTaskByIdInProject(UUID projectId, UUID taskId) {
+        try{
         log.info("[TaskController - getTaskInProject] - calling taskFacadeImpl");
-       TaskDTO task = taskFacadeImpl.getTaskByInProject(projectId, taskId);
+       TaskDTO task = taskFacadeImpl.getTaskByIdInProject(projectId, taskId);
         log.info("[TaskController - getTaskInProject] - return found task to client");
        return ResponseEntity.status(HttpStatus.OK).body(task);
         } catch (ProjectNotFoundException exception) {
@@ -72,8 +72,10 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<List<TaskDTO>> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
-      return null;
+    public ResponseEntity<List<TaskSummaryDTO>> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
+        log.info("[TaskController - getTasksByProject] - calling taskFacadeImpl");
+        List<TaskSummaryDTO> taskDTOList = taskFacadeImpl.getTasksByProject(projectId, sortBy, sortOrder);
+        return ResponseEntity.status(HttpStatus.OK).body(taskDTOList);
     }
 
 

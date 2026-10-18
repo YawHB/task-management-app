@@ -1,8 +1,5 @@
 package com.todoapp.task.facade;
-import com.task_management_app.api.model.AddTaskDTO;
-import com.task_management_app.api.model.PriorityDTO;
-import com.task_management_app.api.model.StatusDTO;
-import com.task_management_app.api.model.TaskDTO;
+import com.task_management_app.api.model.*;
 import com.todoapp.exceptions.ExceptionReason;
 import com.todoapp.exceptions.InvalidStringException;
 import com.todoapp.task.internal.Priority;
@@ -10,7 +7,12 @@ import com.todoapp.task.internal.Status;
 import com.todoapp.task.internal.model.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -51,9 +53,37 @@ public class TaskDTOConverter {
         taskDTO.setPriority(mapPriorityToDTO(task.getPriority()));
         taskDTO.setDueDate(task.getDueDate());
 
-        taskDTO.setCreatedAt(task.getCreatedAt().atOffset(ZoneOffset.UTC));
-        taskDTO.setUpdatedAt(task.getUpdatedAt().atOffset(ZoneOffset.UTC));
+        taskDTO.setCreatedAt(applyUtcOffset(task.getCreatedAt()));
+        taskDTO.setUpdatedAt(applyUtcOffset(task.getCreatedAt()));
         return taskDTO;
+    }
+
+    public List<TaskSummaryDTO> toDTO(List<TaskSummaryProjection> tasks) {
+        log.info("[TaskDTOConverer - toDTO] - mapping list of Tasks --> list of TaskDTOs");
+
+        List<TaskSummaryDTO> taskDTOS = new ArrayList<>();
+
+        for(TaskSummaryProjection task : tasks) {
+            TaskSummaryDTO taskDTO = new TaskSummaryDTO();
+
+        taskDTO.setTaskId(task.getId());
+        taskDTO.setTitle(task.getTitle());
+        taskDTO.setProjectId(task.getProjectId());
+        taskDTO.setFirstName(task.getFirstName());
+        taskDTO.setLastName(task.getLastName());
+        taskDTO.setStatus(mapStatusToDTO(task.getStatus()));
+        taskDTO.setPriority(mapPriorityToDTO(task.getPriority()));
+        taskDTO.setCreatedAt(task.getCreatedAt().atOffset(ZoneOffset.UTC));
+        taskDTO.setCreatedAt(applyUtcOffset(task.getCreatedAt()));
+        taskDTO.setDueDate(task.getDueDate());
+
+        taskDTOS.add(taskDTO);
+        }
+        return taskDTOS;
+    }
+
+    private OffsetDateTime applyUtcOffset(LocalDateTime time) {
+        return time.atOffset(ZoneOffset.UTC);
     }
 
     private Status mapStatusToEntity(StatusDTO status) {

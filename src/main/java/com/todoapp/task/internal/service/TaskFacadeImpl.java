@@ -2,7 +2,9 @@ package com.todoapp.task.internal.service;
 
 import com.task_management_app.api.model.AddTaskDTO;
 import com.task_management_app.api.model.TaskDTO;
+import com.task_management_app.api.model.TaskSummaryDTO;
 import com.todoapp.exceptions.*;
+import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
 import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.task.facade.TaskDTOConverter;
@@ -11,9 +13,11 @@ import com.todoapp.task.internal.repository.TaskRepository;
 import com.todoapp.user.facade.UserFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,7 +44,7 @@ public class TaskFacadeImpl implements TaskFacade {
         return taskDTOConverter.toDTO(newTask);
     }
 
-    public TaskDTO getTaskByInProject(UUID projectId, UUID taskId) {
+    public TaskDTO getTaskByIdInProject(UUID projectId, UUID taskId) {
         log.info("[TaskFacadeImpl - getTaskInProject] - calling projectFacade to find project");
       if(!projectFacade.existsById(projectId)) {
           throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
@@ -67,6 +71,20 @@ public class TaskFacadeImpl implements TaskFacade {
     public boolean taskExistInProject(UUID taskId, UUID projectId) {
         return taskRepository.existByIdAndProjectId(taskId, projectId);
     }
+
+    public List<TaskSummaryDTO> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
+        log.info("[TaskFacadeImpl - getTasksByProject] - converting the string direction (asc/desc) to an ENUM ASC/DESC");
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder);
+        log.info("[TaskFacadeImpl - getTasksByProject] - creating a sort object, with direction and property to sort by");
+        Sort sort = Sort.by((direction), toSnakeCase(sortBy));
+        log.info("[TaskFacadeImpl - getTasksByProject] - calling taskRepository to query the result");
+        List<TaskSummaryProjection> tasks = taskRepository.findTasksInProject(projectId, sort);
+        log.info("[TaskFacadeImpl - getTasksByProject] - converts the list of fetched Tasks to taskDTOs in taskDTOConverter ");
+        return taskDTOConverter.toDTO(tasks);
+
+    }
+
+
 
     private void validatePostRequest(AddTaskDTO requestBody) throws RuntimeException {
         UUID assigneeId = requestBody.getAssigneeId();
@@ -99,5 +117,20 @@ public class TaskFacadeImpl implements TaskFacade {
             throw new InvalidDateRangeException(ExceptionReason.INVALID_DATE_RANGE.getValue());
     }
 
+    public static String toSnakeCase(String input) {
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 0; i < input.length(); i++) {
+            char current = input.charAt(i);
+
+            if (Character.isUpperCase(current)) {
+                result.append('_');
+                result.append(Character.toLowerCase(current));
+            } else {
+                result.append(current);
+            }
+        }
+
+        return result.toString();
+    }
 }

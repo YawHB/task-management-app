@@ -1,12 +1,13 @@
 package com.todoapp.task.internal.repository;
 
+import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,5 +30,14 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
                     "AND project_id = :projectId",
                     nativeQuery = true)
     Optional<Task> findByIdAndProjectId(UUID projectId, UUID taskId);
+
+    @Query(value = "SELECT t.id, t.title, t.status, t.priority, t.created_at, t.due_date, t.project_id,  " +
+                    "u.first_name, u.last_name " +
+                   "FROM todo_tasks AS t " +
+                   "LEFT JOIN users AS u " +
+                   "ON u.id = t.assignee_id " +
+                   " WHERE project_id = :projectId ",
+                   nativeQuery = true)
+    List<TaskSummaryProjection> findTasksInProject(UUID projectId, Sort sort);
 }
 
