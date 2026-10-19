@@ -1,5 +1,7 @@
 package com.todoapp.task.internal.repository;
 
+import com.task_management_app.api.model.TaskDetailsDTO;
+import com.todoapp.task.facade.TaskDetailsProjection;
 import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
 import org.springframework.data.domain.Sort;
@@ -46,5 +48,21 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
                    "WHERE id = :taskId AND project_id = :projectId ",
                    nativeQuery = true)
     void updateTaskAssignee(UUID projectId, UUID taskId, UUID assigneeId);
+
+
+
+    @Query(value = "SELECT t.id AS taskId, t.title AS taskTitle, t.description AS description, " +
+                   "t.parent_task_id AS parentTaskId, t.status, t.priority AS priority, t.created_at AS createdAs,  " +
+                   "t.due_date AS dueDate, t.updated_at AS updatedAt, " +
+                   "p.id AS projectId, p.name AS projectName, " +
+                   "u.id AS assigneeId, u.first_name AS firstName, u.last_name AS lastName, u.email AS email " +
+                   "FROM todo_tasks AS t " +
+                   "LEFT JOIN users AS u ON t.assignee_id = u.id " +
+                   "LEFT JOIN project AS p ON t.project_id = p.id " +
+                   "WHERE t.assignee_id = :assigneeId " +
+                   "AND t.id = :taskId " +
+                   "AND p.id = :projectId",
+                   nativeQuery = true)
+    Optional<TaskDetailsProjection> findTaskDetailsByIdAndProjectId(UUID taskId, UUID projectId, UUID assigneeId);
 }
 

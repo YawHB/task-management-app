@@ -53,9 +53,40 @@ public class TaskDTOConverter {
         taskDTO.setPriority(mapPriorityToDTO(task.getPriority()));
         taskDTO.setDueDate(task.getDueDate());
 
-        taskDTO.setCreatedAt(applyUtcOffset(task.getCreatedAt()));
-        taskDTO.setUpdatedAt(applyUtcOffset(task.getCreatedAt()));
+        taskDTO.setCreatedAt(toUtcOffsetDateTimeOrNull(task.getCreatedAt()));
+        taskDTO.setUpdatedAt(toUtcOffsetDateTimeOrNull(task.getCreatedAt()));
         return taskDTO;
+    }
+
+
+    public TaskDetailsDTO taskDetailsDTO(TaskDetailsProjection taskProjection) {
+        TaskDetailsDTO taskDetailsDTO = new TaskDetailsDTO();
+
+        taskDetailsDTO.setTaskId(taskProjection.getTaskId());
+        taskDetailsDTO.setTaskTitle(taskProjection.getTaskTitle());
+        taskDetailsDTO.setDescription(taskProjection.getDescription());
+        taskDetailsDTO.setParentTaskId(taskProjection.getParentTaskId());
+
+        ProjectSummaryDTO projectDTO = new ProjectSummaryDTO();
+        projectDTO.setProjectId(taskProjection.getProjectId());
+        projectDTO.setProjectName(taskProjection.getProjectName());
+        taskDetailsDTO.setProject(projectDTO);
+
+        UserSummaryDTO assigneeDTO = new UserSummaryDTO();
+        assigneeDTO.setUserId(taskProjection.getAssigneeId());
+        assigneeDTO.setFirstName(taskProjection.getFirstName());
+        assigneeDTO.setLastName(taskProjection.getLastName());
+        assigneeDTO.setEmail(taskProjection.getEmail());
+        taskDetailsDTO.setAssignee(assigneeDTO);
+
+        taskDetailsDTO.setStatus(mapStatusToDTO(taskProjection.getStatus()));
+        taskDetailsDTO.setPriority(mapPriorityToDTO(taskProjection.getPriority()));
+
+        taskDetailsDTO.setDueDate(taskProjection.getDueDate());
+        taskDetailsDTO.setCreatedAt(toUtcOffsetDateTimeOrNull(taskProjection.getCreatedAt()));
+        taskDetailsDTO.setUpdatedAt(toUtcOffsetDateTimeOrNull(taskProjection.getUpdatedAt()));
+
+        return taskDetailsDTO;
     }
 
     public List<TaskSummaryDTO> toDTO(List<TaskSummaryProjection> tasks) {
@@ -74,7 +105,7 @@ public class TaskDTOConverter {
         taskDTO.setStatus(mapStatusToDTO(task.getStatus()));
         taskDTO.setPriority(mapPriorityToDTO(task.getPriority()));
         taskDTO.setCreatedAt(task.getCreatedAt().atOffset(ZoneOffset.UTC));
-        taskDTO.setCreatedAt(applyUtcOffset(task.getCreatedAt()));
+        taskDTO.setCreatedAt(toUtcOffsetDateTimeOrNull(task.getCreatedAt()));
         taskDTO.setDueDate(task.getDueDate());
 
         taskDTOS.add(taskDTO);
@@ -82,8 +113,8 @@ public class TaskDTOConverter {
         return taskDTOS;
     }
 
-    private OffsetDateTime applyUtcOffset(LocalDateTime time) {
-        return time.atOffset(ZoneOffset.UTC);
+    private OffsetDateTime toUtcOffsetDateTimeOrNull(LocalDateTime time) {
+        return time != null ? time.atOffset(ZoneOffset.UTC) : null;
     }
 
     private Status mapStatusToEntity(StatusDTO status) {

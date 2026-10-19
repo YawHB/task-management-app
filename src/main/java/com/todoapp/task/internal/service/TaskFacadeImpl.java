@@ -1,10 +1,8 @@
 package com.todoapp.task.internal.service;
 
-import com.task_management_app.api.model.AddTaskDTO;
-import com.task_management_app.api.model.TaskDTO;
-import com.task_management_app.api.model.TaskSummaryDTO;
-import com.task_management_app.api.model.UpdateTaskAssigneeDTO;
+import com.task_management_app.api.model.*;
 import com.todoapp.exceptions.*;
+import com.todoapp.task.facade.TaskDetailsProjection;
 import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
 import com.todoapp.project.facade.ProjectFacade;
@@ -88,17 +86,17 @@ public class TaskFacadeImpl implements TaskFacade {
     }
 
     @Transactional
-    public TaskDTO updateTaskAssignee(UUID projectId, UUID taskId, UpdateTaskAssigneeDTO updateTaskAssigneeDTO) {
+    public TaskDetailsDTO updateTaskAssignee(UUID projectId, UUID taskId, UpdateTaskAssigneeDTO updateTaskAssigneeDTO) {
       UUID assigneeId = updateTaskAssigneeDTO.getAssigneeId();
       validateUpdateAssignee(projectId, taskId, assigneeId);
 
         log.info("[TaskFacadeImpl - updateTaskAssignee] - calling task repository to update task ");
         taskRepository.updateTaskAssignee(projectId, taskId, assigneeId);
         log.info("[TaskFacadeImpl - updateTaskAssignee] - fetching newly update task from repository");
-        Optional<Task> task =  taskRepository.findByIdAndProjectId(projectId, taskId);
-        if(task.isEmpty()) throw new TaskNotFoundInProjectException(ExceptionReason.TASK_NOT_FOUND_IN_PROJECT.getValue());
+        Optional<TaskDetailsProjection> taskDetails =  taskRepository.findTaskDetailsByIdAndProjectId(taskId, projectId, assigneeId);
+        if(taskDetails.isEmpty()) throw new TaskNotFoundInProjectException(ExceptionReason.TASK_NOT_FOUND_IN_PROJECT.getValue());
         log.info("[TaskFacadeImpl - updateTaskAssignee] - calling toDTO and");
-        return taskDTOConverter.toDTO(task.get());
+        return taskDTOConverter.taskDetailsDTO(taskDetails.get());
     }
 
 
