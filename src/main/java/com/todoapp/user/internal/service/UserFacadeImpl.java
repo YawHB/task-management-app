@@ -46,7 +46,9 @@ public class UserFacadeImpl implements UserFacade {
        return  userRepository.userMemberOfOrganisation(userId, organisationId);
     }
 
+
     public UserDTO addUser(UserDTO userDTO) {
+
         log.info("[UserService - addUser] - calling toEntity ");
         User user = userDTOConverter.toEntity(userDTO);
         log.info("[UserService - addUser] - calling userRepository to save user");
@@ -88,3 +90,11 @@ public class UserFacadeImpl implements UserFacade {
         return userDTOConverter.toDTO(userRepository.findOrganisationsByUserId(userId));
     }
 }
+
+
+
+
+
+
+
+

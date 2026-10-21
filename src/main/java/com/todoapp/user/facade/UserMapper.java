@@ -16,3 +16,7 @@ public interface UserMapper {
     @Mapping(target = "keycloakId", ignore = true)
     UserDTO toDto(User user);
 }
+
+
+
+
