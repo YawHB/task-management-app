@@ -34,5 +34,9 @@ delete:
       description: 'Successfully removed user from project'
     '404':
       description: 'The resource requested, does not exist'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
 
 

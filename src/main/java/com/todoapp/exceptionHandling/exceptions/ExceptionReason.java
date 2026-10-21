@@ -1,4 +1,4 @@
-package com.todoapp.exceptions;
+package com.todoapp.exceptionHandling.exceptions;
 
 public enum ExceptionReason {
 
@@ -6,6 +6,7 @@ public enum ExceptionReason {
     ORG_NOT_FOUND_BY_ID("Organisation not found by this id"),
     PROJECT_NOT_FOUND("Project not found by this id"),
     USER_NOT_MEMBER_OF_ORG("Access denied - the selected user is not a member of this organisation"),
+    USER_NOT_MEMBER_OF_PROJECT("The selected user is not assigned this project. Nothing to remove"),
     USER_NOT_MEMBER_OF_PROJECT("The selected user is not assigned this project"),
     USER_NOT_FOUND_BY_EMAIL("User not found by this email"),
     USER_ALREADY_EXIST_IN_ORG("The user with specified user id already exist in organisation with specified organisation id"),

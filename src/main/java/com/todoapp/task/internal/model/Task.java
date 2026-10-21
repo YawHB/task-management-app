@@ -61,6 +61,17 @@ public class Task {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "task")
+    private List<TaskComment> comments;
+
+    @Enumerated(EnumType.STRING) // Stores the enum name as text in the database
+    @Column(nullable = false)
+    private Status status = Status.TODO;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Priority priority = Priority.MEDIUM;
+
     @ManyToMany(mappedBy = "tasks")
     private List<Label> labels;
 }

@@ -16,7 +16,7 @@ post:
         format: uuid
     - name: userEmail
       in: query
-      type: string
+      required: true
       description: 'The email of the user you want to add to the organisation'
       schema:
         type: string
@@ -30,6 +30,14 @@ post:
             $ref: '../schemas/user/userDTO.yaml'
     '404':
       description: 'Invalid user email. No user with this email exist in the system'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
 

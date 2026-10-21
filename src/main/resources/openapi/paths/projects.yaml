@@ -29,10 +29,23 @@ get:
             type: array
             items:
               $ref: '../schemas/project/projectSummaryDTO.yaml'
+          example:
+            - projectId: "100e8400-e29b-41d4-a716-446655440011"
+              projectName: "John's project 1"
+            - projectId: "200e8400-e29b-41d4-a716-446655440022"
+              projectName: "John's project 2"
     '404':
       description: 'Organisation or user not found'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
     '409':
       description: 'User not member of organisation'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
 
 post:
   tags:
@@ -63,5 +76,13 @@ post:
             $ref: '../schemas/project/projectDTO.yaml'
     '400':
       description: 'Bad request. Check parameter and request-body format'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal server error'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
