@@ -2,16 +2,16 @@ package com.todoapp.task.internal.controller;
 
 import com.task_management_app.api.TaskApi;
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptions.*;
+import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.project.facade.ProjectFacade;
-import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.service.TaskFacadeImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.todoapp.exceptionHandling.exceptions.*;
+import com.todoapp.exceptionHandling.exceptions.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -74,7 +74,6 @@ public class TaskController implements TaskApi {
     @Override
     public ResponseEntity<List<TaskSummaryDTO>> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
         try{
-
         log.info("[TaskController - getTasksByProject] - calling taskFacadeImpl");
         List<TaskSummaryDTO> taskDTOList = taskFacadeImpl.getTasksByProject(projectId, sortBy, sortOrder);
         return ResponseEntity.status(HttpStatus.OK).body(taskDTOList);
@@ -84,7 +83,6 @@ public class TaskController implements TaskApi {
         }
     }
 
-
     @Override
     public ResponseEntity<TaskDTO> updateTask(UpdateTaskDTO updateTaskDTO) {
         return null;
@@ -93,7 +91,6 @@ public class TaskController implements TaskApi {
     @Override
     public ResponseEntity<TaskDetailsDTO> updateTaskAssignee(UUID projectId, UUID taskId, UpdateTaskAssigneeDTO updateTaskAssigneeDTO) {
         try{
-
         log.info("[TaskController - updateTaskAssignee] - calling taskFacadeImpl");
         TaskDetailsDTO task = taskFacadeImpl.updateTaskAssignee(projectId, taskId, updateTaskAssigneeDTO);
         log.info("[TaskController - updateTaskAssignee] - return taskDTO to client");
@@ -107,8 +104,4 @@ public class TaskController implements TaskApi {
         }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-
-
-
 }

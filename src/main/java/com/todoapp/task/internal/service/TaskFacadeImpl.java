@@ -1,7 +1,7 @@
 package com.todoapp.task.internal.service;
 
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptions.*;
+import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.task.facade.TaskDetailsProjection;
 import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;

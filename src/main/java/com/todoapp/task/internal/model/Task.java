@@ -41,14 +41,6 @@ public class Task {
     @Column(name = "task_creator_id")
     private UUID taskCreatorId;
 
-    @Enumerated(EnumType.STRING) // Stores the enum name as text in the database
-    @Column(nullable = false)
-    private Status status = Status.TODO;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Priority priority = Priority.MEDIUM;
-
     @NotBlank
     private String title;
 

@@ -1,4 +1,4 @@
-package com.todoapp.exceptions;
+package com.todoapp.exceptionHandling.exceptions;
 
 public class TaskNotFoundInProjectException extends RuntimeException {
     public TaskNotFoundInProjectException(String message) {
