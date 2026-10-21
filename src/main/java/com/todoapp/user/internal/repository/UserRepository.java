@@ -14,17 +14,14 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-
-
-
     @Query(value = "SELECT o.id AS organisationId, o.name AS organisationName, " +
-                   "o.creator_id AS creatorId " +
-                   "FROM organisation AS o " +
-                   "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +
-                   "WHERE ou.user_id = :userId",
+            "o.creator_id AS creatorId " +
+            "FROM organisation AS o " +
+            "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +
+            "WHERE ou.user_id = :userId",
             nativeQuery = true)
-
     List<OrganisationProjection> findOrganisationsByUserId(@Param("userId")UUID userId);
+
     Optional<User> findByEmail(String userEmail);
 
     @Query(value = "SELECT COUNT(*) > 0 FROM projects_users " +

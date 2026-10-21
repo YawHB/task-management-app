@@ -9,6 +9,7 @@ import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.organisation.internal.model.Organisation;
+import com.todoapp.user.facade.OrganisationProjection;
 import com.todoapp.user.facade.UserFacade;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,6 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     private OrganisationRepository organisationRepository;
     private OrganisationDTOConverter organisationDTOConverter;
     private UserFacade userFacade;
-
 
     public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationDTOConverter ");
