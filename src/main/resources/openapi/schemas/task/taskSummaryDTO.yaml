@@ -1,0 +1,39 @@
+#TASK SUMMARY SCHEMA
+
+type: object
+description: 'Represents a task summary entry'
+properties:
+  taskId:
+    type: string
+    format: uuid
+    description: 'Unique ID of the task (UUID)'
+  title:
+    type: string
+    description: 'Title of the task'
+  status:
+    $ref: './statusDTO.yaml'
+  priority:
+    $ref: './priorityDTO.yaml'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2026-07-15T09:30:00Z'
+  dueDate:
+    type: string
+    format: date
+    example: '2026-08-31'
+  firstName:
+    type: string
+    description: 'FirstName of the task assignee'
+  lastName:
+    type: string
+    description: 'lastName of the task assignee'
+  projectId:
+    type: string
+    format: uuid
+    description: 'Unique ID of the project the task belongs to (UUID)'
+
+
+
+
+

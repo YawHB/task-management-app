@@ -1,10 +1,7 @@
 package com.todoapp.project.internal.service;
 
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptions.UserNotMemberOfOrganisationException;
-import com.todoapp.exceptions.*;
+import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.project.ProjectDTOConverter;
 import com.todoapp.project.internal.repository.ProjectRepository;
@@ -41,7 +38,6 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - addProject] - validates that request body contains project name)");
         if(projectPost.getName().isBlank()) throw new InvalidRequestBodyException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
         if(projectRepository.existsByName(projectPost.getName()))  throw new DuplicateProjectNameException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
-
         log.info("[ProjectFacadeImpl - addProject] - checks if organisation exists by its id (OBS: missing error handling on fail)");
         if(organisationFacade.existsById(organisationId)) {
           log.info("[ProjectFacadeImpl - addProject] - returns a project from the project DTO converter ");
@@ -52,7 +48,6 @@ public class ProjectFacadeImpl implements ProjectFacade {
           return projectDTOConverter.toDTO(createdProject);
       }
 
-          System.out.println("ADD EXCEPTION HERE"); //TODO - ADD EXCEPTION HERE
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
 
@@ -91,11 +86,6 @@ public class ProjectFacadeImpl implements ProjectFacade {
        } catch (DataIntegrityViolationException exception) {
            log.info("[projectFacadeImpl - addProjectMember] - user already exists in project. throwing USER ALREADY MEMBER OF PROJECT");
            throw new UserAlreadyInProjectException(ExceptionReason.USER_ALREADY_MEMBER_OF_PROJECT.getValue());
-       } catch (ProjectNotFoundException exception) {
-           log.error("[ProjectFacadeImpl - addProjectMember] - caught ProjectNotFoundException");
-           throw new UserProjectConflictException(exception.getMessage());
-       } catch (UserNotFoundException exception) {
-           throw new UserProjectConflictException(exception.getMessage());
        }
         log.info("[projectFacadeImpl - addProjectMember] - user added to project. returning project name and user email to controller");
         return new ProjectMemberDTO(projectMemberDTO.getProjectName(), projectMemberDTO.getEmail());
@@ -117,7 +107,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectService- deleteProject] - calling projectRepository to find project by id");
         if (!projectRepository.existsById(id)) {
         log.error("[ProjectService- deleteProject] - Project NOT found in repository");
-            throw new ProjectNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+            throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
         }
         log.info("[ProjectService- deleteProject] - calling projectRepository to delete project by id");
         projectRepository.deleteById(id);
@@ -128,7 +118,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling organisationFacade to check if org exist by id");
         if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling existById to check if project exist by id");
-        if(!this.existById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
+        if(!this.existsById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling userFacade to check if user exist by id");
         if(!userFacade.existById(userId)) throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
         if(!organisationFacade.userExistInOrganisation(organisationId, userId)) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
@@ -139,7 +129,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
     }
 
     @Override
-    public boolean existById(UUID projectId) {
+    public boolean existsById(UUID projectId) {
         Optional<Project> project = projectRepository.findById(projectId);
         return project.isPresent();
     }

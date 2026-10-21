@@ -1,4 +1,4 @@
-package com.todoapp.exceptions;
+package com.todoapp.exceptionHandling.exceptions;
 
 public class ProjectNotFoundException extends RuntimeException {
     public ProjectNotFoundException(String message) {

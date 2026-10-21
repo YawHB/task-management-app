@@ -1,9 +1,9 @@
 package com.todoapp.organisation.internal.service;
 
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptions.ExceptionReason;
-import com.todoapp.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptions.UserExistsInOrganisationException;
+import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
+import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.UserExistsInOrganisationException;
 import com.todoapp.organisation.OrganisationDTOConverter;
 import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;

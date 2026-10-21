@@ -2,8 +2,8 @@
 
   type: string
   enum:
-    - low
-    - medium
-    - high
-    - critical
+    - LOW
+    - MEDIUM
+    - HIGH
+    - CRITICAL
   description: 'Importance level of the task'
