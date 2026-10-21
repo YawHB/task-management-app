@@ -36,8 +36,13 @@ import java.util.UUID;
     }
 
     @Override
+    public boolean userExistInProject(UUID userId, UUID projectId) {
+        return userRepository.userMemberOfProject(userId, projectId);
+    }
+
+    @Override
     public boolean userExistInOrganisation(UUID userId, UUID organisationId) {
-       return  userRepository.existsByOrganisationIdAndUserId(userId, organisationId);
+       return  userRepository.userMemberOfOrganisation(userId, organisationId);
     }
 
 

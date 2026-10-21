@@ -1,0 +1,35 @@
+# USER GET SCHEMA
+
+type: object
+description: 'Represents a summaries user overview'
+required:
+  - firstName
+  - lastName
+  - email
+properties:
+  userId:
+    type: string
+    format: uuid
+    description: 'Unique ID for a user (UUID)'
+  firstName:
+    type: string
+    description: 'The first name of the user'
+  lastName:
+    type: string
+    description: 'The last name of the user'
+  email:
+    type: string
+    format: email
+    description: 'The user''s email'
+  userName:
+    type: string
+example:
+  firstName: "Jane"
+  lastName: "Doe"
+  email: "jane.doe@example.com"
+  userName: "jane_doe01"
+
+
+
+
+

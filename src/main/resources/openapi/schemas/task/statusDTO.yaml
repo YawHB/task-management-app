@@ -2,8 +2,8 @@
 
   type: string
   enum:
-    - todo
-    - in-progress
-    - done
-    - archived
+    - TODO
+    - IN-PROGRESS
+    - DONE
+    - ARCHIVED
   description: 'Current stage of the task'

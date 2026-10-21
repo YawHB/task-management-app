@@ -29,11 +29,13 @@ class OrganisationController implements OrganisationApi {
 
     @Override
     public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
-           log.info("[OrganisationController - addOrganisation] - calling facade");
-           OrganisationDTO organisationDTO = organisationService.addOrganisation(orgRequestDTO);
-           log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
-           return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
+        log.info("[OrganisationController - addOrganisation] - calling facade");
+        OrganisationDTO organisationDTO = organisationService.addOrganisation(orgRequestDTO);
+        log.info("[OrganisationController - addOrganisation] - return an dto organisation to the client");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
     }
+
 
     @Override
     public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) throws OrganisationNotFoundException {

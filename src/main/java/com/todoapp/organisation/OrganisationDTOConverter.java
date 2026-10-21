@@ -67,6 +67,7 @@ import java.util.List;
                 organisationUserDTO.setActiveSince(organisationDetail.getActiveSince().atOffset(ZoneOffset.UTC));
 
 
+
             users.add(organisationUserDTO);
             }
         }

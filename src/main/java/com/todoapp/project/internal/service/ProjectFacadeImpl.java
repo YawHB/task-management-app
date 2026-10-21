@@ -118,7 +118,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling organisationFacade to check if org exist by id");
         if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling existById to check if project exist by id");
-        if(!this.existById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
+        if(!this.existsById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling userFacade to check if user exist by id");
         if(!userFacade.existById(userId)) throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
         if(!organisationFacade.userExistInOrganisation(organisationId, userId)) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
@@ -129,7 +129,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
     }
 
     @Override
-    public boolean existById(UUID projectId) {
+    public boolean existsById(UUID projectId) {
         Optional<Project> project = projectRepository.findById(projectId);
         return project.isPresent();
     }

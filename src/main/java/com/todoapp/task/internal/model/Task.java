@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,19 +29,24 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "parent_task_id")
+    private UUID parentTaskId;
+
+    @Column(name = "project_id")
+    private UUID projectId;
+
+    @Column(name = "assignee_id")
+    private UUID assigneeId;
+
+    @Column(name = "task_creator_id")
+    private UUID taskCreatorId;
+
     @NotBlank
     private String title;
 
     private String description;
 
-    //TODO - Can i point to parentTaks, just like this?
-   private UUID parentTask;
-
-    //@ManyToOne
-    @JoinColumn(name = "project_id")
-    private UUID project;
-
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

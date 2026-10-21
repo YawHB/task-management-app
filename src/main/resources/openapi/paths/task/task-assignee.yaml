@@ -1,0 +1,36 @@
+# TASK ASSIGNEE PATH
+put:
+  tags:
+    - Task
+  summary: 'Update the assignee for a task'
+  description: 'This method can both change, delete and add an assignee to a task. If an assignee is 
+               is assigned the task, and this method is called. the current assignee will be overwritten by the new'
+  operationId: updateTaskAssignee
+  parameters:
+    - name: projectId
+      in: path
+      required: true
+      description: 'Unique identifier of the project where the task exists'
+      schema:
+        type: string
+        format: uuid
+    - name: taskId
+      in: path
+      required: true
+      description: 'Unique identifier of the task with which the assignee belongs'
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/task/updateTaskAssigneeDTO.yaml'
+  responses:
+    200:
+      description: 'Task assignee has successfully been updated'
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/task/taskDetailsDTO.yaml'
