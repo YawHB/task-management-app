@@ -1,0 +1,10 @@
+type: object
+properties:
+  statusCode:
+    type: string
+  errorTitle:
+    type: string
+  errorDescription:
+    type: string
+  errorURI:
+    type: string
