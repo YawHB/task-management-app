@@ -55,7 +55,7 @@ public class TaskFacadeImpl implements TaskFacade {
         }
 
         log.info("[TaskFacadeImpl - getTaskInProject] - calling DTO converter and return fetch task to controller");
-        return taskDTOConverter.toDTO(task.get());
+        return taskMapper.toDTO(task.get());
 
     }
 
@@ -81,7 +81,7 @@ public class TaskFacadeImpl implements TaskFacade {
         log.info("[TaskFacadeImpl - getTasksByProject] - calling taskRepository to query the result");
         List<TaskSummaryProjection> tasks = taskRepository.findTasksInProject(projectId, sort);
         log.info("[TaskFacadeImpl - getTasksByProject] - converts the list of fetched Tasks to taskDTOs in taskDTOConverter ");
-        return taskDTOConverter.toDTO(tasks);
+        return taskMapper.toTaskSummaryDTO(tasks);
     }
 
     @Transactional
