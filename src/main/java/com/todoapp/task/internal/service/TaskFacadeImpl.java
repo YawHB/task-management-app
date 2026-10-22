@@ -80,7 +80,7 @@ public class TaskFacadeImpl implements TaskFacade {
         Sort sort = Sort.by((direction), toSnakeCase(sortBy));
         log.info("[TaskFacadeImpl - getTasksByProject] - calling taskRepository to query the result");
         List<TaskSummaryProjection> tasks = taskRepository.findTasksInProject(projectId, sort);
-        log.info("[TaskFacadeImpl - getTasksByProject] - converts the list of fetched Tasks to taskDTOs in taskDTOConverter ");
+        log.info("[TaskFacadeImpl - getTasksByProject] - converts the list of fetched Tasks to taskDTOs");
         return taskMapper.toTaskSummaryDTO(tasks);
     }
 
@@ -95,7 +95,7 @@ public class TaskFacadeImpl implements TaskFacade {
         Optional<TaskDetailsProjection> taskDetails =  taskRepository.findTaskDetailsByIdAndProjectId(taskId, projectId, assigneeId);
         if(taskDetails.isEmpty()) throw new TaskNotFoundInProjectException(ExceptionReason.TASK_NOT_FOUND_IN_PROJECT.getValue());
         log.info("[TaskFacadeImpl - updateTaskAssignee] - calling toDTO and");
-        return taskDTOConverter.taskDetailsDTO(taskDetails.get());
+        return taskMapper.taskDetailsDTO(taskDetails.get());
     }
 
 

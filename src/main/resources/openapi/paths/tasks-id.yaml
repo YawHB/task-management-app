@@ -50,7 +50,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: '../schemas/task/taskDTO.yaml'
+            $ref: '../schemas/task/taskDetailsDTO.yaml'
     '400':
       description: 'Bad Request. Invalid task id format.'
     '500':

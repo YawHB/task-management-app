@@ -84,7 +84,7 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<TaskDTO> updateTask(UpdateTaskDTO updateTaskDTO) {
+    public ResponseEntity<TaskDetailsDTO> updateTask(UpdateTaskDTO updateTaskDTO) {
         return null;
     }
 
