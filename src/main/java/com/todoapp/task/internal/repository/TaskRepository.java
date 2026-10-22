@@ -32,7 +32,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
                     "WHERE id = :taskId "+
                     "AND project_id = :projectId",
                     nativeQuery = true)
-    Optional<Task> findByIdAndProjectId(UUID projectId, UUID taskId);
+    Optional<Task> findByIdAndProjectId(UUID taskId, UUID projectId);
 
     @Query(value = "SELECT t.id, t.title, t.status, t.priority, t.created_at, t.due_date, t.project_id,  " +
                     "u.first_name, u.last_name " +
