@@ -32,7 +32,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
                     "WHERE id = :taskId "+
                     "AND project_id = :projectId",
                     nativeQuery = true)
-    Optional<Task> findByIdAndProjectId(UUID projectId, UUID taskId);
+    Optional<Task> findByIdAndProjectId(UUID taskId, UUID projectId);
 
     @Query(value = "SELECT t.id, t.title, t.status, t.priority, t.created_at, t.due_date, t.project_id,  " +
                     "u.first_name, u.last_name " +
@@ -52,7 +52,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
 
 
     @Query(value = "SELECT t.id AS taskId, t.title AS taskTitle, t.description AS description, " +
-                   "t.parent_task_id AS parentTaskId, t.status, t.priority AS priority, t.created_at AS createdAs,  " +
+                   "t.parent_task_id AS parentTaskId, t.status, t.priority AS priority, t.created_at AS createdAd,  " +
                    "t.due_date AS dueDate, t.updated_at AS updatedAt, " +
                    "p.id AS projectId, p.name AS projectName, " +
                    "u.id AS assigneeId, u.first_name AS firstName, u.last_name AS lastName, u.email AS email " +

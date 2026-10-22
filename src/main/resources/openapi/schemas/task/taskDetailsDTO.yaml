@@ -20,9 +20,6 @@ properties:
     $ref: '../../schemas/project/projectSummaryDTO.yaml'
   assignee:
     $ref: '../../schemas/user/userSummaryDTO.yaml'
-  taskCreatorId:
-    type: string
-    format: uuid
   status:
     $ref: './statusDTO.yaml'
   priority:
@@ -52,8 +49,6 @@ example:
     firstName: 'John'
     lastName: 'Smith'
     email: 'john.smith@example.com'
-    userName: 'jsmith'
-  taskCreatorId: '9f86d081-884c-4d5f-9f6a-2c7e8b4d3a91'
   status: 'IN-PROGRESS'
   priority: 'MEDIUM'
   dueDate: '2026-08-31'
