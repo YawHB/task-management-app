@@ -2,12 +2,10 @@ package com.todoapp.task.internal.service;
 
 import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.*;
-import com.todoapp.task.facade.TaskDetailsProjection;
-import com.todoapp.task.facade.TaskSummaryProjection;
+import com.todoapp.task.facade.*;
+import com.todoapp.task.internal.mapper.TaskMapper;
 import com.todoapp.task.internal.model.Task;
 import com.todoapp.project.facade.ProjectFacade;
-import com.todoapp.task.facade.TaskDTOConverter;
-import com.todoapp.task.facade.TaskFacade;
 import com.todoapp.task.internal.repository.TaskRepository;
 import com.todoapp.user.facade.UserFacade;
 import lombok.AllArgsConstructor;
@@ -30,6 +28,7 @@ public class TaskFacadeImpl implements TaskFacade {
     private final TaskDTOConverter taskDTOConverter;
     private final ProjectFacade projectFacade;
     private final UserFacade userFacade;
+    private final TaskMapper taskMapper;
 
 
     public TaskDTO addTask(AddTaskDTO addTaskDTO){
@@ -37,11 +36,11 @@ public class TaskFacadeImpl implements TaskFacade {
         log.info("[TaskFacadeImpl - addTask] - calling validatePostRequest");
         this.validatePostRequest(addTaskDTO);
         log.info("[TaskFacadeImpl - addTask] - calling toEntity");
-       Task task = taskDTOConverter.toEntity(addTaskDTO);
+       Task task = taskMapper.toEntity(addTaskDTO);
         log.info("[TaskFacadeImpl - addTask] -  calling repo to save task");
         Task newTask = taskRepository.save(task);
         log.info("[TaskFacadeImpl - addTask] - calling toDTO");
-        return taskDTOConverter.toDTO(newTask);
+        return taskMapper.toDTO(newTask);
     }
 
     public TaskDTO getTaskByIdInProject(UUID projectId, UUID taskId) {
