@@ -1,4 +1,4 @@
-# Modular Monolith Architecture with ArchUnit Enforcement
+# Software Architecture Style
 
 
 > **Status:** 🟢 Accepted 
