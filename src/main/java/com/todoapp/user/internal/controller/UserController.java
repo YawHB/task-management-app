@@ -21,12 +21,18 @@ import java.util.UUID;
 @Slf4j
 public class UserController implements UserApi {
 
-    private final UserFacadeImpl userService;
+    /*TODO - Missing methods:
+    *  getUsersForProject()
+    *  getUsersForOrganisation()
+    *  getUserByEmail()
+    * */
+
+    private final UserFacadeImpl userFacadeImpl;
 
     @Override
     public ResponseEntity<UserDTO> addUser(UserDTO userDTO) {
         log.info("[UserController - addUser] - calling userService to add user");
-        UserDTO createdUser = userService.addUser(userDTO);
+        UserDTO createdUser = userFacadeImpl.addUser(userDTO);
         log.info("[UserController - addUser] - returning the created user to client");
         return ResponseEntity.status(HttpStatus.CREATED).body( (createdUser));
     }
@@ -35,7 +41,7 @@ public class UserController implements UserApi {
     public ResponseEntity<UserDTO> getUserById(UUID id) {
         try {
 
-        UserDTO userDTO = userService.getUserById(id);
+        UserDTO userDTO = userFacadeImpl.getUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
         } catch ( UserNotFoundException exception) {
             log.error("[UserController - getUserById]" + exception.getMessage());
@@ -45,7 +51,7 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {
-       return ResponseEntity.status(HttpStatus.OK).body( userService.getOrganisationsByUserId(userId));
+       return ResponseEntity.status(HttpStatus.OK).body( userFacadeImpl.getOrganisationsByUserId(userId));
     }
 }
 

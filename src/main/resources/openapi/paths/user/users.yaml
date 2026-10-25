@@ -12,14 +12,14 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/user/userDTO.yaml'
+          $ref: '../../schemas/user/userDTO.yaml'
   responses:
     '201':
       description: 'User was successfully created'
       content:
         application/json:
           schema:
-            $ref: '../schemas/user/userDTO.yaml'
+            $ref: '../../schemas/user/userDTO.yaml'
           example:
             userId: "550e8400-e29b-41d4-a716-446655440000"
             firstName: "Jane"
@@ -35,10 +35,10 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal Server Error'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'

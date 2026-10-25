@@ -28,7 +28,7 @@ get:
           schema:
             type: array
             items:
-              $ref: '../schemas/project/projectSummaryDTO.yaml'
+              $ref: '../../schemas/project/projectSummaryDTO.yaml'
           example:
             - projectId: "100e8400-e29b-41d4-a716-446655440011"
               projectName: "John's project 1"
@@ -39,13 +39,13 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '409':
       description: 'User not member of organisation'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
 
 post:
   tags:
@@ -65,7 +65,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/project/ProjectPost.yaml'
+          $ref: '../../schemas/project/ProjectPost.yaml'
 
   responses:
     '201':
@@ -73,16 +73,16 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/project/projectDTO.yaml'
+            $ref: '../../schemas/project/projectDTO.yaml'
     '400':
       description: 'Bad request. Check parameter and request-body format'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal server error'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'

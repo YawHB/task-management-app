@@ -18,37 +18,44 @@ tags:
 #TASK
 paths:
   /api/project/{projectId}/tasks:
-    $ref: './paths/tasks.yaml'
+    $ref: './paths/task/tasks.yaml'
   /api/project/{projectId}/tasks/{taskId}/assignee:
     $ref: './paths/task/task-assignee.yaml'
   /api/projects/{projectId}/tasks/{taskId}:
-    $ref: './paths/tasks-id.yaml'
+    $ref: './paths/task/tasks-id.yaml'
 
 #USER
   /api/users:
-    $ref: './paths/users.yaml'
+    $ref: './paths/user/users.yaml'
   /api/users/{id}:
-    $ref: './paths/users-id.yaml'
+    $ref: './paths/user/users-id.yaml'
+
+# create these endpoints to fetch users for orgs or project
+ # /api/organisations/{organisationId}/users:
+  #  $ref: 'insert path here'
+  #/api/projects/{projectId}/users:
+   # $ref: 'insert path here'
+
   /api/organisations/{organisationId}/projects/users:
-    $ref: './paths/organisations-id-projects-users.yaml'
+    $ref: './paths/user/organisations-id-projects-users.yaml'
   /api/users/{user-id}/organisations:
-    $ref: './paths/users-user-id-organisations.yaml'
+    $ref: './paths/user/users-user-id-organisations.yaml'
 
   #PROJECT
   /api/organisations/{organisationId}/projects:
-    $ref: './paths/projects.yaml'
+    $ref: './paths/project/projects.yaml'
   /api/projects/{projectId}:
-    $ref: './paths/projects-id.yaml'
+    $ref: './paths/project/projects-id.yaml'
   /api/organisations/{organisationId}/projects/{projectId}/users/{userId}:
-    $ref: './paths/projects-id-users-id.yaml'
+    $ref: './paths/project/projects-id-users-id.yaml'
 
 #ORGANISATION
   /api/organisations:
-    $ref: './paths/organisations.yaml'
+    $ref: './paths/organisation/organisations.yaml'
   /api/organisations/{id}:
-    $ref: './paths/organisations-id.yaml'
+    $ref: './paths/organisation/organisations-id.yaml'
   /api/organisations/{id}/users:
-    $ref: './paths/organisations-id-users.yaml'
+    $ref: './paths/organisation/organisations-id-users.yaml'
 
 
 

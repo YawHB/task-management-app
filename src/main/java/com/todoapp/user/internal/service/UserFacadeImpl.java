@@ -26,8 +26,56 @@ public class UserFacadeImpl implements UserFacade {
     private final UserDTOConverter userDTOConverter;
     private final UserMapper userMapper;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public UserDTO addUser(UserDTO userDTO) {
+        log.info("[UserService - addUser] - calling toEntity ");
+        User user = userMapper.toEntity(userDTO);
+        log.info("[UserService - addUser] - calling userRepository to save user");
+        User createdUser = userRepository.save(user);
+        log.info("[UserService - addUser] - return the created user as a userDTO");
+        return userMapper.toDto(createdUser);
+    }
+
+    @Override
+    public List<User> getUsersInOrganisation() {
+        return null;
+    }
+    @Override
+    public List<User> getUsersInProject() {
+        return null;
+    }
+
+    @Override
+    public UserDTO getUserById(UUID userId) {
+        log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isPresent()) {
+
+            log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling mapper to convert user -> toDTO");
+            return userMapper.toDto(foundUser.get());
+        }
+        log.info("[UserFacadeImpl - getUserByEmail] - user not found. throwing user not found exception");
+        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+    }
+
+    public void deleteTask(UUID id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDTO getUserByEmail(String userEmail) {
+        log.info("[UserFacadeImpl - findUserByEmail] - calling user repo to fetch user by email");
+        Optional<User> foundUser = userRepository.findByEmail(userEmail);
+        if (foundUser.isPresent()) {
+            log.info("[UserFacadeImpl - findUserByEmail] - user found. returns a userDTO");
+            return userMapper.toDto(foundUser.get());
+        }
+        log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
+        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
+    }
+
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
+        return userDTOConverter.toDTO(userRepository.findOrganisationsByUserId(userId));
     }
 
     @Override
@@ -43,53 +91,7 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public boolean userExistInOrganisation(UUID userId, UUID organisationId) {
-       return  userRepository.userMemberOfOrganisation(userId, organisationId);
-    }
-
-
-    public UserDTO addUser(UserDTO userDTO) {
-
-        log.info("[UserService - addUser] - calling toEntity ");
-        User user = userMapper.toEntity(userDTO);
-        log.info("[UserService - addUser] - calling userRepository to save user");
-        User createdUser = userRepository.save(user);
-        log.info("[UserService - addUser] - return the created user as a userDTO");
-        return userMapper.toDto(createdUser);
-    }
-
-    @Override
-    public UserDTO getUserById(UUID userId) {
-        log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
-        Optional<User> foundUser = userRepository.findById(userId);
-        if (foundUser.isPresent()) {
-            log.info("found user: {} " + foundUser.get());
-
-            log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling mapper to convert user -> toDTO");
-            return userMapper.toDto(foundUser.get());
-        }
-        log.info("[UserFacadeImpl - getUserByEmail] - user not found. throwing user not found exception");
-        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-    }
-
-    public void deleteTask(UUID id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    public UserDTO findUserByEmail(String userEmail) {
-        log.info("[UserFacadeImpl - findUserByEmail] - calling user repo to fetch user by email");
-        Optional<User> foundUser = userRepository.findByEmail(userEmail);
-        if (foundUser.isPresent()) {
-            log.info("[UserFacadeImpl - findUserByEmail] - user found. returns a userDTO");
-            return userMapper.toDto(foundUser.get());
-        }
-        log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
-        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
-    }
-
-    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
-        return userDTOConverter.toDTO(userRepository.findOrganisationsByUserId(userId));
+        return  userRepository.userMemberOfOrganisation(userId, organisationId);
     }
 }
 

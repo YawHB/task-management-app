@@ -7,7 +7,16 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserFacade {
-     List<User> getAllUsers();
+
+    UserDTO addUser(UserDTO userDTO);
+
+    UserDTO getUserById(UUID userId);
+
+    UserDTO getUserByEmail(String userEmail);
+
+    List<User> getUsersInProject();
+
+    List<User> getUsersInOrganisation();
 
    boolean existById(UUID id);
 
@@ -15,13 +24,6 @@ public interface UserFacade {
 
    boolean userExistInOrganisation(UUID userId, UUID organisationId);
 
-
-    UserDTO addUser(UserDTO userDTO);
-
-    UserDTO getUserById(UUID userId);
-
-
     void deleteTask(UUID id);
 
-UserDTO findUserByEmail(String userEmail);
 }

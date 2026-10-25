@@ -61,7 +61,7 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     @Transactional
     public UserDTO addUserToOrganisation(UUID organisationId, String userEmail) throws OrganisationNotFoundException {
         log.info("[OrganisationFacadeImpl - addUserToOrganisation] - calling userFacade to find user by email");
-        UserDTO userDTO = userFacade.findUserByEmail(userEmail);
+        UserDTO userDTO = userFacade.getUserByEmail(userEmail);
 
         organisationRepository.findById(organisationId).orElseThrow(
                 () -> new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue()));
