@@ -5,7 +5,7 @@ import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.todoapp.user.UserDTOConverter;
-import com.todoapp.user.facade.UserMapper;
+import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
 import com.todoapp.user.facade.UserFacade;
 import com.todoapp.user.internal.model.User;
@@ -50,7 +50,7 @@ public class UserFacadeImpl implements UserFacade {
     public UserDTO addUser(UserDTO userDTO) {
 
         log.info("[UserService - addUser] - calling toEntity ");
-        User user = userDTOConverter.toEntity(userDTO);
+        User user = userMapper.toEntity(userDTO);
         log.info("[UserService - addUser] - calling userRepository to save user");
         User createdUser = userRepository.save(user);
         log.info("[UserService - addUser] - return the created user as a userDTO");
@@ -58,15 +58,17 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public UserDTO getUserByEmail(String email) {
+    public UserDTO getUserById(UUID userId) {
         log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
-        Optional<User> foundUser = userRepository.findByEmail(email);
+        Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isPresent()) {
-            log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling userDTOConverter to convert user toDTO");
+            log.info("found user: {} " + foundUser.get());
+
+            log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling mapper to convert user -> toDTO");
             return userMapper.toDto(foundUser.get());
         }
         log.info("[UserFacadeImpl - getUserByEmail] - user not found. throwing user not found exception");
-        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
+        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
     }
 
     public void deleteTask(UUID id) {

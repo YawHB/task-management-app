@@ -33,7 +33,14 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<UserDTO> getUserById(UUID id) {
-        return null;
+        try {
+
+        UserDTO userDTO = userService.getUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+        } catch ( UserNotFoundException exception) {
+            log.error("[UserController - getUserById]" + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override

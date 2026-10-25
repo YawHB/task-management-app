@@ -22,6 +22,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             nativeQuery = true)
     List<OrganisationProjection> findOrganisationsByUserId(@Param("userId")UUID userId);
 
+    Optional<User> findById(String userId);
+
     Optional<User> findByEmail(String userEmail);
 
     @Query(value = "SELECT COUNT(*) > 0 FROM projects_users " +

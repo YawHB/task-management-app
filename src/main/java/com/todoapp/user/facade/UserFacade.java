@@ -18,7 +18,7 @@ public interface UserFacade {
 
     UserDTO addUser(UserDTO userDTO);
 
-    UserDTO getUserByEmail(String email);
+    UserDTO getUserById(UUID userId);
 
 
     void deleteTask(UUID id);
