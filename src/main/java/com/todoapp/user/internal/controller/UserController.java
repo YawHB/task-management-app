@@ -3,6 +3,7 @@ package com.todoapp.user.internal.controller;
 import com.task_management_app.api.UserApi;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
+import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.todoapp.user.internal.service.UserFacadeImpl;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,18 @@ public class UserController implements UserApi {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @Override
+    public ResponseEntity<List<UserSummaryDTO>> getUsersInProject(UUID projectId) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<UserSummaryDTO>> getUsersInOrganisation(UUID organisationId) {
+      List<UserSummaryDTO> users = userFacadeImpl.getUsersInOrganisation(organisationId);
+      return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
 
     @Override
     public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {

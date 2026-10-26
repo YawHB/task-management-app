@@ -1,10 +1,14 @@
 package com.todoapp.user.internal.service;
 
 import com.task_management_app.api.model.UserDTO;
+import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
+import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.task_management_app.api.model.OrganisationDTO;
+import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.user.UserDTOConverter;
+import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
 import com.todoapp.user.facade.UserFacade;
@@ -25,6 +29,7 @@ public class UserFacadeImpl implements UserFacade {
     private final UserRepository userRepository;
     private final UserDTOConverter userDTOConverter;
     private final UserMapper userMapper;
+    private final OrganisationFacade organisationFacade;
 
     public UserDTO addUser(UserDTO userDTO) {
         log.info("[UserService - addUser] - calling toEntity ");
@@ -39,9 +44,14 @@ public class UserFacadeImpl implements UserFacade {
     public List<User> getUsersInOrganisation() {
         return null;
     }
+
     @Override
-    public List<User> getUsersInProject() {
-        return null;
+    public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
+        if(!organisationFacade.existsById(organisationId)) {
+            throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+        }
+       List<UserSummaryProjection> users = userRepository.findMembersInOrganisation(organisationId);
+        return userMapper.toUserSummaryDTO(users);
     }
 
     @Override

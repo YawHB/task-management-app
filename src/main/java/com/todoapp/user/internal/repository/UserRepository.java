@@ -1,6 +1,8 @@
 package com.todoapp.user.internal.repository;
 
+import com.task_management_app.api.model.UserDTO;
 import com.todoapp.user.facade.OrganisationProjection;
+import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +38,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                    "AND organisation_id = :organisationId",
                     nativeQuery = true)
     boolean userMemberOfOrganisation(UUID userId, UUID organisationId);
+
+
+    @Query(value = "SELECT ou.user_id AS user_id, u.first_name AS first_name " +
+                    "FROM organisations_users AS ou " +
+            "INNER JOIN users AS u ON user_id = id " +
+            "WHERE ou.organisation_id = :organisationId",
+    nativeQuery = true)
+    List<UserSummaryProjection> findMembersInOrganisation(UUID organisationId);
 }

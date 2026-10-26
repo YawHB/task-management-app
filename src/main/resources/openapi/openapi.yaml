@@ -29,12 +29,10 @@ paths:
     $ref: './paths/user/users.yaml'
   /api/users/{id}:
     $ref: './paths/user/users-id.yaml'
-
-# create these endpoints to fetch users for orgs or project
- # /api/organisations/{organisationId}/users:
-  #  $ref: 'insert path here'
-  #/api/projects/{projectId}/users:
-   # $ref: 'insert path here'
+  /api/organisations/{organisationId}/users:
+    $ref: './paths/user/organisation-id-users.yaml'
+  /api/projects/{projectId}/users:
+    $ref: './paths/user/project-id-users.yaml'
 
   /api/organisations/{organisationId}/projects/users:
     $ref: './paths/user/organisations-id-projects-users.yaml'
@@ -58,19 +56,5 @@ paths:
     $ref: './paths/organisation/organisations-id-users.yaml'
 
 
-
-
-#components:
- # schemas:
- #   Task:
-   #   $ref: './schemas/task/taskDTO.yaml'
-  #  Status:
-   #   $ref: './schemas/task/statusDTO.yaml'
-   # Priority:
-    #  $ref: './schemas/task/priorityDTO.yaml'
-   # User:
-   #   $ref: "./schemas/user/userDTO.yaml"
-   # ProjectMemberDTO:
-     # $ref: './schemas/project/addProjectMembershipDTO.yaml'
 
 

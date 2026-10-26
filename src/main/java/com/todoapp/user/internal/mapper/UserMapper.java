@@ -1,18 +1,20 @@
 package com.todoapp.user.internal.mapper;
 
 import com.task_management_app.api.model.UserDTO;
+import com.task_management_app.api.model.UserSummaryDTO;
+import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
 
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
-
 
     @Mapping(target = "id", source = "userId")
     @Mapping(target = "deleted", constant = "false")
@@ -25,6 +27,11 @@ public interface UserMapper {
     @Mapping(target = "isDeleted", source = "deleted")
     @Mapping(target = "keycloakId", ignore = true)
     UserDTO toDto(User user);
+
+
+    UserSummaryDTO toUserSummaryDTO(UserSummaryProjection user);
+
+    List<UserSummaryDTO> toUserSummaryDTO(List<UserSummaryProjection> user);
 
     @Named("createUserNameIfNull")
     default String createUserNameIfNull(UserDTO userDTO) {
