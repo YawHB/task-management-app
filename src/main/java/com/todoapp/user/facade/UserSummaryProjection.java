@@ -8,6 +8,6 @@ public interface UserSummaryProjection {
     String getFirstName();
     String getLastName();
     String getUserName();
-    String email();
+    String getEmail();
 
 }

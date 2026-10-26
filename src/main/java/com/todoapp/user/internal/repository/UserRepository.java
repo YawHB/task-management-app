@@ -40,9 +40,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean userMemberOfOrganisation(UUID userId, UUID organisationId);
 
 
-    @Query(value = "SELECT ou.user_id AS user_id, u.first_name AS first_name " +
+    @Query(value = "SELECT ou.user_id AS id, u.first_name AS first_name, u.last_name, u.username, u.email " +
                     "FROM organisations_users AS ou " +
-            "INNER JOIN users AS u ON user_id = id " +
+            "INNER JOIN users AS u ON u.id = ou.user_id " +
             "WHERE ou.organisation_id = :organisationId",
     nativeQuery = true)
     List<UserSummaryProjection> findMembersInOrganisation(UUID organisationId);

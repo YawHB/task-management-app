@@ -28,9 +28,12 @@ public interface UserMapper {
     @Mapping(target = "keycloakId", ignore = true)
     UserDTO toDto(User user);
 
-
+    @Mapping(target = "userId", source = "id")
     UserSummaryDTO toUserSummaryDTO(UserSummaryProjection user);
 
+
+    @Mapping(target = "userId", source = "id")
+    @Mapping(target = "username", source = "userDTO", qualifiedByName = "createUserNameIfNull" )
     List<UserSummaryDTO> toUserSummaryDTO(List<UserSummaryProjection> user);
 
     @Named("createUserNameIfNull")
