@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -124,5 +125,37 @@ public class GlobalExceptionHandler {
     /** TASK EXCEPTIONS **/
 
 
+    @ExceptionHandler(ParentTaskNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleParentTaskNotFound(ParentTaskNotFoundException exception, HttpServletRequest request) {
+        log.warn("Project not found: {}", exception.getMessage());
+        return errorResponseFactory.buildCustomProblem(HttpStatus.NOT_FOUND, "Parent task not found", exception.getMessage(), request);
+    }
 
-}
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public ResponseEntity<ErrorResponseDTO> handlePInvalidDateRange(InvalidDateRangeException exception,
+                                                                     HttpServletRequest request) {
+        log.warn("Invalid date range: {}", exception.getMessage());
+
+        return errorResponseFactory.buildCustomProblem(HttpStatus.NOT_FOUND, "Invalid date range", exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(TaskTitleAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTaskTitleAlreadyExist(TaskTitleAlreadyExistsException exception, HttpServletRequest request) {
+        log.warn("Title already exist: {}", exception.getMessage());
+        return errorResponseFactory.buildCustomProblem(HttpStatus.NOT_FOUND, "Invalid task title. Title already exist", exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(TaskNotFoundInProjectException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTaskNotFoundInProject(TaskNotFoundInProjectException exception, HttpServletRequest request) {
+        log.warn("Task not found in project: {}", exception.getMessage());
+        return errorResponseFactory.buildCustomProblem(HttpStatus.NOT_FOUND, "Task not found in project", exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+
+        log.warn("Invalid user input: {}", exception.getMessage());
+        return errorResponseFactory.buildCustomProblem(HttpStatus.BAD_REQUEST, "Invalid user input", exception.getMessage(), request);
+
+        }
+    }
