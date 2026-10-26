@@ -8,6 +8,7 @@ import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserExistsInOrganisationException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
+import com.todoapp.mediator.MediatorFacade;
 import com.todoapp.organisation.internal.service.OrganisationFacadeImpl;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import lombok.AllArgsConstructor;
@@ -24,8 +25,8 @@ import java.util.UUID;
 @Slf4j
 class OrganisationController implements OrganisationApi {
 
-    private OrganisationFacade organisationFacade;
     private OrganisationFacadeImpl organisationService;
+    private MediatorFacade mediatorFacadeImpl;
 
     @Override
     public ResponseEntity<OrganisationDTO> addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
@@ -36,7 +37,6 @@ class OrganisationController implements OrganisationApi {
         return ResponseEntity.status(HttpStatus.CREATED).body(organisationDTO);
     }
 
-
     @Override
     public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) throws OrganisationNotFoundException {
             OrganisationDetailsDTO organisationDTO = organisationService.findOrganisationById(id);
@@ -45,8 +45,9 @@ class OrganisationController implements OrganisationApi {
 
     @Override
     public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
-            log.info("[OrganisationController - addUserToOrganisation] - Calling org facade ");
-            UserDTO addedUser = organisationFacade.addUserToOrganisation(id, userEmail);
+            log.info("[OrganisationController - addUserToOrganisation] - calling mediator to subscribe user");
+            UserDTO addedUser = mediatorFacadeImpl.subscribeMemberToOrganisation(id, userEmail);
+            log.info("[OrganisationController - addUserToOrganisation] - operation successful. returning 201 to client");
             return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
     }
 }

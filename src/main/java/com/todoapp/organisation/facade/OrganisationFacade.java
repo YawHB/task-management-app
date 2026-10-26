@@ -3,6 +3,7 @@ package com.todoapp.organisation.facade;
 import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.UserExistsInOrganisationException;
 
 
 import java.util.UUID;
@@ -27,14 +28,15 @@ public interface OrganisationFacade  {
    boolean existsById(UUID organisationId);
 
     /**
-     * Adds a user to an organisation using the user's email address.
+     * Adds a user to an organisation using the user's id.
      *
      * @param id the UUID of the organisation to add the user to
-     * @param userEmail the email address of the user to add
+     * @param userDTO the user to add to the organisation
      * @return the details of the added user
      * @throws OrganisationNotFoundException if the organisation does not exist
+     * @throws UserExistsInOrganisationException if the user is already a member of the organisation
      */
-    UserDTO addUserToOrganisation(UUID id, String userEmail) throws OrganisationNotFoundException;
+    UserDTO addUserToOrganisation(UUID id, UserDTO userDTO) throws OrganisationNotFoundException, UserExistsInOrganisationException;
 
     /**
      * Checks whether a user belongs to the specified organisation.
