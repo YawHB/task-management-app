@@ -26,11 +26,6 @@ public class UserController implements UserApi {
 
     private final MediatorFacade mediatorFacadeImpl;
 
-    /*TODO - Missing methods:
-    *  getUsersForProject()
-    *  getUsersForOrganisation()
-    *  getUserByEmail()
-    * */
 
     private final UserFacadeImpl userFacadeImpl;
 
@@ -44,26 +39,15 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<UserDTO> getUserById(UUID id) {
-        try {
-
         UserDTO userDTO = userFacadeImpl.getUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-        } catch ( UserNotFoundException exception) {
-            log.error("[UserController - getUserById]" + exception.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @Override
     public ResponseEntity<List<UserSummaryDTO>> getUsersInProject(UUID projectId) {
-        try{
         log.info("[UserController - getUsersInProject] - calling mediatorFacadeImpl");
         List<UserSummaryDTO> users = mediatorFacadeImpl.getProjectMembers(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(users);
-        } catch (ProjectNotFoundException exception) {
-            log.error("[UserController - getUsersInProject]" + exception.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @Override
