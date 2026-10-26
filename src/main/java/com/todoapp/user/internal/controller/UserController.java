@@ -4,7 +4,9 @@ import com.task_management_app.api.UserApi;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
+import com.todoapp.exceptionHandling.exceptions.ProjectNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
+import com.todoapp.mediator.MediatorFacade;
 import com.todoapp.user.internal.service.UserFacadeImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Slf4j
 public class UserController implements UserApi {
+
+    private final MediatorFacade mediatorFacadeImpl;
 
     /*TODO - Missing methods:
     *  getUsersForProject()
@@ -52,7 +56,14 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<List<UserSummaryDTO>> getUsersInProject(UUID projectId) {
-        return null;
+        try{
+        log.info("[UserController - getUsersInProject] - calling mediatorFacadeImpl");
+        List<UserSummaryDTO> users = mediatorFacadeImpl.getProjectMembers(projectId);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+        } catch (ProjectNotFoundException exception) {
+            log.error("[UserController - getUsersInProject]" + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override

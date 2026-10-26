@@ -14,7 +14,7 @@ public interface UserFacade {
 
     UserDTO getUserByEmail(String userEmail);
 
-    List<User> getUsersInProject();
+    List<UserSummaryDTO> getUsersInProject(UUID projectId);
 
     List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId);
 

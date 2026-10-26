@@ -4,9 +4,11 @@ import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
 import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
+import com.todoapp.exceptionHandling.exceptions.ProjectNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.todoapp.organisation.facade.OrganisationFacade;
+import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.user.UserDTOConverter;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
@@ -41,8 +43,11 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public List<User> getUsersInOrganisation() {
-        return null;
+    public List<UserSummaryDTO> getUsersInProject(UUID projectId) {
+        log.info("[UserFacadeImpl - getUsersInProject] - calling user repo to get all users");
+        List<UserSummaryProjection> users = userRepository.findMembersInProject(projectId);
+        log.info("[UserFacadeImpl - getUsersInProject] - convert to DTO and return");
+       return userMapper.toUserSummaryDTO(users);
     }
 
     @Override

@@ -13,8 +13,6 @@ delete:
       schema:
         type: string
         format: uuid
-
-
   responses:
     '204':
       description: 'Project was successfully deleted'
