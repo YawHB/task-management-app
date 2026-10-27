@@ -9,10 +9,8 @@ import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.organisation.internal.model.Organisation;
+import com.todoapp.user.UserDTOConverter;
 import com.todoapp.user.facade.OrganisationProjection;
-import com.todoapp.user.facade.UserFacade;
-import com.todoapp.user.internal.model.User;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,8 +25,9 @@ import java.util.UUID;
 @Slf4j
 public class OrganisationFacadeImpl implements OrganisationFacade {
 
-    private OrganisationRepository organisationRepository;
-    private OrganisationDTOConverter organisationDTOConverter;
+    private final OrganisationRepository organisationRepository;
+    private final OrganisationDTOConverter organisationDTOConverter;
+    private final UserDTOConverter userDTOConverter; //TODO - only temporarily. refactor to organisation mapStruct
 
 
     public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
@@ -78,6 +77,14 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     @Override
     public boolean userExistInOrganisation(UUID organisationId, UUID userId) {
         return organisationRepository.userExistInOrganisation(organisationId, userId);
+    }
+
+    @Override
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+        log.info("[OrganisationFacadeImpl - getOrganisationsByUserId] - calling repo to fetch organisations for user");
+        List<OrganisationProjection> organisations = organisationRepository.findOrganisationsByUserId(userId);
+        log.info("[OrganisationFacadeImpl - getOrganisationsByUserId] - convert response to DTO");
+       return userDTOConverter.toDTO(organisations);
     }
 
 }

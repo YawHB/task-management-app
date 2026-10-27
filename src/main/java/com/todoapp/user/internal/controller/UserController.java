@@ -55,12 +55,6 @@ public class UserController implements UserApi {
       List<UserSummaryDTO> users = userFacadeImpl.getUsersInOrganisation(organisationId);
       return ResponseEntity.status(HttpStatus.OK).body(users);
     }
-
-
-    @Override
-    public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {
-       return ResponseEntity.status(HttpStatus.OK).body( userFacadeImpl.getOrganisationsByUserId(userId));
-    }
 }
 
 

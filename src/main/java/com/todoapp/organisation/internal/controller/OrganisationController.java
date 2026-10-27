@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,16 +38,25 @@ class OrganisationController implements OrganisationApi {
     }
 
     @Override
+    public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
+        log.info("[OrganisationController - addUserToOrganisation] - calling mediator to subscribe user");
+        UserDTO addedUser = mediatorFacadeImpl.subscribeMemberToOrganisation(id, userEmail);
+        log.info("[OrganisationController - addUserToOrganisation] - operation successful. returning 201 to client");
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
+    }
+
+    @Override
     public ResponseEntity<OrganisationDetailsDTO> getOrganisationById(UUID id) throws OrganisationNotFoundException {
             OrganisationDetailsDTO organisationDTO = organisationService.findOrganisationById(id);
             return ResponseEntity.ok(organisationDTO);
     }
 
     @Override
-    public ResponseEntity<UserDTO> addUserToOrganisation(UUID id, String userEmail) {
-            log.info("[OrganisationController - addUserToOrganisation] - calling mediator to subscribe user");
-            UserDTO addedUser = mediatorFacadeImpl.subscribeMemberToOrganisation(id, userEmail);
-            log.info("[OrganisationController - addUserToOrganisation] - operation successful. returning 201 to client");
-            return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
+    public ResponseEntity<List<OrganisationDTO>> getOrganisationsByUserId(UUID userId) {
+        log.info("[OrganisationController - getOrganisationsByUserId] - calling mediatorImpl");
+        List<OrganisationDTO> organisations = mediatorFacadeImpl.getOrganisationsByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(organisations);
     }
+
+
 }

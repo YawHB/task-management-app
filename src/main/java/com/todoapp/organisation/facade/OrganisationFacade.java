@@ -1,11 +1,13 @@
 package com.todoapp.organisation.facade;
 
+import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserExistsInOrganisationException;
 
 
+import java.util.List;
 import java.util.UUID;
 
 public interface OrganisationFacade  {
@@ -46,4 +48,12 @@ public interface OrganisationFacade  {
      * @return {@code true} if the user belongs to the organisation, {@code false} otherwise
      */
     boolean userExistInOrganisation(UUID organisationId, UUID userId);
+
+    /**
+     * Retrieves all organisations associated with the specified user.
+     *
+     * @param userId the UUID of the user whose organisations are to be retrieved
+     * @return a list of organisations associated with the user
+     */
+    List<OrganisationDTO> getOrganisationsByUserId(UUID userId);
 }

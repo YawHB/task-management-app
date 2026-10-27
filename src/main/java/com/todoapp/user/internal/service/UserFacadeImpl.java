@@ -4,12 +4,8 @@ import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
 import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptionHandling.exceptions.ProjectNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
-import com.task_management_app.api.model.OrganisationDTO;
 import com.todoapp.organisation.facade.OrganisationFacade;
-import com.todoapp.project.facade.ProjectFacade;
-import com.todoapp.user.UserDTOConverter;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
@@ -29,7 +25,6 @@ import java.util.UUID;
 public class UserFacadeImpl implements UserFacade {
 
     private final UserRepository userRepository;
-    private final UserDTOConverter userDTOConverter;
     private final UserMapper userMapper;
     private final OrganisationFacade organisationFacade;
 
@@ -86,11 +81,6 @@ public class UserFacadeImpl implements UserFacade {
         }
         log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
-    }
-
-    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue()));
-        return userDTOConverter.toDTO(userRepository.findOrganisationsByUserId(userId));
     }
 
     @Override

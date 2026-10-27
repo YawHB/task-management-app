@@ -33,11 +33,9 @@ paths:
     $ref: './paths/user/organisation-id-users.yaml'
   /api/projects/{projectId}/users:
     $ref: './paths/user/project-id-users.yaml'
-
   /api/organisations/{organisationId}/projects/users:
     $ref: './paths/user/organisations-id-projects-users.yaml'
-  /api/users/{user-id}/organisations:
-    $ref: './paths/user/users-user-id-organisations.yaml'
+
 
   #PROJECT
   /api/organisations/{organisationId}/projects:
@@ -54,6 +52,8 @@ paths:
     $ref: './paths/organisation/organisations-id.yaml'
   /api/organisations/{id}/users:
     $ref: './paths/organisation/organisations-id-users.yaml'
+  /api/users/{userId}/organisations:
+    $ref: './paths/user/users-user-id-organisations.yaml'
 
 
 
