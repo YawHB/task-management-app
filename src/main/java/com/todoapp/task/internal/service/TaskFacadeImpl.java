@@ -44,7 +44,7 @@ public class TaskFacadeImpl implements TaskFacade {
         log.info("[TaskFacadeImpl - getTaskInProject] - calling taskRepo to fetch task");
         Optional<Task> task =  taskRepository.findByIdAndProjectId(taskId, projectId);
         validationHandler.validateTaskFound(task);
-        log.info("[TaskFacadeImpl - getTaskInProject] - calling DTO converter and return fetch task to controller");
+        log.info("[TaskFacadeImpl - getTaskInProject] - calling taskMapper and return fetch task to controller");
         return taskMapper.toDTO(task.get());
     }
 
@@ -70,7 +70,7 @@ public class TaskFacadeImpl implements TaskFacade {
         log.info("[TaskFacadeImpl - updateTaskAssignee] - fetching newly update task from repository");
         Optional<TaskDetailsProjection> taskDetails =  taskRepository.findTaskDetailsByIdAndProjectId(taskId, projectId, assigneeId);
         validationHandler.validateTaskFound(taskDetails);
-        log.info("[TaskFacadeImpl - updateTaskAssignee] - calling toDTO and");
+        log.info("[TaskFacadeImpl - updateTaskAssignee] - calling taskDetailsDTO");
         return taskMapper.taskDetailsDTO(taskDetails.get());
     }
 
