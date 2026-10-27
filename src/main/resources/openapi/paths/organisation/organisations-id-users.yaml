@@ -27,17 +27,17 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/user/userDTO.yaml'
+            $ref: '../../schemas/user/userDTO.yaml'
     '404':
       description: 'Invalid user email. No user with this email exist in the system'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal Server Error'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
 

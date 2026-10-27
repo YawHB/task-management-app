@@ -37,6 +37,6 @@ delete:
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
 
 

@@ -1,11 +1,11 @@
 get:
   tags:
-    - User
+    - Organisation
   summary: 'Get all organisations for a user'
   description: 'Returns all organisations that a given user is a member of'
   operationId: 'getOrganisationsByUserId'
   parameters:
-    - name: user-id
+    - name: userId
       in: path
       required: true
       description: 'Unique identifier for the user'
@@ -21,4 +21,5 @@ get:
           schema:
             type: array
             items:
-              $ref: '../schemas/organisation/organisationDTO.yaml'
+             $ref: '../../schemas/organisation/organisationDTO.yaml'
+

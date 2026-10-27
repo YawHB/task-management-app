@@ -9,9 +9,8 @@ import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.organisation.internal.model.Organisation;
+import com.todoapp.user.UserDTOConverter;
 import com.todoapp.user.facade.OrganisationProjection;
-import com.todoapp.user.facade.UserFacade;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,10 @@ import java.util.UUID;
 @Slf4j
 public class OrganisationFacadeImpl implements OrganisationFacade {
 
-    private OrganisationRepository organisationRepository;
-    private OrganisationDTOConverter organisationDTOConverter;
-    private UserFacade userFacade;
+    private final OrganisationRepository organisationRepository;
+    private final OrganisationDTOConverter organisationDTOConverter;
+    private final UserDTOConverter userDTOConverter; //TODO - only temporarily. refactor to organisation mapStruct
+
 
     public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationDTOConverter ");
@@ -58,28 +58,35 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     }
 
     @Override
-    @Transactional
-    public UserDTO addUserToOrganisation(UUID organisationId, String userEmail) throws OrganisationNotFoundException {
-        log.info("[OrganisationFacadeImpl - addUserToOrganisation] - calling userFacade to find user by email");
-        UserDTO userDTO = userFacade.findUserByEmail(userEmail);
-
+    public UserDTO addUserToOrganisation(UUID organisationId, UserDTO userDTO) throws OrganisationNotFoundException {
+        log.info("[OrganisationFacadeImpl - addUserToOrganisation] - calling organisation repo to find organisation if exist");
         organisationRepository.findById(organisationId).orElseThrow(
                 () -> new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue()));
 
+        log.info("[OrganisationFacadeImpl - addUserToOrganisation] - check if user is already member in org");
         boolean userAlreadyAdded = organisationRepository.userExistInOrganisation(organisationId, userDTO.getUserId());
 
-        if (!userAlreadyAdded) {
+        if (userAlreadyAdded) {
+        throw new UserExistsInOrganisationException(ExceptionReason.USER_ALREADY_EXIST_IN_ORG.getValue());
+        }
             log.info("[OrganisationFacadeImpl - addUserToOrganisation] - calling organisation repo to add the user to the organisation");
             organisationRepository.addUserToOrganisation(LocalDateTime.now(), UUID.randomUUID(), organisationId, userDTO.getUserId());
             return userDTO;
-        }
-        throw new UserExistsInOrganisationException(ExceptionReason.USER_ALREADY_EXIST_IN_ORG.getValue());
     }
 
     @Override
     public boolean userExistInOrganisation(UUID organisationId, UUID userId) {
         return organisationRepository.userExistInOrganisation(organisationId, userId);
     }
+
+    @Override
+    public List<OrganisationDTO> getOrganisationsByUserId(UUID userId) {
+        log.info("[OrganisationFacadeImpl - getOrganisationsByUserId] - calling repo to fetch organisations for user");
+        List<OrganisationProjection> organisations = organisationRepository.findOrganisationsByUserId(userId);
+        log.info("[OrganisationFacadeImpl - getOrganisationsByUserId] - convert response to DTO");
+       return userDTOConverter.toDTO(organisations);
+    }
+
 }
 
 

@@ -17,7 +17,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/project/projectMemberDTO.yaml'
+          $ref: '../../schemas/project/projectMemberDTO.yaml'
 
   responses:
     '201':
@@ -25,18 +25,18 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/project/projectMemberDTO.yaml'
+            $ref: '../../schemas/project/projectMemberDTO.yaml'
     '404':
       description: 'The user or project does not exist'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '409':
       description: 'The user is already part of this project'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
 
 

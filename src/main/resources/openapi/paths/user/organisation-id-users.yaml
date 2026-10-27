@@ -1,0 +1,37 @@
+get:
+  tags:
+    - User
+  summary: 'Get all members of an organisation'
+  operationId: 'getUsersInOrganisation'
+  parameters:
+    - name: 'organisationId'
+      in: path
+      required: true
+      description: 'The id of the organisation'
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: 'Members of organisation were successfully fetched'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/user/userSummaryDTO.yaml'
+    '404':
+      description: 'The organisation you requested does not exist'
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
+    '500':
+      description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
+
+
+

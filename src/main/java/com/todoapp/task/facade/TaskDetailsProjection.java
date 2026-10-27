@@ -22,12 +22,12 @@ public interface TaskDetailsProjection {
     String getLastName();
     String getEmail();
 
-    UUID getTaskCreatorId();
-
-    Status getStatus();   // Changed from enum to String
-    Priority getPriority(); // Changed from enum to String
+    Status getStatus();
+    Priority getPriority();
 
     LocalDate getDueDate();
     LocalDateTime getCreatedAt();
     LocalDateTime getUpdatedAt();
 }
+
+

@@ -43,6 +43,10 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
 
     Optional<Project> findByName(String name);
 
+    @Query(value = "SELECT * FROM project WHERE project.id = :projectId ",
+            nativeQuery = true)
+    Optional<Project> findById(UUID projectId);
+
     @Query(value = "SELECT p.created_at, p.id, organisation_id, p.name " +
                    "FROM project AS p " +
                    "WHERE organisation_id = :organisationId " +

@@ -27,7 +27,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/task/taskDTO.yaml'
+            $ref: '../../schemas/task/taskDTO.yaml'
     '400':
       description: 'Bad Request. Task with this id does not exist.'
     '500':
@@ -43,14 +43,15 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/task/updateTaskDTO.yaml'
+          $ref: '../../schemas/task/updateTaskDTO.yaml'
   responses:
     '200':
       description: 'Task was successfully updated'
       content:
         application/json:
           schema:
-            $ref: '../schemas/task/taskDTO.yaml'
+            $ref: '../../schemas/task/taskDetailsDTO.yaml'
+
     '400':
       description: 'Bad Request. Invalid task id format.'
     '500':

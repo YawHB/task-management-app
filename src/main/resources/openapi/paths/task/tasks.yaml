@@ -41,7 +41,7 @@ get:
           schema:
             type: array
             items:
-              $ref: '../schemas/task/taskSummaryDTO.yaml'
+              $ref: '../../schemas/task/taskSummaryDTO.yaml'
     '400':
       description: 'Bad request. Unknown sortBy or sortOrder value.'
     '500':
@@ -58,14 +58,14 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/task/addTaskDTO.yaml'
+          $ref: '../../schemas/task/addTaskDTO.yaml'
   responses:
     '201':
       description: 'Task was successfully created'
       content:
         application/json:
           schema:
-            $ref: '../schemas/task/taskDTO.yaml'
+            $ref: '../../schemas/task/taskDTO.yaml'
     '400':
       description: 'Bad Request. Invalid or missing request data.'
     '500':

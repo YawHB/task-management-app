@@ -20,23 +20,23 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/organisation/organisationDetailsDTO.yaml'
+            $ref: '../../schemas/organisation/organisationDetailsDTO.yaml'
     '400':
       description: 'Bad request. Invalid organisation id format'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '404':
       description: 'The organisation you request does not exist'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
     '500':
       description: 'Internal Server Error'
       content:
         application/json:
           schema:
-            $ref: '../schemas/errorResponses/errorResponseDTO.yaml'
+            $ref: '../../schemas/errorResponses/errorResponseDTO.yaml'
 

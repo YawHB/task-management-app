@@ -1,13 +1,22 @@
 package com.todoapp.user.facade;
 
 import com.task_management_app.api.model.UserDTO;
-import com.todoapp.user.internal.model.User;
+import com.task_management_app.api.model.UserSummaryDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface UserFacade {
-     List<User> getAllUsers();
+
+    UserDTO addUser(UserDTO userDTO);
+
+    UserDTO getUserById(UUID userId);
+
+    UserDTO getUserByEmail(String userEmail);
+
+    List<UserSummaryDTO> getUsersInProject(UUID projectId);
+
+    List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId);
 
    boolean existById(UUID id);
 
@@ -15,13 +24,6 @@ public interface UserFacade {
 
    boolean userExistInOrganisation(UUID userId, UUID organisationId);
 
-
-    UserDTO addUser(UserDTO userDTO);
-
-    UserDTO getUserByEmail(String email);
-
-
     void deleteTask(UUID id);
 
-UserDTO findUserByEmail(String userEmail);
 }

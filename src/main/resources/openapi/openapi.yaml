@@ -18,52 +18,43 @@ tags:
 #TASK
 paths:
   /api/project/{projectId}/tasks:
-    $ref: './paths/tasks.yaml'
+    $ref: './paths/task/tasks.yaml'
   /api/project/{projectId}/tasks/{taskId}/assignee:
     $ref: './paths/task/task-assignee.yaml'
   /api/projects/{projectId}/tasks/{taskId}:
-    $ref: './paths/tasks-id.yaml'
+    $ref: './paths/task/tasks-id.yaml'
 
 #USER
   /api/users:
-    $ref: './paths/users.yaml'
+    $ref: './paths/user/users.yaml'
   /api/users/{id}:
-    $ref: './paths/users-id.yaml'
+    $ref: './paths/user/users-id.yaml'
+  /api/organisations/{organisationId}/users:
+    $ref: './paths/user/organisation-id-users.yaml'
+  /api/projects/{projectId}/users:
+    $ref: './paths/user/project-id-users.yaml'
   /api/organisations/{organisationId}/projects/users:
-    $ref: './paths/organisations-id-projects-users.yaml'
-  /api/users/{user-id}/organisations:
-    $ref: './paths/users-user-id-organisations.yaml'
+    $ref: './paths/user/organisations-id-projects-users.yaml'
+
 
   #PROJECT
   /api/organisations/{organisationId}/projects:
-    $ref: './paths/projects.yaml'
+    $ref: './paths/project/projects.yaml'
   /api/projects/{projectId}:
-    $ref: './paths/projects-id.yaml'
+    $ref: './paths/project/projects-id.yaml'
   /api/organisations/{organisationId}/projects/{projectId}/users/{userId}:
-    $ref: './paths/projects-id-users-id.yaml'
+    $ref: './paths/project/projects-id-users-id.yaml'
 
 #ORGANISATION
   /api/organisations:
-    $ref: './paths/organisations.yaml'
+    $ref: './paths/organisation/organisations.yaml'
   /api/organisations/{id}:
-    $ref: './paths/organisations-id.yaml'
+    $ref: './paths/organisation/organisations-id.yaml'
   /api/organisations/{id}/users:
-    $ref: './paths/organisations-id-users.yaml'
+    $ref: './paths/organisation/organisations-id-users.yaml'
+  /api/users/{userId}/organisations:
+    $ref: './paths/user/users-user-id-organisations.yaml'
 
 
-
-
-#components:
- # schemas:
- #   Task:
-   #   $ref: './schemas/task/taskDTO.yaml'
-  #  Status:
-   #   $ref: './schemas/task/statusDTO.yaml'
-   # Priority:
-    #  $ref: './schemas/task/priorityDTO.yaml'
-   # User:
-   #   $ref: "./schemas/user/userDTO.yaml"
-   # ProjectMemberDTO:
-     # $ref: './schemas/project/addProjectMembershipDTO.yaml'
 
 

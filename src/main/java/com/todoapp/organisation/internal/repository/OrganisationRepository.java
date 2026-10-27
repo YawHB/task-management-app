@@ -58,4 +58,13 @@ public interface OrganisationRepository extends JpaRepository<Organisation, UUID
             "ORDER BY PROJECT_FILTERED_BY_ORG.name ASC",
             nativeQuery = true)
     List<OrganisationDetailsProjection> findOrganisationWithProjectsAndMembers(UUID id);
+
+
+    @Query(value = "SELECT o.id AS organisationId, o.name AS organisationName, " +
+            "o.creator_id AS creatorId " +
+            "FROM organisation AS o " +
+            "INNER JOIN organisations_users ou ON o.id = ou.organisation_id " +
+            "WHERE ou.user_id = :userId",
+            nativeQuery = true)
+    List<OrganisationProjection> findOrganisationsByUserId(UUID userId);
 }
