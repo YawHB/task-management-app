@@ -45,6 +45,7 @@ public class UserFacadeImpl implements UserFacade {
        return userMapper.toUserSummaryDTO(users);
     }
 
+    // TODO - do MOCK TEST✅
     @Override
     public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
         if(!organisationFacade.existsById(organisationId)) {
@@ -54,12 +55,12 @@ public class UserFacadeImpl implements UserFacade {
         return userMapper.toUserSummaryDTO(users);
     }
 
+    // TODO - do MOCK TEST
     @Override
     public UserDTO getUserById(UUID userId) {
         log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isPresent()) {
-
             log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling mapper to convert user -> toDTO");
             return userMapper.toDto(foundUser.get());
         }
