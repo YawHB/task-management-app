@@ -4,6 +4,8 @@ import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.project.ProjectDTOConverter;
+import com.todoapp.project.facade.ProjectProjection;
+import com.todoapp.project.facade.mapper.ProjectMapper;
 import com.todoapp.project.internal.repository.ProjectRepository;
 import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.project.facade.ProjectSummaryProjection;
@@ -28,9 +30,9 @@ public class ProjectFacadeImpl implements ProjectFacade {
 
     private final ProjectDTOConverter projectDTOConverter;
     private final ProjectRepository projectRepository;
-
     private final OrganisationFacade organisationFacade;
     private final UserFacade userFacade;
+    private final ProjectMapper projectMapper;
 
 
     @Override
@@ -41,11 +43,14 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - addProject] - checks if organisation exists by its id (OBS: missing error handling on fail)");
         if(organisationFacade.existsById(organisationId)) {
           log.info("[ProjectFacadeImpl - addProject] - returns a project from the project DTO converter ");
-          Project project = projectDTOConverter.toEntity(organisationId, projectPost);
-          log.info("[ProjectFacadeImpl - addProject] - saves Project object ");
-          Project createdProject = projectRepository.save(project);
+          Project project = projectMapper.toEntity(organisationId, projectPost);
+          log.info("[ProjectFacadeImpl - addProject] - saves Project object");
+           Project createdProject = projectRepository.save(project);
+           ProjectProjection projectProjection = projectRepository.findProjectWithMembersById(createdProject.getId());
+
           log.info("[ProjectFacadeImpl - addProject] - returns Project object");
-          return projectDTOConverter.toDTO(createdProject);
+          return projectMapper.toDTO(projectProjection);
+
       }
 
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
