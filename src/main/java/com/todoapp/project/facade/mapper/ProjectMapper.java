@@ -2,8 +2,10 @@ package com.todoapp.project.facade.mapper;
 
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
+import com.task_management_app.api.model.ProjectSummaryDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.todoapp.project.facade.ProjectProjection;
+import com.todoapp.project.facade.ProjectSummaryProjection;
 import com.todoapp.project.internal.model.Project;
 import com.todoapp.user.facade.UserSummaryProjection;
 import org.mapstruct.Mapper;
@@ -13,6 +15,7 @@ import org.mapstruct.ReportingPolicy;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring",
@@ -27,11 +30,12 @@ public interface ProjectMapper {
     @Mapping(target = "name", source = "projectName")
     ProjectDTO toDTO(ProjectProjection project);
 
+    ProjectDTO toDTO(Project project);
+
      @Mapping(target = "userId", source = "id")
      UserDTO toUserDTO(UserSummaryProjection userSummaryProjection);
 
-
-    //List<ProjectSummaryDTO> toProjectSummaryDTO(ProjectSummaryProjection projects);
+    List<ProjectSummaryDTO> toProjectSummaryDTO(List<ProjectSummaryProjection> projects);
 
 
     default OffsetDateTime toUtcOffsetDateTimeOrNull(LocalDateTime time) {

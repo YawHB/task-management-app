@@ -26,8 +26,8 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
     ProjectProjection findProjectWithMembersById(UUID projectId);
 
 
-    @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.project_id, " +
-                   "PROJECT_FILTERED_BY_ORG.name " +
+    @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.project_id AS projectId, " +
+                   "PROJECT_FILTERED_BY_ORG.name AS projectName " +
             "FROM (" +
                      "SELECT project.id AS project_id, " +
                              "project.name " +

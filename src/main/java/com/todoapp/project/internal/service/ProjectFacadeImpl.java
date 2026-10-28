@@ -28,7 +28,6 @@ import java.util.UUID;
 @Slf4j
 public class ProjectFacadeImpl implements ProjectFacade {
 
-    private final ProjectDTOConverter projectDTOConverter;
     private final ProjectRepository projectRepository;
     private final OrganisationFacade organisationFacade;
     private final UserFacade userFacade;
@@ -69,7 +68,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
         List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId);
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling toDTO");
-        List<ProjectSummaryDTO> projectSummaryDTOS = projectDTOConverter.toDTO(projects);
+        List<ProjectSummaryDTO> projectSummaryDTOS = projectMapper.toProjectSummaryDTO(projects);
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return a list of projectSummaryDTOs to controller");
         return projectSummaryDTOS;
     }
@@ -100,8 +99,8 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - calling project repo to find project in current organisation");
         Optional<Project> foundProject = projectRepository.findProjectByOrganisationIdAndName(organisationId, projectName);
         if(foundProject.isPresent()) {
-            log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project found - calling converter method, toDTO");
-            return projectDTOConverter.toDTO(foundProject.get());
+            log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project found - calling projectMapper -> toDTO");
+            return projectMapper.toDTO(foundProject.get());
 
         }
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project not found - throwing PROJECT NOT FOUND IN ORG exception");
