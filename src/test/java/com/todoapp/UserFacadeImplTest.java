@@ -1,5 +1,6 @@
 package com.todoapp;
 
+
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.organisation.facade.OrganisationFacade;
@@ -34,7 +35,7 @@ public class UserFacadeImplTest {
 
     @InjectMocks
     private UserFacadeImpl userFacadeImpl;
-    @InjectMocks
+    @Mock
     private OrganisationFacadeImpl organisationFacade;
 
     @Test
