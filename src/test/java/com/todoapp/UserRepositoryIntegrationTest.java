@@ -67,4 +67,14 @@ public class UserRepositoryIntegrationTest {
         assertEquals(actualUser, expectedUser);
     }
 
+   @Test
+   public void findMembersInProject_returnsListOfUserSummeryProjections(){
+        // ARRANGE
+
+        //ACT
+
+       //ASSERT
+
+   }
+
 }
