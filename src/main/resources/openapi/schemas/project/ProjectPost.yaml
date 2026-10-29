@@ -4,11 +4,13 @@ type: object
 description: 'Represents a post project request'
 required:
   - name
+  - ownerId
 properties:
   name:
     type: string
     description: 'name of the project'
 example:
   name: "John's project 1"
+
 
 

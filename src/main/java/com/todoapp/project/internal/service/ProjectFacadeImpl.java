@@ -4,6 +4,8 @@ import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.project.ProjectDTOConverter;
+import com.todoapp.project.facade.ProjectProjection;
+import com.todoapp.project.facade.mapper.ProjectMapper;
 import com.todoapp.project.internal.repository.ProjectRepository;
 import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.project.facade.ProjectSummaryProjection;
@@ -26,11 +28,10 @@ import java.util.UUID;
 @Slf4j
 public class ProjectFacadeImpl implements ProjectFacade {
 
-    private final ProjectDTOConverter projectDTOConverter;
     private final ProjectRepository projectRepository;
-
     private final OrganisationFacade organisationFacade;
     private final UserFacade userFacade;
+    private final ProjectMapper projectMapper;
 
 
     @Override
@@ -41,11 +42,14 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - addProject] - checks if organisation exists by its id (OBS: missing error handling on fail)");
         if(organisationFacade.existsById(organisationId)) {
           log.info("[ProjectFacadeImpl - addProject] - returns a project from the project DTO converter ");
-          Project project = projectDTOConverter.toEntity(organisationId, projectPost);
-          log.info("[ProjectFacadeImpl - addProject] - saves Project object ");
-          Project createdProject = projectRepository.save(project);
+          Project project = projectMapper.toEntity(organisationId, projectPost);
+          log.info("[ProjectFacadeImpl - addProject] - saves Project object");
+           Project createdProject = projectRepository.save(project);
+           ProjectProjection projectProjection = projectRepository.findProjectWithMembersById(createdProject.getId());
+
           log.info("[ProjectFacadeImpl - addProject] - returns Project object");
-          return projectDTOConverter.toDTO(createdProject);
+          return projectMapper.toDTO(projectProjection);
+
       }
 
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
@@ -64,7 +68,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
         List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId);
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling toDTO");
-        List<ProjectSummaryDTO> projectSummaryDTOS = projectDTOConverter.toDTO(projects);
+        List<ProjectSummaryDTO> projectSummaryDTOS = projectMapper.toProjectSummaryDTO(projects);
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] -return a list of projectSummaryDTOs to controller");
         return projectSummaryDTOS;
     }
@@ -95,8 +99,8 @@ public class ProjectFacadeImpl implements ProjectFacade {
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - calling project repo to find project in current organisation");
         Optional<Project> foundProject = projectRepository.findProjectByOrganisationIdAndName(organisationId, projectName);
         if(foundProject.isPresent()) {
-            log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project found - calling converter method, toDTO");
-            return projectDTOConverter.toDTO(foundProject.get());
+            log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project found - calling projectMapper -> toDTO");
+            return projectMapper.toDTO(foundProject.get());
 
         }
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project not found - throwing PROJECT NOT FOUND IN ORG exception");

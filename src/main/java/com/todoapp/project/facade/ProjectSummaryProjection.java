@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface ProjectSummaryProjection {
     UUID getProjectId();
-    String getName();
+    String getProjectName();
 }
