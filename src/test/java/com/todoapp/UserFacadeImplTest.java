@@ -3,6 +3,7 @@ package com.todoapp;
 
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
+import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.internal.service.OrganisationFacadeImpl;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,10 +35,11 @@ public class UserFacadeImplTest {
     @Mock
     private UserMapper userMapper;
 
-    @InjectMocks
-    private UserFacadeImpl userFacadeImpl;
     @Mock
     private OrganisationFacadeImpl organisationFacade;
+
+    @InjectMocks
+    private UserFacadeImpl userFacadeImpl;
 
     @Test
     public void getUserByEmail_returnsMappedUser() {
@@ -54,13 +57,28 @@ public class UserFacadeImplTest {
                 thenReturn(Optional.of(user));
         when(userMapper.toDto(user)).thenReturn(userDTO);
 
-        //ACT
+        // ACTUAL CALL
         UserDTO expectedUserDTO = userFacadeImpl.getUserByEmail("john@gmail.com");
 
         // ASSERT
         assertSame(expectedUserDTO, userDTO);
         verify(userRepository).findByEmail("john@gmail.com");
         verify(userMapper).toDto(user);
+    }
+
+    @Test
+    public void getUserByEmail_doesNotReturnMappedUser() {
+        // ARRANGE
+        String email = "notfound@gmail.com";
+
+        // MOCK
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // ACTUAL CALL
+        assertThrows(UserNotFoundException.class, () -> userFacadeImpl.getUserByEmail(email));
+
+        // ASSERT
+        verify(userRepository, times(1)).findByEmail(email);
     }
 
 
@@ -140,7 +158,6 @@ public class UserFacadeImplTest {
         assertSame(expectedUserDTO, actualUserDTO);
         verify(userRepository).findById(expectedUser.getId());
         verify(userMapper).toDto(expectedUser);
-
     }
 }
 
