@@ -2,6 +2,7 @@ package com.todoapp.user.facade;
 
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
+import com.todoapp.exceptionHandling.exceptions.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,11 +13,18 @@ public interface UserFacade {
 
     UserDTO getUserById(UUID userId);
 
+    /**
+     * Retrieves a user by their email address.
+     *
+     * @param userEmail (String) the email address of the user
+     * @return the details of the found user
+     * @throws UserNotFoundException if no user with the given email address exists
+     */
     UserDTO getUserByEmail(String userEmail);
 
     List<UserSummaryDTO> getUsersInProject(UUID projectId);
 
-    List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId);
+    List<UserSummaryDTO> findMembersInOrganisation(UUID organisationId);
 
    boolean existById(UUID id);
 

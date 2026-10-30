@@ -5,6 +5,7 @@ import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
 import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
+import com.todoapp.mediator.MediatorFacade;
 import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
@@ -26,7 +27,6 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final OrganisationFacade organisationFacade;
 
     public UserDTO addUser(UserDTO userDTO) {
         log.info("[UserService - addUser] - calling toEntity ");
@@ -45,13 +45,10 @@ public class UserFacadeImpl implements UserFacade {
        return userMapper.toUserSummaryDTO(users);
     }
 
-    @Override
-    public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
-        if(!organisationFacade.existsById(organisationId)) {
-            throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-        }
+    public List<UserSummaryDTO> findMembersInOrganisation(UUID organisationId) {
        List<UserSummaryProjection> users = userRepository.findMembersInOrganisation(organisationId);
         return userMapper.toUserSummaryDTO(users);
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.todoapp.mediator;
 
+import com.task_management_app.api.model.AddOrganisationRequestDTO;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
@@ -33,7 +34,6 @@ public class MediatorFacadeImpl implements MediatorFacade {
         UserDTO userDTO = userFacade.getUserByEmail(memberEmail);
         log.info("[mediatorFacadeImpl - subscribeMemberToOrganisation] - calling organisationFacade to to add member to organisation");
        return organisationFacade.addUserToOrganisation( organisationId, userDTO);
-
     }
 
     @Override
@@ -55,6 +55,11 @@ public class MediatorFacadeImpl implements MediatorFacade {
         return organisationFacade.getOrganisationsByUserId(userId);
     }
 
+    @Override
+    public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
+        organisationFacade.existsById(organisationId);
+        return userFacade.findMembersInOrganisation(organisationId);
+    }
 
 
     @Override

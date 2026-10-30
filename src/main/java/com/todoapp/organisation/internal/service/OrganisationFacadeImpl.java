@@ -1,9 +1,7 @@
 package com.todoapp.organisation.internal.service;
 
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
-import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
-import com.todoapp.exceptionHandling.exceptions.UserExistsInOrganisationException;
+import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.OrganisationDTOConverter;
 import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
@@ -57,7 +55,10 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     @Override
     public boolean existsById(UUID organisationId) {
         Optional<Organisation> exists = organisationRepository.findById(organisationId);
-        return exists.isPresent();
+        if(exists.isEmpty()) {
+        throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
+        }
+        return true;
     }
 
     @Override

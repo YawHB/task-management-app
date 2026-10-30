@@ -52,7 +52,7 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<List<UserSummaryDTO>> getUsersInOrganisation(UUID organisationId) {
-      List<UserSummaryDTO> users = userFacadeImpl.getUsersInOrganisation(organisationId);
+      List<UserSummaryDTO> users = mediatorFacadeImpl.getUsersInOrganisation(organisationId);
       return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 }
