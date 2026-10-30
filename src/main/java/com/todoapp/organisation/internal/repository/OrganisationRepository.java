@@ -19,16 +19,9 @@ public interface OrganisationRepository extends JpaRepository<Organisation, UUID
 
     @Modifying
     @Query(value = "INSERT INTO organisations_users (active_since, id, organisation_id, user_id) " +
-            " VALUES (:activeSince, :id, :organisationId, :userId)", nativeQuery = true)
+                    "VALUES (:activeSince, :id, :organisationId, :userId)",
+                     nativeQuery = true)
     void addUserToOrganisation(LocalDateTime activeSince, UUID id, UUID organisationId, @Valid UUID userId);
-
-
-    @Query(value = "SELECT COUNT(*) > 0 " +
-            "FROM organisations_users " +
-            "WHERE organisation_id = :organisationId " +
-            "AND user_id = :userId",
-            nativeQuery = true)
-    boolean userExistInOrganisation(UUID organisationId, UUID userId);
 
     @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.organisation_id, " +
             "o.name, " +
@@ -59,7 +52,6 @@ public interface OrganisationRepository extends JpaRepository<Organisation, UUID
             nativeQuery = true)
     List<OrganisationDetailsProjection> findOrganisationWithProjectsAndMembers(UUID id);
 
-
     @Query(value = "SELECT o.id AS organisationId, o.name AS organisationName, " +
             "o.creator_id AS creatorId " +
             "FROM organisation AS o " +
@@ -67,4 +59,16 @@ public interface OrganisationRepository extends JpaRepository<Organisation, UUID
             "WHERE ou.user_id = :userId",
             nativeQuery = true)
     List<OrganisationProjection> findOrganisationsByUserId(UUID userId);
+
+    @Query(value = "SELECT COUNT(*) > 0 " +
+            "FROM organisations_users " +
+            "WHERE organisation_id = :organisationId " +
+            "AND user_id = :userId",
+            nativeQuery = true)
+    boolean userExistInOrganisation(UUID organisationId, UUID userId);
+
+    boolean existsByName(String name);
+
+
+
 }

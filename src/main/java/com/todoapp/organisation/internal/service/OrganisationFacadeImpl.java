@@ -30,8 +30,11 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     private final UserDTOConverter userDTOConverter; //TODO - only temporarily. refactor to organisation mapStruct
 
 
+    @Override
     public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
+        String name = orgRequestDTO.getOrganisationName();
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationDTOConverter ");
+        if(organisationRepository.existsByName(name)) throw new DuplicateOrganisationNameException(ExceptionReason.DUPLICATE_ORG_NAME.getValue());
         Organisation organisation = organisationDTOConverter.toEntity(orgRequestDTO);
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the repository to save an organisation object");
         Organisation newOrganisation = organisationRepository.save(organisation);

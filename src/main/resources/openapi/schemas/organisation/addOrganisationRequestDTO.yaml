@@ -1,7 +1,16 @@
 type: object
+required:
+  - organisationName
+  - creatorId
 properties:
   organisationName:
     type: string
     description: 'name of the organisation'
-required:
-  - organisationName
+  creatorId:
+    type: string
+    format: uuid
+    description: 'Id of the admin who created the organisation'
+
+example:
+  name: "John's organisation"
+  creatorId: '4a391180-9c47-43db-a381-7113e3f6f8a7'
