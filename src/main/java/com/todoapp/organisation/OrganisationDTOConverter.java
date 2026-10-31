@@ -20,6 +20,7 @@ import java.util.List;
     public Organisation toEntity(AddOrganisationRequestDTO addOrgReqDTO) {
         Organisation organisation = new Organisation();
         organisation.setName(addOrgReqDTO.getOrganisationName());
+        organisation.setCreatorId(addOrgReqDTO.getCreatorId());
 
         return organisation;
     }
@@ -31,6 +32,7 @@ import java.util.List;
 
         organisationDTO.setOrganisationId(organisation.getId());
         organisationDTO.setName(organisation.getName());
+        organisationDTO.setCreatorId(organisation.getCreatorId());
         return organisationDTO;
     }
 

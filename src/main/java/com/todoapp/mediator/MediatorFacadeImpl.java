@@ -27,6 +27,17 @@ public class MediatorFacadeImpl implements MediatorFacade {
     private final ProjectFacade projectFacade;
 
 
+
+    @Override
+    public OrganisationDTO createOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
+        /*TODO - delegate the throw responsibility of all facade methods to the facadeImpl through a validater class.
+           That way the mediator does not need conditional logic, which helps it remove responsibility
+           and stay clean
+         */
+        userFacade.existById(orgRequestDTO.getCreatorId());
+        return organisationFacade.addOrganisation(orgRequestDTO);
+    }
+
     @Override
     @Transactional
     public UserDTO subscribeMemberToOrganisation(UUID organisationId, String memberEmail) {
@@ -62,15 +73,4 @@ public class MediatorFacadeImpl implements MediatorFacade {
     }
 
 
-    @Override
-    public OrganisationDTO createOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
-        /*TODO - delegate the throw responsibility of all facade methods to the facadeImpl through a validater class.
-           That way the mediator does not need conditional logic, which helps it remove responsibility
-           and stay clean
-         */
-       if(!userFacade.existById(orgRequestDTO.getCreatorId())) {
-            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-       }
-       return organisationFacade.addOrganisation(orgRequestDTO);
-    }
 }
