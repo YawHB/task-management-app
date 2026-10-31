@@ -3,6 +3,7 @@ package com.todoapp.organisation.internal.service;
 import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.OrganisationDTOConverter;
+import com.todoapp.organisation.facade.mapper.OrganisationMapper;
 import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
 import com.todoapp.organisation.facade.OrganisationFacade;
@@ -26,18 +27,19 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     private final OrganisationRepository organisationRepository;
     private final OrganisationDTOConverter organisationDTOConverter;
     private final UserDTOConverter userDTOConverter; //TODO - only temporarily. refactor to organisation mapStruct
+    private final OrganisationMapper organisationMapper;
 
 
     @Override
     public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
         String name = orgRequestDTO.getOrganisationName();
-        log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationDTOConverter ");
+        log.info("[OrganisationFacadeImpl - addOrganisation] - calling organisationMapper ");
         if(organisationRepository.existsByName(name)) throw new DuplicateOrganisationNameException(ExceptionReason.DUPLICATE_ORG_NAME.getValue());
-        Organisation organisation = organisationDTOConverter.toEntity(orgRequestDTO);
+        Organisation organisation = organisationMapper.toEntity(orgRequestDTO);
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the repository to save an organisation object");
         Organisation newOrganisation = organisationRepository.save(organisation);
         log.info("[OrganisationFacadeImpl - addOrganisation] - calling the toDTO to populate organisationDTO for the controller");
-        return organisationDTOConverter.toDTO(newOrganisation);
+        return organisationMapper.toDTO(newOrganisation);
     }
 
     @Override

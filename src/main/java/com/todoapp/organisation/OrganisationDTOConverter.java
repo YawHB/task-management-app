@@ -17,13 +17,7 @@ import java.util.List;
 @AllArgsConstructor
  public class OrganisationDTOConverter {
 
-    public Organisation toEntity(AddOrganisationRequestDTO addOrgReqDTO) {
-        Organisation organisation = new Organisation();
-        organisation.setName(addOrgReqDTO.getOrganisationName());
-        organisation.setCreatorId(addOrgReqDTO.getCreatorId());
 
-        return organisation;
-    }
 
     public OrganisationDTO toDTO(Organisation organisation) {
         log.info("[OrganisationDTO - toDTO] - populating the organisationDTO object");
