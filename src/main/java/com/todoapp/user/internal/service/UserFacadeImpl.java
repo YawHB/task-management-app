@@ -83,7 +83,10 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public boolean existById(UUID userId) {
         Optional<User> user = userRepository.findById(userId);
-        return user.isPresent();
+        if(user.isEmpty()) {
+            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+        }
+        return true;
     }
 
     @Override

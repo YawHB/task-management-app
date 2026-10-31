@@ -2,9 +2,8 @@ package com.todoapp.organisation.facade.mapper;
 
 import com.task_management_app.api.model.*;
 import com.todoapp.organisation.facade.OrganisationDetailsProjection;
-import com.todoapp.organisation.facade.OrganisationProjectProjection;
 import com.todoapp.organisation.internal.model.Organisation;
-import com.todoapp.user.facade.UserSummaryProjection;
+import com.todoapp.user.facade.OrganisationProjection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -29,6 +28,10 @@ public interface OrganisationMapper {
     @Mapping(target = "organisationId", source = "id")
     OrganisationDTO toDTO(Organisation organisation);
 
+    @Mapping(target = "name", source = "organisationName")
+    OrganisationDTO toOrganisationDTO(OrganisationProjection projection);
+
+    List<OrganisationDTO> toOrganisationDTO(List<OrganisationProjection> projections);
 
     OrganisationDetailsDTO toOrganisationDetailsDTO(OrganisationDetailsProjection projection);
 
@@ -42,18 +45,21 @@ public interface OrganisationMapper {
                 : null;
     }
 
-
     default OrganisationDetailsDTO toDTO(List<OrganisationDetailsProjection> projections) {
 
+        // Get first project entry from db
         OrganisationDetailsProjection organisation = projections.getFirst();
+        //Convert it to a DTO
         OrganisationDetailsDTO organisationDTO = toOrganisationDetailsDTO(organisation);
+        //Set the organisation id and name
         organisationDTO.setOrganisationId(organisation.getOrganisationId());
         organisationDTO.name(organisation.getOrganisationName());
 
-
+        //Prepare the project and user list for OrganisationDTO
         LinkedHashMap<UUID, OrganisationProjectDTO> projects = new LinkedHashMap<>();
         LinkedHashMap<UUID, OrganisationUserDTO> users = new LinkedHashMap<>();
 
+        //Add only unique projects to project list
         for(OrganisationDetailsProjection projection : projections ) {
             if(projection.getProjectId() != null || projections.isEmpty()) {
                 projects.putIfAbsent(
@@ -61,7 +67,7 @@ public interface OrganisationMapper {
                         toOrganisationProjectDTO(projection));
             }
         }
-
+        //Add only unique users to user list
         for(OrganisationDetailsProjection projection : projections) {
             if(projection.getUserId() != null || projections.isEmpty()) {
                 users.putIfAbsent(
@@ -69,7 +75,7 @@ public interface OrganisationMapper {
                         toOrganisationUserDTO(projection));
             }
         }
-
+        //Add project and user list to organisationDTO (this gives us the nested object structure)
         organisationDTO.setProjects(new LinkedList<>(projects.values()));
         organisationDTO.setUsers(new LinkedList<>(users.values()));
 
