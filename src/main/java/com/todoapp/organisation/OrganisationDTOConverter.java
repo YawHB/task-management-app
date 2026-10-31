@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ import java.util.List;
 
 
     public OrganisationDetailsDTO toDTO(List<OrganisationDetailsProjection> organisationDetailsList) {
-        log.info("[OrganisationDTO - toDTO] - populating the organisationDTO object");
+        log.info("[OrganisationDTO - toDTO] - populating a list organisationDTO object");
 
         OrganisationDetailsDTO organisationDetailsDTO = new OrganisationDetailsDTO();
         List<OrganisationProjectDTO> projects = new ArrayList<>();
@@ -40,31 +42,36 @@ import java.util.List;
 
         organisationDetailsDTO.setOrganisationId(organisationDetailsList.getFirst().getOrganisationId());
         organisationDetailsDTO.setName(organisationDetailsList.getFirst().getOrganisationName());
-        for(OrganisationDetailsProjection organisationDetail : organisationDetailsList) {
 
-            if(projectIsUnique(projects, organisationDetail)) {
+        if(organisationDetailsList.getFirst().getProjectId() != null) {
+
+        for(OrganisationDetailsProjection project : organisationDetailsList) {
+
+            if( projectIsUnique(projects, project)) {
                 OrganisationProjectDTO organisationProjectDTO = new OrganisationProjectDTO();
-                organisationProjectDTO.setProjectId(organisationDetail.getProjectId());
-                organisationProjectDTO.setProjectName(organisationDetail.getProjectName());
-                organisationProjectDTO.setOrganisationId(organisationDetail.getOrganisationId());
-                organisationProjectDTO.setCreatedAt(organisationDetail.getActiveSince().atOffset(ZoneOffset.UTC));
-                organisationProjectDTO.setCreatedAt((organisationDetail.getActiveSince()).atOffset(ZoneOffset.UTC));
+                organisationProjectDTO.setProjectId(project.getProjectId());
+                organisationProjectDTO.setProjectName(project.getProjectName());
+                organisationProjectDTO.setOrganisationId(project.getOrganisationId());
+                organisationProjectDTO.setCreatedAt(project.getActiveSince().atOffset(ZoneOffset.UTC));
+                organisationProjectDTO.setCreatedAt((project.getActiveSince()).atOffset(ZoneOffset.UTC));
 
                 projects.add(organisationProjectDTO);
             }
+          }
+        }
+        if(organisationDetailsList.getFirst().getUserId() != null) {
+            for(OrganisationDetailsProjection user : organisationDetailsList) {
 
-            if(userIsUnique(users, organisationDetail)) {
+            if(userIsUnique(users, user)) {
                 OrganisationUserDTO organisationUserDTO = new OrganisationUserDTO();
-                organisationUserDTO.setUserId(organisationDetail.getUserId());
-                organisationUserDTO.setFirstName(organisationDetail.getFirstName());
-                organisationUserDTO.setLastName(organisationDetail.getLastName());
-                organisationUserDTO.setEmail(organisationDetail.getEmail());
-                organisationUserDTO.setOrganisationId(organisationDetail.getOrganisationId());
-                organisationUserDTO.setActiveSince(organisationDetail.getActiveSince().atOffset(ZoneOffset.UTC));
-
-
-
+                organisationUserDTO.setUserId(user.getUserId());
+                organisationUserDTO.setFirstName(user.getFirstName());
+                organisationUserDTO.setLastName(user.getLastName());
+                organisationUserDTO.setEmail(user.getEmail());
+                organisationUserDTO.setOrganisationId(user.getOrganisationId());
+                organisationUserDTO.setActiveSince(user.getActiveSince().atOffset(ZoneOffset.UTC));
             users.add(organisationUserDTO);
+             }
             }
         }
         organisationDetailsDTO.setProjects(projects);
@@ -72,17 +79,17 @@ import java.util.List;
         return organisationDetailsDTO;
     }
 
-    private boolean projectIsUnique(List<OrganisationProjectDTO> projects, OrganisationDetailsProjection organisationDetail) {
-        log.info("INSIDE PROJECT_IS_UNIQUE " + organisationDetail.getOrganisationId());
+    private boolean projectIsUnique(List<OrganisationProjectDTO> projects, OrganisationDetailsProjection project) {
+        log.info("INSIDE PROJECT_IS_UNIQUE " + project.getProjectId());
         for(OrganisationProjectDTO p : projects) {
-           if(p.getProjectId().equals(organisationDetail.getProjectId()) ) return false;
+           if( p.getProjectId() != null && p.getProjectId().equals(project.getProjectId()) ) return false;
         }
         return true;
     }
 
     private boolean userIsUnique(List<OrganisationUserDTO> users, OrganisationDetailsProjection organisationDetail) {
         for(OrganisationUserDTO u : users) {
-            if(u.getUserId().equals(organisationDetail.getUserId())) return false;
+            if(u.getUserId() != null && u.getUserId().equals(organisationDetail.getUserId())) return false;
         }
         return true;
     }

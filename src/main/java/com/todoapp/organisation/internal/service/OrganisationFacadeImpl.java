@@ -49,7 +49,7 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
         if (organisation.isPresent()) {
             log.info("[OrganisationFacadeImpl - findOrganisationById] - calling org repo to get org details(projects + users)");
             List<OrganisationDetailsProjection> organisationDetailsProjection = organisationRepository.findOrganisationWithProjectsAndMembers(id);
-            return organisationDTOConverter.toDTO(organisationDetailsProjection);
+            return organisationMapper.toDTO(organisationDetailsProjection);
         }
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
