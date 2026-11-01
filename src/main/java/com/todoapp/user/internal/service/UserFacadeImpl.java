@@ -62,6 +62,7 @@ public class UserFacadeImpl implements UserFacade {
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
     }
 
+    //TODO - Why is this here?
     public void deleteTask(UUID id) {
         userRepository.deleteById(id);
     }
@@ -90,7 +91,6 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     //TODO - can these be extracted to user userValidator? H1 obs - they are used in project validator. consider a mediator method
-
     @Override
     public boolean userExistInProject(UUID userId, UUID projectId) {
         return userRepository.userMemberOfProject(userId, projectId);

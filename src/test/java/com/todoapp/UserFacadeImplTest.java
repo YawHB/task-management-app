@@ -4,9 +4,6 @@ package com.todoapp;
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
-import com.todoapp.organisation.facade.OrganisationFacade;
-import com.todoapp.organisation.internal.repository.OrganisationRepository;
-import com.todoapp.organisation.internal.service.OrganisationFacadeImpl;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.model.User;
@@ -35,11 +32,9 @@ public class UserFacadeImplTest {
     @Mock
     private UserMapper userMapper;
 
-    @Mock
-    private OrganisationFacadeImpl organisationFacade;
-
     @InjectMocks
     private UserFacadeImpl userFacadeImpl;
+
 
     @Test
     public void getUserByEmail_returnsMappedUser() {
@@ -110,6 +105,7 @@ public class UserFacadeImplTest {
     @Test public void getUsersInOrganisation_returnsUsersInOrganisation(){
         //ARRANGE
         UUID organisationId = UUID.randomUUID();
+       // UserSummaryProjection userProjection1 = mock(UserSummaryProjection.class);
         UserSummaryProjection userProjection1 = mock("userProjection1");
         UserSummaryProjection userProjection2 = mock("userProjection12");
         List<UserSummaryProjection> userProjectionList = List.of(userProjection1, userProjection2);
@@ -117,15 +113,14 @@ public class UserFacadeImplTest {
         UserSummaryDTO userDTO2 =  new UserSummaryDTO();
         List<UserSummaryDTO> expectedUserDTOList = List.of(userDTO1, userDTO2);
 
-        //MOCK
-        when(organisationFacade.existsById(organisationId)).thenReturn(true);
 
         when(userRepository.findMembersInOrganisation(organisationId)).
                 thenReturn(userProjectionList);
+
         when(userMapper.toUserSummaryDTO(userProjectionList)).
                 thenReturn(expectedUserDTOList);
         //ACT
-        List<UserSummaryDTO> actualUserDTOList = userFacadeImpl.getUsersInOrganisation(organisationId);
+        List<UserSummaryDTO> actualUserDTOList = userFacadeImpl.findMembersInOrganisation(organisationId);
 
         //ASSERT
         assertSame(expectedUserDTOList, actualUserDTOList);
@@ -159,6 +154,24 @@ public class UserFacadeImplTest {
         verify(userRepository).findById(expectedUser.getId());
         verify(userMapper).toDto(expectedUser);
     }
+
+
+    @Test
+    public void getUserById_throwsUserDoesNotExistsException() {
+
+    //ARRANGE
+    UUID id = UUID.randomUUID();
+
+    //MOCK
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+    //ACT
+        assertThrows(UserNotFoundException.class, () -> userFacadeImpl.getUserById(id));
+
+    //ASSERT
+        verify(userRepository, times(1)).findById(id);
+    }
+
 }
 
 
