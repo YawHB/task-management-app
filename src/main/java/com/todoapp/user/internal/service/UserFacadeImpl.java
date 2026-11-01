@@ -3,10 +3,7 @@ package com.todoapp.user.internal.service;
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
-import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
-import com.todoapp.mediator.MediatorFacade;
-import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
@@ -51,6 +48,7 @@ public class UserFacadeImpl implements UserFacade {
 
     }
 
+    //TODO - extract findById to userValidationHandler h1 (validateUserExistsById(userId) returns the found user or throws
     @Override
     public UserDTO getUserById(UUID userId) {
         log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
@@ -68,6 +66,7 @@ public class UserFacadeImpl implements UserFacade {
         userRepository.deleteById(id);
     }
 
+    //TODO - extract findByEmail to userValidationHandler h1 (validateUserExistsByEmail(email) returns the found user or throws
     @Override
     public UserDTO getUserByEmail(String userEmail) {
         log.info("[UserFacadeImpl - findUserByEmail] - calling user repo to fetch user by email");
@@ -80,6 +79,7 @@ public class UserFacadeImpl implements UserFacade {
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
     }
 
+    //TODO - needs to be void. either throw an error or do nothing. Then there is no need to check if true in the receiving end
     @Override
     public boolean existById(UUID userId) {
         Optional<User> user = userRepository.findById(userId);
@@ -88,6 +88,8 @@ public class UserFacadeImpl implements UserFacade {
         }
         return true;
     }
+
+    //TODO - can these be extracted to user userValidator? H1 obs - they are used in project validator. consider a mediator method
 
     @Override
     public boolean userExistInProject(UUID userId, UUID projectId) {

@@ -3,7 +3,6 @@ package com.todoapp.project.internal.service;
 import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.organisation.facade.OrganisationFacade;
-import com.todoapp.project.ProjectDTOConverter;
 import com.todoapp.project.facade.ProjectProjection;
 import com.todoapp.project.facade.mapper.ProjectMapper;
 import com.todoapp.project.internal.repository.ProjectRepository;
@@ -29,11 +28,12 @@ import java.util.UUID;
 public class ProjectFacadeImpl implements ProjectFacade {
 
     private final ProjectRepository projectRepository;
-    private final OrganisationFacade organisationFacade;
-    private final UserFacade userFacade;
+    private final OrganisationFacade organisationFacade; //TODO - delegate cross module logic to mediator
+    private final UserFacade userFacade; //TODO - delegate cross module logic to mediator
     private final ProjectMapper projectMapper;
 
 
+    //TODO - delegate to mediator service
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
         log.info("[ProjectFacadeImpl - addProject] - validates that request body contains project name)");
@@ -55,6 +55,8 @@ public class ProjectFacadeImpl implements ProjectFacade {
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
 
+
+    //TODO - delegate to mediator service
     public List<ProjectSummaryDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling OrganisationFacade to check if organisation exist");
@@ -73,6 +75,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         return projectSummaryDTOS;
     }
 
+    //TODO - delegate to mediator service
     @Transactional
     public ProjectMemberDTO addProjectMember(UUID organisationId, ProjectMemberDTO projectMemberDTO) {
         log.info("[projectFacadeImpl - addProjectMember] - calling userFacade to get user by email");
@@ -117,6 +120,8 @@ public class ProjectFacadeImpl implements ProjectFacade {
         projectRepository.deleteById(id);
       }
 
+
+      //TODO - delegate to mediator service
     @Transactional
     public void removeProjectUser(UUID organisationId, UUID projectId, UUID userId) throws OrganisationNotFoundException {
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling organisationFacade to check if org exist by id");

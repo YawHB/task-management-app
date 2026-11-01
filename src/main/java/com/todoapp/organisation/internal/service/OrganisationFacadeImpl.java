@@ -26,6 +26,7 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
     private final OrganisationMapper organisationMapper;
 
 
+    //TODO extract existsByName to validator - return void or throw
     @Override
     public OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
         String name = orgRequestDTO.getOrganisationName();
@@ -38,6 +39,7 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
         return organisationMapper.toDTO(newOrganisation);
     }
 
+    //TODO extract findById to validator - return organisation or throw
     @Override
     public OrganisationDetailsDTO findOrganisationById(UUID id) throws OrganisationNotFoundException {
         log.info("[OrganisationFacadeImpl - findOrganisationById] - calling org repo to find org by id");
@@ -50,6 +52,7 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
         throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
 
+    //TODO extract findById to validator - return organisation or throw
     @Override
     public boolean existsById(UUID organisationId) {
         Optional<Organisation> exists = organisationRepository.findById(organisationId);
@@ -59,15 +62,16 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
         return true;
     }
 
+    //TODO extract findById to validator - return organisation or throw
     @Override
     public UserDTO addUserToOrganisation(UUID organisationId, UserDTO userDTO) throws OrganisationNotFoundException {
         log.info("[OrganisationFacadeImpl - addUserToOrganisation] - calling organisation repo to find organisation if exist");
         organisationRepository.findById(organisationId).orElseThrow(
                 () -> new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue()));
 
+        //TODO extract userExistInOrganisation to validator - return organisation or throw
         log.info("[OrganisationFacadeImpl - addUserToOrganisation] - check if user is already member in org");
         boolean userAlreadyAdded = organisationRepository.userExistInOrganisation(organisationId, userDTO.getUserId());
-
         if (userAlreadyAdded) {
         throw new UserExistsInOrganisationException(ExceptionReason.USER_ALREADY_EXIST_IN_ORG.getValue());
         }
@@ -76,6 +80,7 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
             return userDTO;
     }
 
+    //TODO extract userExistInOrganisation to validator - return organisation or throw
     @Override
     public boolean userExistInOrganisation(UUID organisationId, UUID userId) {
         return organisationRepository.userExistInOrganisation(organisationId, userId);
