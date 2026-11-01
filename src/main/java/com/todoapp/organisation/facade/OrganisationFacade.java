@@ -1,5 +1,6 @@
 package com.todoapp.organisation.facade;
 
+import com.task_management_app.api.model.AddOrganisationRequestDTO;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.OrganisationDetailsDTO;
 import com.task_management_app.api.model.UserDTO;
@@ -28,6 +29,9 @@ public interface OrganisationFacade  {
      * @return {@code true} if the organisation exists, {@code false} otherwise
      */
    boolean existsById(UUID organisationId);
+
+
+   OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO);
 
     /**
      * Adds a user to an organisation using the user's id.

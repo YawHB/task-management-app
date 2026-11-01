@@ -19,7 +19,7 @@ import java.util.UUID;
 public class TaskValidationHandler {
 
     private final ProjectFacade projectFacade;
-    private final UserFacade userFacade;
+    private final UserFacade userFacade; //TODO - move methods using userFacade into mediator
     private final TaskRepository taskRepository;
 
     public void validateProjectExists(UUID projectId) {

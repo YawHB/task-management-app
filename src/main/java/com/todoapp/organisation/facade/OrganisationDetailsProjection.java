@@ -19,8 +19,8 @@ public class OrganisationDetailsProjection {
     private String projectName;
     private LocalDateTime createdAt;
     private UUID userId;
+    private LocalDateTime activeSince;
     private String firstName;
     private String lastName;
     private String email;
-    private LocalDateTime activeSince;
 }

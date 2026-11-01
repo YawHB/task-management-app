@@ -3,9 +3,7 @@ package com.todoapp.user.internal.service;
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
-import com.todoapp.exceptionHandling.exceptions.OrganisationNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
-import com.todoapp.organisation.facade.OrganisationFacade;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
@@ -26,7 +24,6 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final OrganisationFacade organisationFacade;
 
     public UserDTO addUser(UserDTO userDTO) {
         log.info("[UserService - addUser] - calling toEntity ");
@@ -45,15 +42,13 @@ public class UserFacadeImpl implements UserFacade {
        return userMapper.toUserSummaryDTO(users);
     }
 
-    @Override
-    public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
-        if(!organisationFacade.existsById(organisationId)) {
-            throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-        }
+    public List<UserSummaryDTO> findMembersInOrganisation(UUID organisationId) {
        List<UserSummaryProjection> users = userRepository.findMembersInOrganisation(organisationId);
         return userMapper.toUserSummaryDTO(users);
+
     }
 
+    //TODO - extract findById to userValidationHandler h1 (validateUserExistsById(userId) returns the found user or throws
     @Override
     public UserDTO getUserById(UUID userId) {
         log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
@@ -71,6 +66,7 @@ public class UserFacadeImpl implements UserFacade {
         userRepository.deleteById(id);
     }
 
+    //TODO - extract findByEmail to userValidationHandler h1 (validateUserExistsByEmail(email) returns the found user or throws
     @Override
     public UserDTO getUserByEmail(String userEmail) {
         log.info("[UserFacadeImpl - findUserByEmail] - calling user repo to fetch user by email");
@@ -83,11 +79,17 @@ public class UserFacadeImpl implements UserFacade {
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
     }
 
+    //TODO - needs to be void. either throw an error or do nothing. Then there is no need to check if true in the receiving end
     @Override
     public boolean existById(UUID userId) {
         Optional<User> user = userRepository.findById(userId);
-        return user.isPresent();
+        if(user.isEmpty()) {
+            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+        }
+        return true;
     }
+
+    //TODO - can these be extracted to user userValidator? H1 obs - they are used in project validator. consider a mediator method
 
     @Override
     public boolean userExistInProject(UUID userId, UUID projectId) {
