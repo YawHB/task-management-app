@@ -6,7 +6,7 @@ import com.task_management_app.api.model.ProjectMemberDTO;
 import com.task_management_app.api.model.ProjectDTO;
 import com.task_management_app.api.model.ProjectPost;
 import com.task_management_app.api.model.ProjectSummaryDTO;
-import com.todoapp.exceptionHandling.exceptions.*;
+import com.todoapp.mediator.MediatorFacadeImpl;
 import com.todoapp.project.internal.service.ProjectFacadeImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +22,13 @@ import java.util.UUID;
 @Slf4j
 public class ProjectController implements ProjectApi {
 
-    ProjectFacadeImpl projectService;
+   private final ProjectFacadeImpl projectService;
+   private final MediatorFacadeImpl mediatorFacadeImpl;
 
     @Override
     public ResponseEntity<ProjectDTO> addProject(UUID organisationId, ProjectPost ProjectPost) {
-
             log.info("[ProjectController - addProject] - calling facade");
+            mediatorFacadeImpl.addProjectToOrganisation(organisationId, ProjectPost);
             ProjectDTO projectDTO = projectService.addProject(organisationId, ProjectPost);
             log.info("[ProjectController - addProject] - Returns response to the client");
             return ResponseEntity.status(HttpStatus.CREATED).body(projectDTO);

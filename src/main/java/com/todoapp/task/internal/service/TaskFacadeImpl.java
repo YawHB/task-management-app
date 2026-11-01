@@ -1,12 +1,11 @@
 package com.todoapp.task.internal.service;
 
 import com.task_management_app.api.model.*;
-import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.task.facade.*;
 import com.todoapp.task.internal.mapper.TaskMapper;
 import com.todoapp.task.internal.model.Task;
 import com.todoapp.task.internal.repository.TaskRepository;
-import com.todoapp.task.internal.utils.TaskValidationHandler;
+import com.todoapp.task.internal.validation.TaskValidationHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;

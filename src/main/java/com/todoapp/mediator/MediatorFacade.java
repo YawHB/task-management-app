@@ -1,9 +1,6 @@
 package com.todoapp.mediator;
 
-import com.task_management_app.api.model.AddOrganisationRequestDTO;
-import com.task_management_app.api.model.OrganisationDTO;
-import com.task_management_app.api.model.UserDTO;
-import com.task_management_app.api.model.UserSummaryDTO;
+import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.*;
 
 import java.util.List;
@@ -24,5 +21,6 @@ public interface MediatorFacade {
     List<OrganisationDTO> getOrganisationsByUserId(UUID userId);
     List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId);
     OrganisationDTO createOrganisation(AddOrganisationRequestDTO orgRequestDTO);
+    ProjectDTO addProjectToOrganisation(UUID organisationId, ProjectPost newProject);
 
 }

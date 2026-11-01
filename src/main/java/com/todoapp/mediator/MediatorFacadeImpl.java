@@ -1,9 +1,6 @@
 package com.todoapp.mediator;
 
-import com.task_management_app.api.model.AddOrganisationRequestDTO;
-import com.task_management_app.api.model.OrganisationDTO;
-import com.task_management_app.api.model.UserDTO;
-import com.task_management_app.api.model.UserSummaryDTO;
+import com.task_management_app.api.model.*;
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
 import com.todoapp.exceptionHandling.exceptions.ProjectNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
@@ -70,6 +67,12 @@ public class MediatorFacadeImpl implements MediatorFacade {
     public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
         organisationFacade.existsById(organisationId);
         return userFacade.findMembersInOrganisation(organisationId);
+    }
+
+    @Override
+    public ProjectDTO addProjectToOrganisation(UUID organisationId, ProjectPost newProject) {
+        organisationFacade.existsById(organisationId);
+        return projectFacade.addProject(organisationId, newProject);
     }
 
 

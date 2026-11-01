@@ -9,6 +9,7 @@ import com.todoapp.project.internal.repository.ProjectRepository;
 import com.todoapp.project.facade.ProjectFacade;
 import com.todoapp.project.facade.ProjectSummaryProjection;
 import com.todoapp.project.internal.model.Project;
+import com.todoapp.project.internal.validation.ProjectValidationHandler;
 import com.todoapp.user.facade.UserFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,32 +28,25 @@ import java.util.UUID;
 @Slf4j
 public class ProjectFacadeImpl implements ProjectFacade {
 
+    private final ProjectValidationHandler validationHandler;
     private final ProjectRepository projectRepository;
     private final OrganisationFacade organisationFacade; //TODO - delegate cross module logic to mediator
     private final UserFacade userFacade; //TODO - delegate cross module logic to mediator
     private final ProjectMapper projectMapper;
 
-
-    //TODO - delegate to mediator service
     @Override
     public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
-        log.info("[ProjectFacadeImpl - addProject] - validates that request body contains project name)");
-        if(projectPost.getName().isBlank()) throw new InvalidRequestBodyException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
-        if(projectRepository.existsByName(projectPost.getName()))  throw new DuplicateProjectNameException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
-        log.info("[ProjectFacadeImpl - addProject] - checks if organisation exists by its id (OBS: missing error handling on fail)");
-        if(organisationFacade.existsById(organisationId)) {
-          log.info("[ProjectFacadeImpl - addProject] - returns a project from the project DTO converter ");
+
+          validationHandler.validateAddProject(projectPost);
+          log.info("[ProjectFacadeImpl - addProject] - calls projectMapper toEntity");
           Project project = projectMapper.toEntity(organisationId, projectPost);
           log.info("[ProjectFacadeImpl - addProject] - saves Project object");
            Project createdProject = projectRepository.save(project);
+          log.info("[ProjectFacadeImpl - addProject] - fetches new project");
            ProjectProjection projectProjection = projectRepository.findProjectWithMembersById(createdProject.getId());
 
           log.info("[ProjectFacadeImpl - addProject] - returns Project object");
           return projectMapper.toDTO(projectProjection);
-
-      }
-
-        throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
     }
 
 

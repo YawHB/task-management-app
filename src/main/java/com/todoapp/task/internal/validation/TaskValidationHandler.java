@@ -1,4 +1,4 @@
-package com.todoapp.task.internal.utils;
+package com.todoapp.task.internal.validation;
 
 import com.task_management_app.api.model.AddTaskDTO;
 import com.todoapp.exceptionHandling.exceptions.*;
