@@ -82,5 +82,12 @@ public class MediatorFacadeImpl implements MediatorFacade {
         return projectFacade.getProjectsForUserInOrganisation(organisationId, userId);
     }
 
+    @Override
+    public ProjectMemberDTO addProjectMember(UUID organisationId, ProjectMemberDTO projectMemberDTO) {
+        UserDTO foundUser =  userFacade.getUserByEmail(projectMemberDTO.getEmail());
+        userFacade.userExistInOrganisation(foundUser.getUserId(), organisationId);
+        return projectFacade.addProjectUser(organisationId, projectMemberDTO, foundUser.getUserId() );
+    }
+
 
 }

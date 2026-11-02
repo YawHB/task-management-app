@@ -30,7 +30,14 @@ public interface UserFacade {
 
    boolean userExistInProject(UUID userId, UUID projectId);
 
-   boolean userExistInOrganisation(UUID userId, UUID organisationId);
+    /**
+     * Validates that a user is a member of a specific organisation.
+     *
+     * @param userId the ID of the user
+     * @param organisationId the ID of the organisation
+     * @throws UserNotMemberOfOrganisationException if the user is not a member of the organisation
+     */
+   void userExistInOrganisation(UUID userId, UUID organisationId);
 
     void deleteTask(UUID id);
 

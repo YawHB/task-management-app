@@ -60,33 +60,30 @@ public class ProjectFacadeImpl implements ProjectFacade {
         return projectSummaryDTOS;
     }
 
-    //TODO - delegate to mediator service
     @Transactional
-    public ProjectMemberDTO addProjectMember(UUID organisationId, ProjectMemberDTO projectMemberDTO) {
+    public ProjectMemberDTO addProjectUser(UUID organisationId, ProjectMemberDTO projectMemberDTO, UUID userId) {
         log.info("[projectFacadeImpl - addProjectMember] - calling userFacade to get user by email");
 
        try{
-           UserDTO foundUser =  userFacade.getUserByEmail(projectMemberDTO.getEmail());
-        log.info("[projectFacadeImpl - addProjectMember] - calling userFacade to check if user exist in org");
-        if(!userFacade.userExistInOrganisation(foundUser.getUserId(), organisationId))
-            throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+            log.info("[projectFacadeImpl - addProjectMember] - calling private method getProjectByOrganisationIdAndName");
+            ProjectDTO foundProject = getProjectByOrganisationIdAndName( organisationId, projectMemberDTO.getProjectName());
 
-        log.info("[projectFacadeImpl - addProjectMember] - calling private method getProjectByOrganisationIdAndName");
-       ProjectDTO foundProject = getProjectByOrganisationIdAndName( organisationId, projectMemberDTO.getProjectName());
-           log.info("[projectFacadeImpl - addProjectMember] - calling saveProjectUser in repo with org and project IDs");
-           projectRepository.saveProjectUser(foundProject.getProjectId(), foundUser.getUserId());
+            log.info("[projectFacadeImpl - addProjectMember] - calling saveProjectUser in repo with org and project IDs");
+            projectRepository.saveProjectUser(foundProject.getProjectId(), userId);
+            log.info("[projectFacadeImpl - addProjectMember] - user added to project. returning project name and user email to controller");
+        return new ProjectMemberDTO(projectMemberDTO.getProjectName(), projectMemberDTO.getEmail());
+
        } catch (DataIntegrityViolationException exception) {
            log.info("[projectFacadeImpl - addProjectMember] - user already exists in project. throwing USER ALREADY MEMBER OF PROJECT");
            throw new UserAlreadyInProjectException(ExceptionReason.USER_ALREADY_MEMBER_OF_PROJECT.getValue());
        }
-        log.info("[projectFacadeImpl - addProjectMember] - user added to project. returning project name and user email to controller");
-        return new ProjectMemberDTO(projectMemberDTO.getProjectName(), projectMemberDTO.getEmail());
     }
 
      private ProjectDTO getProjectByOrganisationIdAndName(UUID organisationId, String projectName) {
         log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - calling project repo to find project in current organisation");
         Optional<Project> foundProject = projectRepository.findProjectByOrganisationIdAndName(organisationId, projectName);
         if(foundProject.isPresent()) {
+            log.info("[🤓🤓🤓found project {} ", foundProject);
             log.info("[projectFacadeImpl - getProjectByOrganisationIdAndName] - project found - calling projectMapper -> toDTO");
             return projectMapper.toDTO(foundProject.get());
 

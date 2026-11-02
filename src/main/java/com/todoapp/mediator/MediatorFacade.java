@@ -35,4 +35,15 @@ public interface MediatorFacade {
      */
     List<ProjectSummaryDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId);
 
+    /**
+     * Adds an existing organisation member to a project.
+     *
+     * @param organisationId the ID of the organisation
+     * @param projectMemberDTO the project membership details, including the user's email
+     * @return the created project membership
+     * @throws UserNotFoundException if no user exists with the provided email
+     * @throws UserNotMemberOfOrganisationException if the user is not a member of the organisation
+     */
+    ProjectMemberDTO addProjectMember(UUID organisationId, ProjectMemberDTO projectMemberDTO);
+
 }

@@ -46,7 +46,7 @@ public class ProjectController implements ProjectApi {
     public ResponseEntity<ProjectMemberDTO> addProjectMember( UUID organisationId, ProjectMemberDTO projectMemberDTO) {
 
         log.info("[ProjectController - addProjectMember] - calling projectService with org id and ");
-        ProjectMemberDTO pmDto = projectService.addProjectMember(organisationId, projectMemberDTO);
+        ProjectMemberDTO pmDto = mediatorFacadeImpl.addProjectMember(organisationId, projectMemberDTO);
         log.info("[ProjectController - addProjectMember] - return a 201 status response to client. user added to project ");
         return ResponseEntity.status(HttpStatus.CREATED).body(pmDto);
     }
