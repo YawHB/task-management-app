@@ -25,9 +25,8 @@ public class TaskFacadeImpl implements TaskFacade {
     private final TaskMapper taskMapper;
     private final TaskValidationHandler validationHandler;
 
-
+    //TODO - extract to mediator. it calls projectFacade and userFacade from validator class
     public TaskDTO addTask(AddTaskDTO addTaskDTO){
-
         log.info("[TaskFacadeImpl - addTask] - calling validatePostRequest");
         validationHandler.validatePostRequest(addTaskDTO);
         log.info("[TaskFacadeImpl - addTask] - calling toEntity");
@@ -38,6 +37,7 @@ public class TaskFacadeImpl implements TaskFacade {
         return taskMapper.toDTO(newTask);
     }
 
+    //TODO - extract to mediator. it calls projectFacade from validator class
     public TaskDTO getTaskByIdInProject(UUID projectId, UUID taskId) {
         validationHandler.validateProjectExists(projectId);
         log.info("[TaskFacadeImpl - getTaskInProject] - calling taskRepo to fetch task");
@@ -47,6 +47,7 @@ public class TaskFacadeImpl implements TaskFacade {
         return taskMapper.toDTO(task.get());
     }
 
+    //TODO - extract to mediator. it calls projectFacade from validator class
     public List<TaskSummaryDTO> getTasksByProject(UUID projectId, String sortBy, String sortOrder) {
         validationHandler.validateProjectExists(projectId);
         log.info("[TaskFacadeImpl - getTasksByProject] - converting the string direction (asc/desc) to an ENUM ASC/DESC");
@@ -59,6 +60,7 @@ public class TaskFacadeImpl implements TaskFacade {
         return taskMapper.toTaskSummaryDTO(tasks);
     }
 
+    //TODO - extract to mediator. it calls projectFacade and userFacade from validator class
     @Transactional
     public TaskDetailsDTO updateTaskAssignee(UUID projectId, UUID taskId, UpdateTaskAssigneeDTO updateTaskAssigneeDTO) {
       UUID assigneeId = updateTaskAssigneeDTO.getAssigneeId();
