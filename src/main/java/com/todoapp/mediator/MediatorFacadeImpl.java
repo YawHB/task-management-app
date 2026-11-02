@@ -75,5 +75,12 @@ public class MediatorFacadeImpl implements MediatorFacade {
         return projectFacade.addProject(organisationId, newProject);
     }
 
+    @Override
+    public List<ProjectSummaryDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) {
+        organisationFacade.existsById(organisationId);
+        organisationFacade.userExistInOrganisation(organisationId, userId);
+        return projectFacade.getProjectsForUserInOrganisation(organisationId, userId);
+    }
+
 
 }

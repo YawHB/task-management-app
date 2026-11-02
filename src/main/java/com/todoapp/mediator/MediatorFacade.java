@@ -22,5 +22,17 @@ public interface MediatorFacade {
     List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId);
     OrganisationDTO createOrganisation(AddOrganisationRequestDTO orgRequestDTO);
     ProjectDTO addProjectToOrganisation(UUID organisationId, ProjectPost newProject);
+    /**
+     * Retrieves all projects in an organisation that a specific user is a member of.
+     * Validates that the organisation exists and that the user is a member of the organisation
+     * before retrieving the projects.
+     *
+     * @param organisationId the ID of the organisation
+     * @param userId the ID of the user
+     * @return a list of projects the user is a member of within the organisation
+     * @throws OrganisationNotFoundException if the organisation does not exist
+     * @throws UserNotMemberOfOrganisationException if the user is not a member of the organisation
+     */
+    List<ProjectSummaryDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId);
 
 }

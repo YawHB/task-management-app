@@ -37,7 +37,7 @@ public class ProjectController implements ProjectApi {
     @Override
     public ResponseEntity<List<ProjectSummaryDTO>> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId){
         log.info("[ProjectController - getProjectsForMemberInOrganisation] - calling projectService with org id and user id");
-        List<ProjectSummaryDTO> projects = projectService.getProjectsForMemberInOrganisation(organisationId, userId);
+        List<ProjectSummaryDTO> projects = mediatorFacadeImpl.getProjectsForMemberInOrganisation(organisationId, userId);
         log.info("[ProjectController - getProjectsForMemberInOrganisation] - returning status code OK with the list of projectDTOs");
        return ResponseEntity.status(HttpStatus.OK).body(projects);
     }

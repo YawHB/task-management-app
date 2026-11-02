@@ -49,9 +49,11 @@ public interface OrganisationFacade  {
      *
      * @param organisationId the UUID of the organisation to check
      * @param userId the UUID of the user to check
-     * @return {@code true} if the user belongs to the organisation, {@code false} otherwise
+     * @return {@code void} if the user belongs to the organisation, {@code false} otherwise
      */
-    boolean userExistInOrganisation(UUID organisationId, UUID userId);
+    void userExistInOrganisation(UUID organisationId, UUID userId);
+
+    void userIsNotMemberOfOrganisation(UUID organisationId, UUID userId);
 
     /**
      * Retrieves all organisations associated with the specified user.

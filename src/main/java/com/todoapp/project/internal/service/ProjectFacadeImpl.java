@@ -35,7 +35,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
     private final ProjectMapper projectMapper;
 
     @Override
-    public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException {
+    public ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) {
 
           validationHandler.validateAddProject(projectPost);
           log.info("[ProjectFacadeImpl - addProject] - calls projectMapper toEntity");
@@ -49,17 +49,8 @@ public class ProjectFacadeImpl implements ProjectFacade {
           return projectMapper.toDTO(projectProjection);
     }
 
-
-    //TODO - delegate to mediator service
-    public List<ProjectSummaryDTO> getProjectsForMemberInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
-
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling OrganisationFacade to check if organisation exist");
-        if(!organisationFacade.existsById(organisationId)) throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-
-        log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository to check if user exist in the organisation");
-        boolean isMember = organisationFacade.userExistInOrganisation(organisationId, userId);
-
-        if(!isMember) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+    @Override
+    public List<ProjectSummaryDTO> getProjectsForUserInOrganisation(UUID organisationId, UUID userId) throws OrganisationNotFoundException {
 
         log.info("[ProjectFacadeImpl - getProjectsForMemberInOrganisation] - calling projectRepository with org id and user id to find all projects in org for user");
         List<ProjectSummaryProjection> projects = projectRepository.findProjectsForMemberInOrganisation(organisationId, userId);
@@ -124,7 +115,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
         if(!this.existsById(projectId)) throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND_IN_ORG.getValue());
         log.info("[ProjectFacadeImpl - removeProjectUser] - calling userFacade to check if user exist by id");
         if(!userFacade.existById(userId)) throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-        if(!organisationFacade.userExistInOrganisation(organisationId, userId)) throw new UserNotMemberOfOrganisationException(ExceptionReason.USER_NOT_MEMBER_OF_ORG.getValue());
+        organisationFacade.userExistInOrganisation(organisationId, userId);
         if(!projectRepository.userExistInProject(projectId, userId)) throw new UserNotMemberOfProjectException(ExceptionReason.USER_NOT_MEMBER_OF_PROJECT.getValue());
 
         log.info("[ProjectFacadeImpl - removeProjectUser] - All objects exist. Calling projectRepository to remove user from project");
