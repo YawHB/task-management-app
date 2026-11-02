@@ -152,12 +152,13 @@ public class UserRepositoryIntegrationTest {
         //ARRANGE
         entityManager.createNativeQuery(CREATE_ORGANISATIONS_USERS_TABLE).executeUpdate();
         User expectedUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        userRepository.saveAndFlush(expectedUser);
 
         Organisation organisation = new Organisation();
         organisation.setName("BULLSHIT");
-        UUID expectedOrgId = organisation.getId();
 
         organisationRepository.saveAndFlush(organisation);
+        UUID expectedOrgId = organisation.getId();
 
         //MOCK
 
