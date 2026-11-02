@@ -1,6 +1,7 @@
 package com.todoapp.user.internal.validator;
 
 import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
+import com.todoapp.exceptionHandling.exceptions.UserNotFoundException;
 import com.todoapp.exceptionHandling.exceptions.UserNotMemberOfOrganisationException;
 import com.todoapp.user.internal.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,15 @@ public class UserValidationHandler {
         }
     }
 
+    /**
+     * Validates that a user exists with the specified ID.
+     *
+     * @param userId the UUID of the user to validate
+     * @throws UserNotFoundException if no user exists with the specified ID
+     */
+    public void validateExistsById(UUID userId) {
+       if(! userRepository.existsById(userId)){
+           throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+       }
+    }
 }

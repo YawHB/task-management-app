@@ -26,7 +26,13 @@ public interface UserFacade {
 
     List<UserSummaryDTO> findMembersInOrganisation(UUID organisationId);
 
-   boolean existById(UUID id);
+    /**
+     * Checks whether a user exists with the specified ID.
+     *
+     * @param id the UUID of the user to check
+     * @throws UserNotFoundException if no user exists with the specified ID
+     */
+   void existById(UUID id);
 
    boolean userExistInProject(UUID userId, UUID projectId);
 

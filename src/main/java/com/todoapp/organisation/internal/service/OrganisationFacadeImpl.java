@@ -56,13 +56,9 @@ public class OrganisationFacadeImpl implements OrganisationFacade {
 
     //TODO extract findById to validator - return void or throw
     @Override
-    public boolean existsById(UUID organisationId) {
+    public void existsById(UUID organisationId) {
         log.info("[OrganisationFacadeImpl - existsById] - calling organisation repository to find org by id");
-        Optional<Organisation> exists = organisationRepository.findById(organisationId);
-        if(exists.isEmpty()) {
-        throw new OrganisationNotFoundException(ExceptionReason.ORG_NOT_FOUND_BY_ID.getValue());
-        }
-        return true;
+       validationHandler.validateExistsById(organisationId);
     }
 
     //TODO extract findById to validator - return organisation or throw

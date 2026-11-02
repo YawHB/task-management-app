@@ -1,13 +1,13 @@
 package com.todoapp.project.internal.validation;
 
 import com.task_management_app.api.model.ProjectPost;
-import com.todoapp.exceptionHandling.exceptions.DuplicateProjectNameException;
-import com.todoapp.exceptionHandling.exceptions.ExceptionReason;
-import com.todoapp.exceptionHandling.exceptions.InvalidRequestBodyException;
+import com.todoapp.exceptionHandling.exceptions.*;
 import com.todoapp.project.internal.repository.ProjectRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -35,4 +35,21 @@ public class ProjectValidationHandler {
         if(projectRepository.existsByName(name)) throw new DuplicateProjectNameException(ExceptionReason.INVALID_REQUEST_BODY.getValue());
     }
 
+    public void ValidateExistsById(UUID projectId) {
+        if(!projectRepository.existsById(projectId)){
+            throw new ProjectNotFoundException(ExceptionReason.PROJECT_NOT_FOUND.getValue());
+        }
+    }
+
+    /**
+     * Validates that a user is a member of the specified project.
+     *
+     * @param projectId the ID of the project to check
+     * @param userId the ID of the user whose membership is being validated
+     * @throws UserNotMemberOfProjectException if the user is not a member of the project
+     */
+    public void validateUserIsMemberOfProject(UUID projectId, UUID userId){
+        if(!projectRepository.userExistInProject(projectId, userId))
+            throw new UserNotMemberOfProjectException(ExceptionReason.USER_NOT_MEMBER_OF_PROJECT.getValue());
+    }
 }

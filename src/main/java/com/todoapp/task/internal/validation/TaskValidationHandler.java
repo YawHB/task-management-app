@@ -24,11 +24,13 @@ public class TaskValidationHandler {
 
     public void validateProjectExists(UUID projectId) {
         log.info("[TaskValidationHandler - validateProjectExists] - calling projectFacade to check if project exists");
-
+        //TODO - move projectFacade to mediator
+        /*
         if (!projectFacade.existsById(projectId)) {
             throw new ProjectNotFoundException(
                     ExceptionReason.PROJECT_NOT_FOUND.getValue());
         }
+         */
     }
 
     private void validateTaskTitleIsUnique(UUID projectId, String taskTitle) {
@@ -52,9 +54,8 @@ public class TaskValidationHandler {
     private void validateAssigneeExists(UUID assigneeId) {
         log.info("[TaskFacadeImpl - validateAssigneeExists] - checking assignee");
 
-        if (assigneeId != null && !userFacade.existById(assigneeId)) {
-            throw new UserNotFoundException(
-                    ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
+        if (assigneeId != null ) {
+            userFacade.existById(assigneeId);
         }
     }
 

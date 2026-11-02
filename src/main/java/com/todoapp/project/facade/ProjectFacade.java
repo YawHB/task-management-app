@@ -15,12 +15,12 @@ public interface ProjectFacade {
     ProjectDTO addProject(UUID organisationId, ProjectPost projectPost) throws OrganisationNotFoundException;
 
     /**
-
-     Checks whether a project exists with the specified ID.
-     @param projectId the UUID of the project to check
-     @return {@code true} if the project exists, {@code false} otherwise
+     * Checks whether a project exists with the specified ID.
+     *
+     * @param projectId the UUID of the project to check
+     * @throws ProjectNotFoundException if no project exists with the specified ID
      */
-    boolean existsById(UUID projectId);
+    void existsById(UUID projectId);
 
     /**
      * Retrieves all projects within an organisation that a specific user is a member of.
@@ -44,11 +44,17 @@ public interface ProjectFacade {
      */
      ProjectMemberDTO addProjectUser(UUID organisationId, ProjectMemberDTO projectMemberDTO, UUID userId);
 
-
-
-
-
-
+    /**
+     * Removes a user from a project.
+     *
+     * <p>Validates that the user is a member of the specified project before
+     * delegating the removal operation to the project repository.</p>
+     *
+     * @param projectId the ID of the project from which the user will be removed
+     * @param userId the ID of the user to remove from the project
+     * @throws UserNotMemberOfProjectException if the user is not a member of the project
+     */
+    void removeProjectUser(UUID projectId, UUID userId);
 }
 
 

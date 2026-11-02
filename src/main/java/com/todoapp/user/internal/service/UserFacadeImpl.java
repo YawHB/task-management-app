@@ -80,14 +80,9 @@ public class UserFacadeImpl implements UserFacade {
             return userMapper.toDto(foundUser.get());
     }
 
-    //TODO - needs to be void. either throw an error or do nothing. Then there is no need to check if true in the receiving end
     @Override
-    public boolean existById(UUID userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()) {
-            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-        }
-        return true;
+    public void existById(UUID userId) {
+       validationHandler.validateExistsById(userId);
     }
 
     //TODO - can these be extracted to user userValidator? H1 obs - they are used in project validator. consider a mediator method

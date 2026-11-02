@@ -63,7 +63,7 @@ public class ProjectController implements ProjectApi {
     public ResponseEntity<Void> removeProjectUser(UUID organisationId, UUID projectId, UUID userId) {
 
         log.info("[ProjectController - removeProjectUser] - calling project service");
-        projectService.removeProjectUser(organisationId, projectId, userId);
+        mediatorFacadeImpl.removeProjectMember(organisationId, projectId, userId);
         log.info("[ProjectController - removeProjectUser] - return a success noContent(204) ResponseEntity✅");
         return ResponseEntity.noContent().build();
     }

@@ -46,4 +46,17 @@ public interface MediatorFacade {
      */
     ProjectMemberDTO addProjectMember(UUID organisationId, ProjectMemberDTO projectMemberDTO);
 
+    /**
+     * Removes a user from a project within an organisation.
+     *
+     * <p>Validates that the organisation, project, and user exist, and that the user
+     * belongs to the organisation before delegating the removal operation to the
+     * project facade.</p>
+     *
+     * @param organisationId the ID of the organisation containing the project
+     * @param projectId the ID of the project from which the user will be removed
+     * @param userId the ID of the user to remove from the project
+     */
+    void removeProjectMember(UUID organisationId, UUID projectId, UUID userId);
+
 }
