@@ -17,9 +17,11 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,52 +41,53 @@ import java.util.UUID;
 public class ProjectRepositoryIntegrationTest {
     @SpringBootConfiguration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = {Project.class, Organisation.class})
-    @EnableJpaRepositories(basePackageClasses = {ProjectRepository.class})
+    @EntityScan(basePackageClasses = {Project.class, User.class, Organisation.class})
+    @EnableJpaRepositories(basePackageClasses = {ProjectRepository.class, UserRepository.class})
     static class JpaOnlyConfig {
-
-
     }
 
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private EntityManager entityManager;
 
     private static final String CREATE_PROJECT_USERS_TABLE = """
-        CREATE TABLE IF NOT EXISTS project_users (
-            id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
-            users_id UUID NOT NULL,
-            projects_id UUID NOT NULL,
-            CONSTRAINT fk_project_users_user
-                FOREIGN KEY (users_id)
-                REFERENCES users(id)
-                ON DELETE CASCADE,
-            CONSTRAINT fk_project_users_project
-                FOREIGN KEY (projects_id)
-                REFERENCES project(id)
-                ON DELETE CASCADE
-        )
-        """;
+            CREATE TABLE IF NOT EXISTS projects_users (
+                id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+                user_id UUID NOT NULL,
+                project_id UUID NOT NULL,
+                CONSTRAINT fk_project_users_user
+                    FOREIGN KEY (user_id)
+                    REFERENCES users(id)
+                    ON DELETE CASCADE,
+                CONSTRAINT fk_project_users_project
+                    FOREIGN KEY (project_id)
+                    REFERENCES project(id)
+                    ON DELETE CASCADE
+            )
+            """;
 
     @Test
-    public void findProjectsForMemberInOrganisation_returnsTheListOfProjectForMemberInOrganisation(){
+    public void findProjectsForMemberInOrganisation_returnsTheListOfProjectForMemberInOrganisation() {
         //ARRANGE
-
-        UUID userId = UUID.randomUUID();
 
         Project expectedProject = projectRepository.saveAndFlush(FakeTestDataGenerator.
                 createProjects(1).getFirst());
-        System.out.println("=============================");
-        System.out.println( expectedProject);
+
+        User user = FakeTestDataGenerator.createUsers(1).getFirst();
+        User expectedUser = userRepository.saveAndFlush(user);
+
         entityManager.clear();
 
         entityManager.createNativeQuery(CREATE_PROJECT_USERS_TABLE).executeUpdate();
 
-        entityManager.createNativeQuery("INSERT INTO projects_users(project_id, user_id) " +
-                                                 "VALUES(:projectId, :userId )").
-                                                setParameter("projectId", expectedProject.getId()).
-                                                setParameter("userId", userId).executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO projects_users(user_id, project_id) " +
+                        "VALUES(:userId, :projectId)")
+                .setParameter("userId", expectedUser.getId())
+                .setParameter("projectId", expectedProject.getId()).executeUpdate();
+
         entityManager.flush();
         entityManager.clear();
 
@@ -92,11 +95,8 @@ public class ProjectRepositoryIntegrationTest {
 
         //ACT
 
-        List<ProjectSummaryProjection> actualProjects =  projectRepository.findProjectsForMemberInOrganisation(userId, organisationId);
-
-        List<ProjectSummaryProjection> test =  entityManager.createNativeQuery("SELECT * projects_users", ProjectSummaryProjection.class).getResultList();
-        System.out.println("*******************");
-        System.out.println(test);
+        List<ProjectSummaryProjection> actualProjects =
+                projectRepository.findProjectsForMemberInOrganisation(organisationId, expectedUser.getId());
 
         //ASSERT
         assertEquals(1, actualProjects.size());
