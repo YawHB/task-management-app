@@ -30,6 +30,7 @@ public interface ProjectMapper {
     @Mapping(target = "name", source = "projectName")
     ProjectDTO toDTO(ProjectProjection project);
 
+    @Mapping(target = "projectId", source = "id")
     ProjectDTO toDTO(Project project);
 
      @Mapping(target = "userId", source = "id")

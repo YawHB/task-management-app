@@ -74,6 +74,7 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
                     nativeQuery = true)
     void removeUserFromProject(UUID projectId, UUID userId);
 
+    //TODO - refactor COUNT(*) > 0 to SELECT EXISTS()
     @Query(value = "SELECT COUNT(*) > 0 " +
             "FROM projects_users " +
             "WHERE project_id = :projectId " +
@@ -81,6 +82,8 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
             nativeQuery = true)
     boolean userExistInProject(UUID projectId, UUID userId);
 
+    // TODO Should probably only check uniqueness within organisation
+    //TODO - refactor COUNT(*) > 0 to SELECT EXISTS()
     @Query(value = "SELECT COUNT(*) > 0 " +
             "FROM project " +
             "WHERE name = :name",
