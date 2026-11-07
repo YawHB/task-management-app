@@ -10,10 +10,28 @@ import java.util.UUID;
 
 public class FakeTestDataGenerator {
 
-    private static List<String> firstNames = List.of("John", "Bob", "Tom");
-    private static List<String> lastNames = List.of("Smith", "Pickles", "Johnson");
+    private static List<String> firstNames = List.of(
+            "John", "Bob", "Tom", "Michael", "David",
+            "James", "Robert", "Daniel", "William", "Thomas"
+    );
 
-    private static List<String> projectNames = List.of("Project Alpha", "Project Beta", "Project Gamma");
+    private static List<String> lastNames = List.of(
+            "Smith", "Johnson", "Williams", "Brown", "Jones",
+            "Miller", "Davis", "Wilson", "Anderson", "Taylor"
+    );
+
+    private static List<String> projectNames = List.of(
+            "Website Redesign",
+            "Customer Portal",
+            "Inventory Management System",
+            "Payment Integration",
+            "Employee Management",
+            "Reporting Dashboard",
+            "Mobile Application",
+            "Order Processing System",
+            "Document Management",
+            "Task Automation Platform"
+    );
 /*
     private static List<UUID> projectIds = List.of(
             UUID.fromString("11111111-1111-1111-1111-111111111111"),
@@ -39,7 +57,7 @@ public class FakeTestDataGenerator {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(firstName + "." + lastName + "@example.org");
-            user.setUsername(firstName + "_user");
+            user.setUsername(firstName + "_" + lastName);
             user.setDeleted(false);
             users.add(user);
         }
