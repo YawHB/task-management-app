@@ -155,9 +155,6 @@ public class UserRepositoryIntegrationTest {
                 .setParameter("userId", expectedUser.getId())
                 .executeUpdate();
 
-        entityManager.flush();
-        entityManager.clear();
-
         //ACT
         List<UserSummaryProjection> actualMembersInProject = userRepository.findMembersInProject(expectedProject.getId());
 
@@ -205,8 +202,6 @@ public class UserRepositoryIntegrationTest {
                     .setParameter("userId", user.getId())
                     .executeUpdate();
         }
-        entityManager.flush();
-        entityManager.clear();
 
         //ACT
         List<UserSummaryProjection> actualUsers = userRepository.findMembersInProject(project.getId());
@@ -235,18 +230,12 @@ public class UserRepositoryIntegrationTest {
     public void findMembersInOrganisation_returnsMemberWhenOneMemberExists(){
         //ARRANGE
         entityManager.createNativeQuery(CREATE_ORGANISATIONS_USERS_TABLE).executeUpdate();
-        entityManager.flush();
-        entityManager.clear();
 
         User user = FakeTestDataGenerator.createUsers(1).getFirst();
         User expectedUser = userRepository.saveAndFlush(user);
-        entityManager.flush();
-        entityManager.clear();
 
        Organisation organisation = FakeTestDataGenerator.createOrganisations(1).getFirst();
-       Organisation expectedOrganisation = organisationRepository.saveAndFlush(organisation);
-        entityManager.flush();
-        entityManager.clear();
+      organisationRepository.saveAndFlush(organisation);
 
         LocalDateTime activeSince = LocalDateTime.now();
         UUID id = UUID.randomUUID();
@@ -364,5 +353,50 @@ public class UserRepositoryIntegrationTest {
       //ASSERT
       assertFalse(isMember);
 
+  }
+
+  @Test
+    public void userMemberOfOrganisation_returnsTrueWhenUserIsMemberOfOrganisation() {
+
+      //ARRANGE
+      Organisation organisation = FakeTestDataGenerator.createOrganisations(1).getFirst();
+      Organisation expectedOrganisation = organisationRepository.saveAndFlush(organisation);
+
+      User user = FakeTestDataGenerator.createUsers(1).getFirst();
+      User expectedUser = userRepository.saveAndFlush(user);
+
+      entityManager.createNativeQuery(CREATE_ORGANISATIONS_USERS_TABLE).executeUpdate();
+      entityManager.createNativeQuery(
+                    "INSERT INTO organisations_users(active_since, id, organisation_id, user_id) " +
+                            "VALUES(:activeSince, :id, :organisationId, :userId)")
+              .setParameter("activeSince", LocalDateTime.now())
+              .setParameter("id", UUID.randomUUID())
+              .setParameter("organisationId", expectedOrganisation.getId())
+              .setParameter("userId", expectedUser.getId())
+              .executeUpdate();
+
+      //ACT
+
+      boolean isMember = userRepository.userMemberOfOrganisation(
+              expectedUser.getId(),
+              expectedOrganisation.getId());
+
+      //ASSERT
+      assertTrue(isMember);
+  }
+
+  @Test
+    public void userMemberOfOrganisation_returnsFalseWhenUserIsNotMemberOfOrganisation(){
+      //ARRANGE
+      Organisation organisation = FakeTestDataGenerator.createOrganisations(1).getFirst();
+       organisation = organisationRepository.saveAndFlush(organisation);
+
+      User user = FakeTestDataGenerator.createUsers(1).getFirst();
+      User nonMemberUser = userRepository.saveAndFlush(user);
+
+      //ACT
+      boolean isMember = userRepository.userMemberOfOrganisation(nonMemberUser.getId(), organisation.getId());
+      //ASSERT
+      assertFalse(isMember);
   }
 }
