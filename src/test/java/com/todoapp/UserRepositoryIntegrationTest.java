@@ -327,34 +327,42 @@ public class UserRepositoryIntegrationTest {
 
     }
 
-    /*
-    @Test
-    public void findMembersInOrganisation_returnsListOfUserSummaryProjections() {
+  @Test
+    public void userMemberOfProject_returnsTrueWhenUserIsMemberOfProject(){
         //ARRANGE
-        entityManager.createNativeQuery(CREATE_ORGANISATIONS_USERS_TABLE).executeUpdate();
-        User expectedUser = FakeTestDataGenerator.createUsers(1).getFirst();
-        userRepository.saveAndFlush(expectedUser);
+       Project expectedProject = FakeTestDataGenerator.createProjects(1).getFirst();
+       projectRepository.saveAndFlush(expectedProject);
 
-        Organisation organisation = new Organisation();
-        organisation.setName(":(");
+       User expectedUser = FakeTestDataGenerator.createUsers(1).getFirst();
+       userRepository.saveAndFlush(expectedUser);
 
-        organisationRepository.saveAndFlush(organisation);
-        UUID expectedOrgId = organisation.getId();
+       entityManager.createNativeQuery(
+               "INSERT INTO projects_users(project_id, user_id) " +
+                        "VALUES(:projectId, :userId)")
+                        .setParameter("projectId", expectedProject.getId())
+                        .setParameter("userId", expectedUser.getId())
+                        .executeUpdate();
+       //ACT
+      boolean isMember = userRepository.userMemberOfProject(expectedUser.getId(), expectedProject.getId());
 
-        //MOCK
+      //ASSERT
+      assertTrue(isMember);
+  }
 
-        entityManager.createNativeQuery("INSERT INTO organisations_users(organisation_id, user_id) "+
-        "values (:organisationId, :userId)").setParameter("organisationId",expectedOrgId).
-                setParameter("userId", expectedUser.getId()).executeUpdate();
-        entityManager.flush();
-        entityManager.clear();
+  @Test
+    public void userMemberOfProject_returnsFalseWhenUserIsNotMemberOfProject(){
 
-        //ACT
-        List<UserSummaryProjection> actualUsers = userRepository.findMembersInOrganisation(expectedOrgId);
+      //ARRANGE
+      User nonMemberUser = FakeTestDataGenerator.createUsers(1).getFirst();
+      userRepository.saveAndFlush(nonMemberUser);
 
-        //ASSERT
-        assertEquals(expectedUser.getEmail() ,actualUsers.getFirst().getEmail());
-    }
+      Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+      projectRepository.saveAndFlush(project);
 
-     */
+      //ACT
+      boolean isMember = userRepository.userMemberOfProject(nonMemberUser.getId(), project.getId());
+      //ASSERT
+      assertFalse(isMember);
+
+  }
 }
