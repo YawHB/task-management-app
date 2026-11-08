@@ -1,12 +1,10 @@
 package com.todoapp;
 
+import com.todoapp.organisation.internal.model.Organisation;
 import com.todoapp.project.internal.model.Project;
 import com.todoapp.user.internal.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class FakeTestDataGenerator {
 
@@ -47,6 +45,14 @@ public class FakeTestDataGenerator {
             UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc")
     );
 
+    private static List<String> organisationNames = List.of(
+            "Nordic Software Solutions",
+            "Copenhagen Business Group",
+            "Scandinavian Logistics",
+            "Danish Healthcare Services",
+            "Global Engineering Solutions"
+    );
+
     public static List<User> createUsers(int numberOfUsers) {
         List<User> users = new ArrayList<>();
         Random random = new Random();
@@ -59,6 +65,7 @@ public class FakeTestDataGenerator {
             user.setEmail(firstName + "." + lastName + "@example.org");
             user.setUsername(firstName + "_" + lastName);
             user.setDeleted(false);
+
             users.add(user);
         }
 
@@ -81,6 +88,19 @@ public class FakeTestDataGenerator {
             }
 
             return projects;
+        }
+
+        public static List<Organisation> createOrganisations(int numberOfOrganisations) {
+        List<Organisation> organisations = new ArrayList<>();
+        Random random = new Random();
+
+        for(int i = 0; i< numberOfOrganisations; i++){
+            Organisation organisation = new Organisation();
+            String organisationName = organisationNames.get(random.nextInt(0, organisationNames.size()));
+            organisation.setName(organisationName);
+            organisations.add(organisation);
+          }
+        return organisations;
         }
     }
 

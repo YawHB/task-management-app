@@ -85,33 +85,26 @@ public class UserRepositoryIntegrationTest {
         """;
 
     private static final String CREATE_ORGANISATIONS_USERS_TABLE = """
-    CREATE TABLE IF NOT EXISTS ORGANISATIONS_USERS (
-        id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
-        user_id UUID NOT NULL,
-        organisation_id UUID NOT NULL,
-        active_since TIMESTAMP NOT NULL DEFAULT NOW(),
-        CONSTRAINT fk_organisation_users_id 
-            FOREIGN KEY (user_id) 
-            REFERENCES USERS (id) 
-            ON DELETE CASCADE,
-        CONSTRAINT fk_organisation_id 
-            FOREIGN KEY (organisation_id) 
-            REFERENCES ORGANISATION (id) 
-            ON DELETE CASCADE
-    )
-""";
+            CREATE TABLE IF NOT EXISTS ORGANISATIONS_USERS (
+                id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+                user_id UUID NOT NULL,
+                organisation_id UUID NOT NULL,
+                active_since TIMESTAMP NOT NULL DEFAULT NOW(),
+            CONSTRAINT fk_organisation_users_id
+                FOREIGN KEY (user_id)
+                REFERENCES users(id)
+                ON DELETE CASCADE,
+            CONSTRAINT fk_organisation_id
+                FOREIGN KEY (organisation_id)
+                REFERENCES organisation(id)
+                ON DELETE CASCADE,
+            CONSTRAINT uk_organisations_users
+                UNIQUE(organisation_id, user_id)
+            )
+        """;
 
 
 
-    private User createUser() {
-        User user = new User();
-        user.setFirstName("Ada");
-        user.setLastName("Lovelace");
-        user.setEmail("ada.integration@example.org");
-        user.setUsername("ada_integration");
-        user.setDeleted(false);
-        return user;
-    }
 
     @Test
     public void findByEmail_returnsExistingUserByEmail() {
@@ -200,7 +193,7 @@ public class UserRepositoryIntegrationTest {
         Project expectedProject = projectRepository.saveAndFlush(project);
 
         //create 2 users
-        List<User> expectedUsers = FakeTestDataGenerator.createUsers(2);
+        List<User> expectedUsers = FakeTestDataGenerator.createUsers(3);
         expectedUsers = userRepository.saveAllAndFlush(expectedUsers);
 
 
@@ -219,9 +212,120 @@ public class UserRepositoryIntegrationTest {
         List<UserSummaryProjection> actualUsers = userRepository.findMembersInProject(project.getId());
 
         //ASSERT
-        assertEquals(2, actualUsers.size());
+
+        for(User expectedUser : expectedUsers) {
+            UserSummaryProjection actualUser = null;
+
+            for(UserSummaryProjection user : actualUsers){
+                if(expectedUser.getFirstName().equals(user.getFirstName())) {
+                    actualUser = user;
+                }
+            }
+
+            assertNotNull(actualUser);
+            assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+            assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+            assertEquals(expectedUser.getUsername(), actualUser.getUserName());
+            assertEquals(expectedUser.getEmail(), actualUser.getEmail());
+        }
+        assertEquals(3, actualUsers.size());
     }
 
+    @Test
+    public void findMembersInOrganisation_returnsMemberWhenOneMemberExists(){
+        //ARRANGE
+        entityManager.createNativeQuery(CREATE_ORGANISATIONS_USERS_TABLE).executeUpdate();
+        entityManager.flush();
+        entityManager.clear();
+
+        User user = FakeTestDataGenerator.createUsers(1).getFirst();
+        User expectedUser = userRepository.saveAndFlush(user);
+        entityManager.flush();
+        entityManager.clear();
+
+       Organisation organisation = FakeTestDataGenerator.createOrganisations(1).getFirst();
+       Organisation expectedOrganisation = organisationRepository.saveAndFlush(organisation);
+        entityManager.flush();
+        entityManager.clear();
+
+        LocalDateTime activeSince = LocalDateTime.now();
+        UUID id = UUID.randomUUID();
+
+        entityManager.createNativeQuery(
+                "INSERT INTO organisations_users " +
+                        "VALUES(:id, :userId, :organisationId, :activeSince)")
+                        .setParameter("id", id)
+                        .setParameter("userId", user.getId())
+                        .setParameter("organisationId", organisation.getId())
+                        .setParameter("activeSince", activeSince)
+                        .executeUpdate();
+        //ACT
+
+        List<UserSummaryProjection> actualUsers = userRepository.findMembersInOrganisation(organisation.getId());
+        //ASSERT
+        UserSummaryProjection actualUser = actualUsers.getFirst();
+
+        assertEquals(1, actualUsers.size());
+        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
+        assertEquals(expectedUser.getUsername(), actualUser.getUserName());
+        assertFalse(expectedUser.isDeleted(), String.valueOf(false));
+    }
+
+    @Test
+    public void findMembersInOrganisation_returnsEmptyListWhenNoMembersExist(){
+        //ARRANGE
+        Organisation organisation = FakeTestDataGenerator.createOrganisations(1).getFirst();
+        //ACT
+        List<UserSummaryProjection> actualUsers = userRepository.findMembersInOrganisation(organisation.getId());
+        //ASSERT
+        assertTrue(actualUsers.isEmpty());
+    }
+
+    @Test
+    public void findMembersInOrganisation_returnsAllMembersWhenMultipleMembersExist(){
+        //ARRANGE
+        Organisation organisation = FakeTestDataGenerator.createOrganisations(1).getFirst();
+        organisationRepository.saveAndFlush(organisation);
+
+        List<User> expectedUsers = userRepository.saveAllAndFlush(FakeTestDataGenerator.createUsers(3));
+
+        for (User expectedUser : expectedUsers) {
+            entityManager.createNativeQuery(
+                            "INSERT INTO organisations_users(active_since, id, user_id, organisation_id ) " +
+                                    "VALUES(:activeSince, :id, :userId, :organisationId)")
+                    .setParameter("activeSince", LocalDateTime.now())
+                    .setParameter("id", UUID.randomUUID())
+                    .setParameter("userId", expectedUser.getId())
+                    .setParameter("organisationId", organisation.getId())
+                    .executeUpdate();
+        }
+
+        //ACT
+        List<UserSummaryProjection> actualUsers = userRepository.findMembersInOrganisation(organisation.getId());
+
+        //ASSERT
+        //return order is not predictable. nested for loop insures assertions of the same (expected/actual) object
+       for(User expectedUser : expectedUsers) {
+           UserSummaryProjection actualUser = null;
+
+           for(UserSummaryProjection user : actualUsers){
+               if(expectedUser.getFirstName().equals(user.getFirstName())) {
+                   actualUser = user;
+               }
+           }
+
+           assertNotNull(actualUser);
+            assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+            assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+            assertEquals(expectedUser.getUsername(), actualUser.getUserName());
+            assertEquals(expectedUser.getEmail(), actualUser.getEmail());
+       }
+        assertEquals(3, actualUsers.size());
+
+
+    }
 
     /*
     @Test
