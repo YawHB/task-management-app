@@ -1,5 +1,6 @@
 package com.todoapp.project.internal.repository;
 
+import com.todoapp.project.facade.ProjectProjection;
 import com.todoapp.project.facade.ProjectSummaryProjection;
 import com.todoapp.project.internal.model.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,15 +15,19 @@ import java.util.UUID;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
 
-    @Query(value = "SELECT COUNT(*) > 0 " +
-                   "FROM project " +
-                   "WHERE name = :name",
-                   nativeQuery = true)
-    boolean existsByName(String name );
+
+    @Query(value = "SELECT p.id AS projectId, p.organisation_id AS organisationId, p.name AS projectName, p.created_at AS createdAt, " +
+            "u.id AS userId, u.first_name AS firstName, u.last_name AS lastName, u.email, u.username " +
+            "FROM project AS p " +
+            "LEFT JOIN projects_users AS pu ON pu.project_id = p.id " +
+            "LEFT JOIN users AS u ON u.id = pu.user_id " +
+            "WHERE p.id = :projectId",
+            nativeQuery = true)
+    ProjectProjection findProjectWithMembersById(UUID projectId);
 
 
-    @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.project_id, " +
-                   "PROJECT_FILTERED_BY_ORG.name " +
+    @Query(value = "SELECT PROJECT_FILTERED_BY_ORG.project_id AS projectId, " +
+                   "PROJECT_FILTERED_BY_ORG.name AS projectName " +
             "FROM (" +
                      "SELECT project.id AS project_id, " +
                              "project.name " +
@@ -46,6 +51,7 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
     @Query(value = "SELECT * FROM project WHERE project.id = :projectId ",
             nativeQuery = true)
     Optional<Project> findById(UUID projectId);
+
 
     @Query(value = "SELECT p.created_at, p.id, organisation_id, p.name " +
                    "FROM project AS p " +
@@ -74,4 +80,10 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
             "AND user_id = :userId",
             nativeQuery = true)
     boolean userExistInProject(UUID projectId, UUID userId);
+
+    @Query(value = "SELECT COUNT(*) > 0 " +
+            "FROM project " +
+            "WHERE name = :name",
+            nativeQuery = true)
+    boolean existsByName(String name );
 }

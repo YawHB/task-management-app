@@ -1,5 +1,6 @@
 package com.todoapp.mediator;
 
+import com.task_management_app.api.model.AddOrganisationRequestDTO;
 import com.task_management_app.api.model.OrganisationDTO;
 import com.task_management_app.api.model.UserDTO;
 import com.task_management_app.api.model.UserSummaryDTO;
@@ -26,6 +27,17 @@ public class MediatorFacadeImpl implements MediatorFacade {
     private final ProjectFacade projectFacade;
 
 
+
+    @Override
+    public OrganisationDTO createOrganisation(AddOrganisationRequestDTO orgRequestDTO) {
+        /*TODO - delegate the throw responsibility of all facade methods to the facadeImpl through a validater class.
+           That way the mediator does not need conditional logic, which helps it remove responsibility
+           and stay clean
+         */
+        userFacade.existById(orgRequestDTO.getCreatorId());
+        return organisationFacade.addOrganisation(orgRequestDTO);
+    }
+
     @Override
     @Transactional
     public UserDTO subscribeMemberToOrganisation(UUID organisationId, String memberEmail) {
@@ -33,7 +45,6 @@ public class MediatorFacadeImpl implements MediatorFacade {
         UserDTO userDTO = userFacade.getUserByEmail(memberEmail);
         log.info("[mediatorFacadeImpl - subscribeMemberToOrganisation] - calling organisationFacade to to add member to organisation");
        return organisationFacade.addUserToOrganisation( organisationId, userDTO);
-
     }
 
     @Override
@@ -53,6 +64,12 @@ public class MediatorFacadeImpl implements MediatorFacade {
         }
         log.info("[mediatorFacadeImpl - getOrganisationsByUserId] - calling organisationFacade");
         return organisationFacade.getOrganisationsByUserId(userId);
+    }
+
+    @Override
+    public List<UserSummaryDTO> getUsersInOrganisation(UUID organisationId) {
+        organisationFacade.existsById(organisationId);
+        return userFacade.findMembersInOrganisation(organisationId);
     }
 
 

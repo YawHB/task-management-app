@@ -29,6 +29,14 @@ public class GlobalExceptionHandler {
         return errorResponseFactory.buildCustomProblem(HttpStatus.NOT_FOUND, "Organisation not found", exception.getMessage(), request);
     }
 
+    @ExceptionHandler(DuplicateOrganisationNameException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrganisationNameDuplication(DuplicateOrganisationNameException exception,
+                                                                       HttpServletRequest request) {
+        log.warn("Organisation name already exists in database: {}", exception.getMessage());
+
+        return errorResponseFactory.buildCustomProblem(HttpStatus.NOT_FOUND, "Organisation name duplication", exception.getMessage(), request);
+    }
+
     /** USER EXCEPTIONS **/
 
 

@@ -18,6 +18,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class ProjectDTOConverter {
+    /*
 
     public Project toEntity(UUID organisationId , ProjectPost projectPost) {
         log.info("[ProjectDTO Converter - toEntity] -Creating a new Project ");
@@ -46,12 +47,14 @@ public class ProjectDTOConverter {
         for( ProjectSummaryProjection p : projects) {
         ProjectSummaryDTO projectSummaryDTO = new ProjectSummaryDTO();
         projectSummaryDTO.setProjectId(p.getProjectId());
-        projectSummaryDTO.setProjectName(p.getName());
+        projectSummaryDTO.setProjectName(p.getProjectName());
         projectSummaryDTOS.add(projectSummaryDTO);
         }
 
         return projectSummaryDTOS;
     }
+
+     */
 }
 
 

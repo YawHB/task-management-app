@@ -1,13 +1,9 @@
 package com.todoapp.user.internal.repository;
 
-import com.task_management_app.api.model.UserDTO;
-import com.task_management_app.api.model.UserSummaryDTO;
-import com.todoapp.user.facade.OrganisationProjection;
 import com.todoapp.user.facade.UserSummaryProjection;
 import com.todoapp.user.internal.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
