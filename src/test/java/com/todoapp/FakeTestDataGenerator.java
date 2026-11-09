@@ -2,55 +2,29 @@ package com.todoapp;
 
 import com.todoapp.organisation.internal.model.Organisation;
 import com.todoapp.project.internal.model.Project;
+import com.todoapp.task.internal.Priority;
+import com.todoapp.task.internal.Status;
+import com.todoapp.task.internal.model.Task;
 import com.todoapp.user.internal.model.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class FakeTestDataGenerator {
 
-    private static List<String> firstNames = List.of(
+    //===================================================================//
+    //============================= USER ================================//
+    //===================================================================//
+
+    private final static List<String> firstNames = List.of(
             "John", "Bob", "Tom", "Michael", "David",
             "James", "Robert", "Daniel", "William", "Thomas"
     );
 
-    private static List<String> lastNames = List.of(
+    private final static List<String> lastNames = List.of(
             "Smith", "Johnson", "Williams", "Brown", "Jones",
             "Miller", "Davis", "Wilson", "Anderson", "Taylor"
-    );
-
-    private static List<String> projectNames = List.of(
-            "Website Redesign",
-            "Customer Portal",
-            "Inventory Management System",
-            "Payment Integration",
-            "Employee Management",
-            "Reporting Dashboard",
-            "Mobile Application",
-            "Order Processing System",
-            "Document Management",
-            "Task Automation Platform"
-    );
-/*
-    private static List<UUID> projectIds = List.of(
-            UUID.fromString("11111111-1111-1111-1111-111111111111"),
-            UUID.fromString("22222222-2222-2222-2222-222222222222"),
-            UUID.fromString("33333333-3333-3333-3333-333333333333")
-    );
- */
-
-
-    private static List<UUID> organisationIds = List.of(
-            UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-            UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-            UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc")
-    );
-
-    private static List<String> organisationNames = List.of(
-            "Nordic Software Solutions",
-            "Copenhagen Business Group",
-            "Scandinavian Logistics",
-            "Danish Healthcare Services",
-            "Global Engineering Solutions"
     );
 
     public static List<User> createUsers(int numberOfUsers) {
@@ -72,6 +46,62 @@ public class FakeTestDataGenerator {
         return users;
     }
 
+    //===================================================================//
+    //============================= TASK ================================//
+    //===================================================================//
+    private static final List<String> taskNames = List.of(
+            "Implement User Authentication",
+            "Design Database Schema",
+            "Create Project Dashboard",
+            "Implement Task Assignment",
+            "Add Email Notifications"
+    );
+
+    public static List<Task> createTasks(int numOfTasks){
+        List<Task> tasks = new ArrayList<>();
+        for(int i = 0; i< numOfTasks; i++){
+            Task task = new Task();
+            Random random = new Random();
+           task.setProjectId(UUID.fromString("bfad9468-03e6-450a-a07e-1d9504a28156"));
+           task.setAssigneeId(UUID.fromString("17e56aa9-6791-4d18-a7e2-fb5d52fbb4cd"));
+           task.setTaskCreatorId(UUID.fromString("17e56aa9-6791-4d18-a7e2-fb5d52fbb4cd"));
+           task.setTitle(taskNames.get(random.nextInt(0,taskNames.size())));
+           task.setDescription(("This is a task description"));
+           task.setDueDate(LocalDate.now().plusWeeks(2));
+           task.setCreatedAt(LocalDateTime.now());
+           task.setUpdatedAt(LocalDateTime.now());
+           task.setStatus(Status.TODO);
+           task.setPriority(Priority.MEDIUM);
+
+           tasks.add(task);
+        }
+        return tasks;
+    }
+
+
+
+    //===================================================================//
+    //============================= PROJECT =============================//
+    //===================================================================//
+    private final static List<String> projectNames = List.of(
+            "Website Redesign",
+            "Customer Portal",
+            "Inventory Management System",
+            "Payment Integration",
+            "Employee Management",
+            "Reporting Dashboard",
+            "Mobile Application",
+            "Order Processing System",
+            "Document Management",
+            "Task Automation Platform"
+    );
+
+    private final static List<UUID> organisationIds = List.of(
+            UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+            UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+            UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc")
+    );
+
         public static List<Project> createProjects(int numberOfProjects) {
             List<Project> projects = new ArrayList<>();
             Random random = new Random();
@@ -90,6 +120,18 @@ public class FakeTestDataGenerator {
             return projects;
         }
 
+
+    //===================================================================//
+    //============================= ORGANISATION ================================//
+    //===================================================================//
+
+    private static final List<String> organisationNames = List.of(
+            "Nordic Software Solutions",
+            "Copenhagen Business Group",
+            "Scandinavian Logistics",
+            "Danish Healthcare Services",
+            "Global Engineering Solutions"
+    );
         public static List<Organisation> createOrganisations(int numberOfOrganisations) {
         List<Organisation> organisations = new ArrayList<>();
         Random random = new Random();

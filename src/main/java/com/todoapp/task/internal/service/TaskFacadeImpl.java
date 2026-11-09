@@ -26,7 +26,6 @@ public class TaskFacadeImpl implements TaskFacade {
     private final TaskMapper taskMapper;
     private final TaskValidationHandler validationHandler;
 
-
     public TaskDTO addTask(AddTaskDTO addTaskDTO){
 
         log.info("[TaskFacadeImpl - addTask] - calling validatePostRequest");
@@ -98,7 +97,6 @@ public class TaskFacadeImpl implements TaskFacade {
                 result.append(current);
             }
         }
-
         return result.toString();
     }
 }
