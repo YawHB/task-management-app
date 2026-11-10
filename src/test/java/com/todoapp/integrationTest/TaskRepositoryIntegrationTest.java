@@ -22,6 +22,7 @@ import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -153,6 +154,57 @@ public class TaskRepositoryIntegrationTest {
         project = projectRepository.saveAndFlush(project);
         //ACT
         //ASSERT
+    }
+
+    @Test
+    public void findByIdAndProjectId_returnsTaskWhenTaskExistsInProject(){
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        Task task = FakeTestDataGenerator.createTasks(1).getFirst();
+        task.setProjectId(project.getId());
+        Task expectedTask = taskRepository.saveAndFlush(task);
+
+        //ACT
+        Optional<Task> actualTask = taskRepository.findByIdAndProjectId(expectedTask.getId(), expectedTask.getProjectId());
+
+        //ASSERT
+        assertTrue(actualTask.isPresent());
+        assertEquals(expectedTask.getId(), actualTask.get().getId());
+        assertEquals(expectedTask.getProjectId(), expectedProject.getId());
+
+    }
+
+    @Test
+    public void findByIdAndProjectId_returnsEmptyWhenTaskDoesNotExist(){
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        //ACT
+       Optional<Task> foundTask = taskRepository.findByIdAndProjectId(UUID.randomUUID(), expectedProject.getId());
+
+        //ASSERT
+        assertTrue(foundTask.isEmpty());
+    }
+
+    @Test
+    public void findByIdAndProjectId_returnsEmptyWhenTaskBelongsToDifferentProject(){
+        //ARRANGE
+        UUID unrelatedProjectId = UUID.randomUUID();
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        Task task = FakeTestDataGenerator.createTasks(1).getFirst();
+        task.setProjectId(project.getId());
+        Task expectedTask = taskRepository.saveAndFlush(task);
+
+        //ACT
+         Optional<Task> taskFound = taskRepository.findByIdAndProjectId(expectedTask.getId(), unrelatedProjectId);
+
+        //ASSERT
+        assertTrue(taskFound.isEmpty());
     }
 
     //ARRANGE
