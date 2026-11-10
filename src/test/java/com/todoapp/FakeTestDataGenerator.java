@@ -57,7 +57,24 @@ public class FakeTestDataGenerator {
             "Add Email Notifications"
     );
 
+    private static final List<Status> statusList = List.of(
+            Status.TODO,
+            Status.IN_PROGRESS,
+            Status.DONE,
+            Status.ARCHIVED
+    );
+
+    private static final List<Priority> priorityList = List.of(
+            Priority.LOW,
+            Priority.MEDIUM,
+            Priority.HIGH,
+            Priority.CRITICAL
+    );
+
+
+
     public static List<Task> createTasks(int numOfTasks){
+        int maxDays = 5;
         List<Task> tasks = new ArrayList<>();
         for(int i = 0; i< numOfTasks; i++){
             Task task = new Task();
@@ -65,13 +82,13 @@ public class FakeTestDataGenerator {
            task.setProjectId(UUID.fromString("bfad9468-03e6-450a-a07e-1d9504a28156"));
            task.setAssigneeId(UUID.fromString("17e56aa9-6791-4d18-a7e2-fb5d52fbb4cd"));
            task.setTaskCreatorId(UUID.fromString("17e56aa9-6791-4d18-a7e2-fb5d52fbb4cd"));
-           task.setTitle(taskNames.get(random.nextInt(0,taskNames.size())));
+           task.setTitle(taskNames.get(i));
            task.setDescription(("This is a task description"));
-           task.setDueDate(LocalDate.now().plusWeeks(2));
-           task.setCreatedAt(LocalDateTime.now());
+           task.setCreatedAt(LocalDateTime.now().minusDays(i+1));
+           task.setDueDate(LocalDate.now().plusWeeks(i+1));
            task.setUpdatedAt(LocalDateTime.now());
-           task.setStatus(Status.TODO);
-           task.setPriority(Priority.MEDIUM);
+           task.setStatus(statusList.get(random.nextInt(0, statusList.size())));
+           task.setPriority(priorityList.get(random.nextInt(0, priorityList.size())));
 
            tasks.add(task);
         }
@@ -144,5 +161,6 @@ public class FakeTestDataGenerator {
           }
         return organisations;
         }
+
     }
 

@@ -6,6 +6,7 @@ import com.todoapp.organisation.internal.model.Organisation;
 import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.project.internal.model.Project;
 import com.todoapp.project.internal.repository.ProjectRepository;
+import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
 import com.todoapp.task.internal.repository.TaskRepository;
 import com.todoapp.user.internal.model.User;
@@ -19,11 +20,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -206,6 +207,324 @@ public class TaskRepositoryIntegrationTest {
         //ASSERT
         assertTrue(taskFound.isEmpty());
     }
+
+    @Test
+    public void findTasksInProject_returnsTasksWhenTasksExistInProject(){
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task> expectedTasks = taskRepository.saveAllAndFlush(tasks);
+
+        Sort defaultSorting = Sort.by(Sort.Direction.ASC, "created_at");
+
+        //ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), defaultSorting);
+        //ASSERT
+        assertEquals(3, actualTasks.size());
+
+        assertTrue(actualTasks.get(0).getCreatedAt()
+                .isBefore(actualTasks.get(1).getCreatedAt()));
+
+        assertTrue(actualTasks.get(1).getCreatedAt()
+                .isBefore(actualTasks.get(2).getCreatedAt()));
+
+        assertEquals(expectedTasks.get(0).getTitle(), actualTasks.get(0).getTitle());
+        assertEquals(expectedTasks.get(1).getTitle(), actualTasks.get(1).getTitle());
+        assertEquals(expectedTasks.get(2).getTitle(), actualTasks.get(2).getTitle());
+    }
+
+    @Test
+    public void findTasksInProject_returnsEmptyListWhenProjectHasNoTasks(){
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        project = projectRepository.saveAndFlush(project);
+
+        //ACT
+        Sort defaultSorting = Sort.by(Sort.Direction.ASC, "created_at");
+        List<TaskSummaryProjection> tasks = taskRepository.findTasksInProject(project.getId(), defaultSorting);
+
+        //ASSERT
+        assertTrue(tasks.isEmpty());
+
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksWhenTaskHasNoAssignee(){
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> {
+        task.setProjectId(expectedProject.getId());
+        task.setAssigneeId(null);
+        });
+
+         taskRepository.saveAllAndFlush(tasks);
+
+        //ACT
+        Sort defaultSorting = Sort.by(Sort.Direction.ASC, "created_at");
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(project.getId(), defaultSorting);
+
+        //ASSERT
+        assertEquals(3, actualTasks.size());
+        assertAll(actualTasks.stream()
+                .map(task -> () -> assertNull(task.getFirstName())));
+
+        assertAll(actualTasks.stream()
+                .map(task -> () -> assertNull(task.getLastName())));
+    }
+
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByCreatedAtAscending() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task> expectedTasks = taskRepository.saveAllAndFlush(tasks);
+
+        Sort createdAtAscending = Sort.by(Sort.Direction.ASC, "created_at");
+
+        // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), createdAtAscending);
+
+        // ASSERT
+        assertEquals(3, actualTasks.size());
+
+
+        assertAll(() -> {
+            for(int i = 0; i<actualTasks.size()-1; i++) {
+                assertTrue(actualTasks.get(i).getCreatedAt()
+                        .isBefore(actualTasks.get(i+1).getCreatedAt()));
+            }
+        });
+
+        assertAll(() -> {
+            for(int i = 0; i < actualTasks.size(); i++){
+                assertEquals(expectedTasks.get(i)
+                        .getCreatedAt(),actualTasks.get(i).getCreatedAt());
+            }
+        });
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByCreatedAtDescending() {
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+         tasks = taskRepository.saveAllAndFlush(tasks);
+         tasks.sort(Comparator.comparing(task -> task.getCreatedAt()));
+        List<Task> expectedTasks = tasks.reversed();
+
+        Sort createdAtDescending = Sort.by(Sort.Direction.DESC, "created_at");
+
+        // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), createdAtDescending);
+
+        // ASSERT
+        assertEquals(3, actualTasks.size());
+
+        assertAll(() -> {
+            for(int i = 0; i<actualTasks.size()-1; i++) {
+                assertTrue(actualTasks.get(i).getCreatedAt()
+                        .isAfter(actualTasks.get(i+1).getCreatedAt()));
+            }
+        });
+
+        assertAll(() -> {
+            for(int i = 0; i < actualTasks.size(); i++){
+                assertEquals(expectedTasks.get(i)
+                        .getCreatedAt(),actualTasks.get(i).getCreatedAt());
+            }
+        });
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByDueDateAscending() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task> expectedTasks = taskRepository.saveAllAndFlush(tasks);
+        expectedTasks.sort(Comparator.comparing(task -> task.getDueDate()));
+
+        Sort dueDateAscending = Sort.by(Sort.Direction.ASC, "due_date");
+
+        // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), dueDateAscending);
+
+        // ASSERT
+        assertEquals(3, actualTasks.size());
+
+        assertAll(() -> {
+            for(int i = 0; i<actualTasks.size()-1; i++) {
+                assertTrue(actualTasks.get(i).getDueDate()
+                        .isBefore(actualTasks.get(i+1).getDueDate()));
+            }
+        });
+
+        assertAll(() -> {
+            for(int i = 0; i < actualTasks.size(); i++){
+                assertEquals(expectedTasks.get(i)
+                        .getDueDate(),actualTasks.get(i).getDueDate());
+            }
+        });
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByDueDateDescending() {
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        tasks = taskRepository.saveAllAndFlush(tasks);
+        tasks.sort(Comparator.comparing(task -> task.getDueDate()));
+        List<Task> expectedTasks = tasks.reversed();
+
+        Sort dueDateDescending = Sort.by(Sort.Direction.DESC, "due_date");
+
+        // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), dueDateDescending);
+
+        // ASSERT
+        assertEquals(3, actualTasks.size());
+
+        assertAll(() -> {
+            for(int i = 0; i<actualTasks.size()-1; i++) {
+                assertTrue(actualTasks.get(i).getDueDate()
+                        .isAfter(actualTasks.get(i+1).getDueDate()));
+            }
+        });
+
+        assertAll(() -> {
+            for(int i = 0; i < actualTasks.size(); i++){
+                assertEquals(expectedTasks.get(i)
+                        .getDueDate(),actualTasks.get(i).getDueDate());
+            }
+        });
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByTitleAscending() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task> expectedTasks = taskRepository.saveAllAndFlush(tasks);
+        expectedTasks.sort(Comparator.comparing(task -> task.getTitle()));
+
+        Sort titleAscending = Sort.by(Sort.Direction.ASC, "title");
+
+        // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), titleAscending);
+
+        // ASSERT
+        assertEquals(3, actualTasks.size());
+
+        assertAll(() -> {
+            for(int i = 0; i<actualTasks.size()-1; i++) {
+
+                assertTrue(actualTasks.get(i).getTitle()
+                        .compareTo(actualTasks.get(i+1).getTitle()) < 0);
+            }
+        });
+
+        assertAll(() -> {
+            for(int i = 0; i < actualTasks.size(); i++){
+                assertEquals(expectedTasks.get(i)
+                        .getTitle(),actualTasks.get(i).getTitle());
+            }
+        });
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByTitleDescending() {
+        //ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        tasks = taskRepository.saveAllAndFlush(tasks);
+        tasks.sort(Comparator.comparing(task -> task.getTitle()));
+        List<Task> expectedTasks = tasks.reversed();
+
+        Sort titleDescending = Sort.by(Sort.Direction.DESC, "title");
+
+        // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), titleDescending);
+
+        // ASSERT
+        assertEquals(3, actualTasks.size());
+
+        assertAll(() -> {
+            for(int i = 0; i<actualTasks.size()-1; i++) {
+                assertTrue(actualTasks.get(i).getTitle()
+                        .compareTo(actualTasks.get(i+1).getTitle()) > 0);
+
+            }
+        });
+
+        assertAll(() -> {
+            for(int i = 0; i < actualTasks.size(); i++){
+                assertEquals(expectedTasks.get(i)
+                        .getTitle(),actualTasks.get(i).getTitle());
+            }
+        });
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByPriorityAscending() {
+        // ARRANGE
+
+        // ACT
+
+        // ASSERT
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByPriorityDescending() {
+        // ARRANGE
+
+        // ACT
+
+        // ASSERT
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByStatusAscending() {
+        // ARRANGE
+
+        // ACT
+
+        // ASSERT
+    }
+
+    @Test
+    public void findTasksInProject_returnsTasksSortedByStatusDescending() {
+        // ARRANGE
+
+        // ACT
+
+        // ASSERT
+    }
+
+
+
 
     //ARRANGE
     //ACT
