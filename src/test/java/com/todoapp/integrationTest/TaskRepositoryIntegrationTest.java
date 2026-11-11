@@ -1,9 +1,6 @@
 package com.todoapp.integrationTest;
 
 import com.todoapp.FakeTestDataGenerator;
-import com.todoapp.UserRepositoryIntegrationTest;
-import com.todoapp.organisation.internal.model.Organisation;
-import com.todoapp.organisation.internal.repository.OrganisationRepository;
 import com.todoapp.project.internal.model.Project;
 import com.todoapp.project.internal.repository.ProjectRepository;
 import com.todoapp.task.facade.TaskSummaryProjection;
@@ -12,7 +9,6 @@ import com.todoapp.task.internal.repository.TaskRepository;
 import com.todoapp.user.internal.model.User;
 import com.todoapp.user.internal.repository.UserRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.constraints.AssertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -490,43 +486,105 @@ public class TaskRepositoryIntegrationTest {
     @Test
     public void findTasksInProject_returnsTasksSortedByPriorityAscending() {
         // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task>  expectedTasks = taskRepository.saveAllAndFlush(tasks);
+        expectedTasks.sort(Comparator.comparing(task -> task.getPriority().name())); // name() Sorts the Priority ENUMs as Strings, instead of the natural order I defined them
+
+        Sort priorityAsc = Sort.by(Sort.Direction.ASC, "priority");
 
         // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), priorityAsc);
 
         // ASSERT
+        assertEquals(3, actualTasks.size());
+        assertAll(()-> {
+            for(int i = 0; i< actualTasks.size(); i++) {
+                assertEquals(expectedTasks.get(i).getPriority(), actualTasks.get(i).getPriority());
+                assertEquals(expectedTasks.get(i).getTitle(), actualTasks.get(i).getTitle());
+            }
+        });
     }
 
     @Test
     public void findTasksInProject_returnsTasksSortedByPriorityDescending() {
         // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+          List<Task> foundTasks = taskRepository.saveAllAndFlush(tasks);
+        foundTasks.sort(Comparator.comparing(task -> task.getPriority().name()));
+        List<Task> expectedTasks = foundTasks.reversed();
+
+        Sort priorityDesc = Sort.by(Sort.Direction.DESC, "priority");
 
         // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), priorityDesc);
 
         // ASSERT
+        assertEquals(3, actualTasks.size());
+        assertAll(()-> {
+            for(int i = 0; i< actualTasks.size(); i++) {
+                assertEquals(expectedTasks.get(i).getPriority(), actualTasks.get(i).getPriority());
+            }
+        });
     }
 
     @Test
     public void findTasksInProject_returnsTasksSortedByStatusAscending() {
         // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task>  expectedTasks = taskRepository.saveAllAndFlush(tasks);
+        expectedTasks.sort(Comparator.comparing(task -> task.getStatus().name())); // name() Sorts the Status ENUMs as Strings, instead of the natural order I defined them
+
+        Sort statusAsc = Sort.by(Sort.Direction.ASC, "status");
 
         // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), statusAsc);
 
         // ASSERT
+        assertEquals(3, actualTasks.size());
+        assertAll(()-> {
+            for(int i = 0; i< actualTasks.size(); i++) {
+                assertEquals(expectedTasks.get(i).getStatus(), actualTasks.get(i).getStatus());
+                assertEquals(expectedTasks.get(i).getTitle(), actualTasks.get(i).getTitle());
+            }
+        });
     }
 
     @Test
     public void findTasksInProject_returnsTasksSortedByStatusDescending() {
         // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        Project expectedProject = projectRepository.saveAndFlush(project);
+
+        List<Task> tasks = FakeTestDataGenerator.createTasks(3);
+        tasks.forEach(task -> task.setProjectId(expectedProject.getId()));
+        List<Task> foundTasks = taskRepository.saveAllAndFlush(tasks);
+        foundTasks.sort(Comparator.comparing(task -> task.getStatus().name()));
+
+        List<Task> expectedTasks = foundTasks.reversed();
+
+        Sort statusDesc = Sort.by(Sort.Direction.DESC, "status");
 
         // ACT
+        List<TaskSummaryProjection> actualTasks = taskRepository.findTasksInProject(expectedProject.getId(), statusDesc);
 
         // ASSERT
+        assertEquals(3, actualTasks.size());
+        assertAll(()-> {
+            for(int i = 0; i< actualTasks.size(); i++) {
+                assertEquals(expectedTasks.get(i).getStatus(), actualTasks.get(i).getStatus());
+            }
+        });
     }
-
-
-
-
-    //ARRANGE
-    //ACT
-    //ASSERT
 }
