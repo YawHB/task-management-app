@@ -33,7 +33,7 @@ public class FakeTestDataGenerator {
         for (int i = 0; i < numberOfUsers; i++) {
             User user = new User();
             String firstName = firstNames.get(random.nextInt(0, firstNames.size()));
-            String lastName = lastNames.get(random.nextInt(0, firstNames.size()));
+            String lastName = lastNames.get(random.nextInt(0, lastNames.size()));
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(firstName + "." + lastName + "@example.org");

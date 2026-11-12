@@ -3,6 +3,7 @@ package com.todoapp.integrationTest;
 import com.todoapp.FakeTestDataGenerator;
 import com.todoapp.project.internal.model.Project;
 import com.todoapp.project.internal.repository.ProjectRepository;
+import com.todoapp.task.facade.TaskDetailsProjection;
 import com.todoapp.task.facade.TaskSummaryProjection;
 import com.todoapp.task.internal.model.Task;
 import com.todoapp.task.internal.repository.TaskRepository;
@@ -58,6 +59,8 @@ public class TaskRepositoryIntegrationTest {
     @Autowired
     ProjectRepository projectRepository;
 
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     private EntityManager entityManager;
 
@@ -586,5 +589,174 @@ public class TaskRepositoryIntegrationTest {
                 assertEquals(expectedTasks.get(i).getStatus(), actualTasks.get(i).getStatus());
             }
         });
+    }
+
+    @Test
+    public void updateTaskAssignee_updatesAssigneeWhenTaskExistsInProject() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        projectRepository.saveAndFlush(project);
+
+        User originalUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        originalUser = userRepository.saveAndFlush(originalUser);
+
+        Task task = FakeTestDataGenerator.createTasks(1).getFirst();
+        task.setProjectId(project.getId());
+        task.setAssigneeId(originalUser.getId());
+        task = taskRepository.saveAndFlush(task);
+
+        User otherUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        otherUser = userRepository.saveAndFlush(otherUser);
+
+        // ACT
+        taskRepository.updateTaskAssignee(
+                project.getId(),
+                task.getId(),
+                otherUser.getId());
+
+        entityManager.flush();
+        entityManager.clear();
+
+        Optional<Task> updatedTask = taskRepository
+                .findByIdAndProjectId(task.getId(), project.getId());
+
+        // ASSERT
+        assertTrue(updatedTask.isPresent());
+        assertEquals(otherUser.getId(), updatedTask.get().getAssigneeId());
+    }
+
+    @Test
+    public void updateTaskAssignee_doesNotUpdateTaskWhenTaskDoesNotExistInProject() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        projectRepository.saveAndFlush(project);
+
+        User originalUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        originalUser = userRepository.saveAndFlush(originalUser);
+
+        UUID otherTaskId = UUID.randomUUID();
+        Task task = FakeTestDataGenerator.createTasks(1).getFirst();
+        task.setProjectId(project.getId());
+        task.setAssigneeId(originalUser.getId());
+        taskRepository.saveAndFlush(task);
+
+        User otherUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        userRepository.saveAndFlush(otherUser);
+        entityManager.flush();
+        entityManager.clear();
+
+        // ACT
+        Optional<Task> actualTask = taskRepository.findByIdAndProjectId(otherTaskId,project.getId());
+
+        // ASSERT
+        assertTrue(actualTask.isEmpty());
+    }
+
+    @Test
+    public void findTaskDetailsByIdAndProjectId_returnsTaskDetailsWhenTaskExistsAndIsAssignedToUser() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        projectRepository.saveAndFlush(project);
+
+        User expectedUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        expectedUser = userRepository.saveAndFlush(expectedUser);
+
+        Task expectedTask = FakeTestDataGenerator.createTasks(1).getFirst();
+        expectedTask.setProjectId(project.getId());
+        expectedTask.setAssigneeId(expectedUser.getId());
+        taskRepository.saveAndFlush(expectedTask);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // ACT
+       Optional<TaskDetailsProjection> actualTask = taskRepository.findTaskDetailsByIdAndProjectId(
+                expectedTask.getId(),
+                project.getId(),
+                expectedUser.getId());
+
+        // ASSERT
+        assertTrue(actualTask.isPresent());
+        //Cant compare IDs, so found other unique properties for user and project
+        assertEquals(expectedUser.getEmail(), actualTask.get().getEmail());
+        assertEquals(project.getName(), actualTask.get().getProjectName());
+        assertEquals(expectedTask.getTitle(), actualTask.get().getTaskTitle());
+    }
+
+    @Test
+    public void findTaskDetailsByIdAndProjectId_returnsEmptyWhenTaskDoesNotExist() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        projectRepository.saveAndFlush(project);
+
+        User expectedUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        expectedUser = userRepository.saveAndFlush(expectedUser);
+
+        UUID nonExistingTask = UUID.randomUUID();
+
+        // ACT
+        Optional<TaskDetailsProjection> actualTask = taskRepository.findTaskDetailsByIdAndProjectId(nonExistingTask, project.getId(), expectedUser.getId());
+
+        // ASSERT
+        assertTrue(actualTask.isEmpty());
+    }
+
+    @Test
+    public void findTaskDetailsByIdAndProjectId_returnsEmptyWhenTaskBelongsToDifferentProject() {
+        // ARRANGE
+        List<Project> projects = FakeTestDataGenerator.createProjects(2);
+        Project expectedProject = projects.getFirst();
+        Project otherProject = projects.getLast();
+
+        projectRepository.saveAndFlush(expectedProject);
+        projectRepository.saveAndFlush(otherProject);
+
+        User expectedUser = FakeTestDataGenerator.createUsers(1).getFirst();
+        expectedUser = userRepository.saveAndFlush(expectedUser);
+
+        Task task = FakeTestDataGenerator.createTasks(1).getFirst();
+        task.setProjectId(expectedProject.getId());
+        task.setAssigneeId(expectedUser.getId());
+        taskRepository.saveAndFlush(task);
+
+        // ACT
+        Optional<TaskDetailsProjection> actualTask =
+                taskRepository.findTaskDetailsByIdAndProjectId(
+                        task.getId(),
+                        otherProject.getId(),
+                        expectedUser.getId());
+
+        // ASSERT
+        assertTrue(actualTask.isEmpty());
+
+    }
+
+    @Test
+    public void findTaskDetailsByIdAndProjectId_returnsEmptyWhenTaskIsAssignedToDifferentUser() {
+        // ARRANGE
+        Project project = FakeTestDataGenerator.createProjects(1).getFirst();
+        projectRepository.saveAndFlush(project);
+
+        List<User> users = FakeTestDataGenerator.createUsers(2);
+        User expectedUser = users.getFirst();
+        User otherUser = users.getLast();
+        expectedUser = userRepository.saveAndFlush(expectedUser);
+        otherUser = userRepository.saveAndFlush(otherUser);
+
+        Task task = FakeTestDataGenerator.createTasks(1).getFirst();
+        task.setProjectId(project.getId());
+        task.setAssigneeId(expectedUser.getId());
+        taskRepository.saveAndFlush(task);
+
+        // ACT
+        Optional<TaskDetailsProjection> actualTask =
+                taskRepository.findTaskDetailsByIdAndProjectId(
+                        task.getId(),
+                        project.getId(),
+                        otherUser.getId());
+
+        // ASSERT
+        assertTrue(actualTask.isEmpty());
+
     }
 }
