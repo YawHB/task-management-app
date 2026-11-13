@@ -23,12 +23,12 @@ public interface OrganisationFacade  {
     OrganisationDetailsDTO findOrganisationById(UUID id) throws OrganisationNotFoundException;
 
     /**
-     * Checks whether an organisation exists with the specified ID.
+     * Validates that an organisation exists with the specified ID.
      *
-     * @param organisationId the UUID of the organisation to check
-     * @return {@code true} if the organisation exists, {@code false} otherwise
+     * @param organisationId the UUID of the organisation to validate
+     * @throws OrganisationNotFoundException if no organisation exists with the specified ID
      */
-   boolean existsById(UUID organisationId);
+   void existsById(UUID organisationId);
 
 
    OrganisationDTO addOrganisation(AddOrganisationRequestDTO orgRequestDTO);
@@ -49,9 +49,11 @@ public interface OrganisationFacade  {
      *
      * @param organisationId the UUID of the organisation to check
      * @param userId the UUID of the user to check
-     * @return {@code true} if the user belongs to the organisation, {@code false} otherwise
+     * @return {@code void} if the user belongs to the organisation, {@code false} otherwise
      */
-    boolean userExistInOrganisation(UUID organisationId, UUID userId);
+    void userExistInOrganisation(UUID organisationId, UUID userId);
+
+    void userIsNotMemberOfOrganisation(UUID organisationId, UUID userId);
 
     /**
      * Retrieves all organisations associated with the specified user.

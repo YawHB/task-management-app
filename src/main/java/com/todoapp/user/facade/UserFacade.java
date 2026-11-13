@@ -26,11 +26,24 @@ public interface UserFacade {
 
     List<UserSummaryDTO> findMembersInOrganisation(UUID organisationId);
 
-   boolean existById(UUID id);
+    /**
+     * Checks whether a user exists with the specified ID.
+     *
+     * @param id the UUID of the user to check
+     * @throws UserNotFoundException if no user exists with the specified ID
+     */
+   void existById(UUID id);
 
    boolean userExistInProject(UUID userId, UUID projectId);
 
-   boolean userExistInOrganisation(UUID userId, UUID organisationId);
+    /**
+     * Validates that a user is a member of a specific organisation.
+     *
+     * @param userId the ID of the user
+     * @param organisationId the ID of the organisation
+     * @throws UserNotMemberOfOrganisationException if the user is not a member of the organisation
+     */
+   void userExistInOrganisation(UUID userId, UUID organisationId);
 
     void deleteTask(UUID id);
 

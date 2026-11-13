@@ -9,6 +9,7 @@ import com.todoapp.user.internal.mapper.UserMapper;
 import com.todoapp.user.internal.repository.UserRepository;
 import com.todoapp.user.facade.UserFacade;
 import com.todoapp.user.internal.model.User;
+import com.todoapp.user.internal.validator.UserValidationHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,9 @@ import java.util.UUID;
 public class UserFacadeImpl implements UserFacade {
 
     private final UserRepository userRepository;
+    private final UserValidationHandler validationHandler;
     private final UserMapper userMapper;
+
 
     public UserDTO addUser(UserDTO userDTO) {
         log.info("[UserService - addUser] - calling toEntity ");
@@ -51,14 +54,13 @@ public class UserFacadeImpl implements UserFacade {
     //TODO - extract findById to userValidationHandler h1 (validateUserExistsById(userId) returns the found user or throws
     @Override
     public UserDTO getUserById(UUID userId) {
-        log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to find user by email");
+        log.info("[UserFacadeImpl - getUserById] - calling user repo to find user by email");
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isPresent()) {
-
-            log.info("[UserFacadeImpl - getUserByEmail] - user is found. calling mapper to convert user -> toDTO");
+            log.info("[UserFacadeImpl - getUserById] - user is found. calling mapper to convert user -> toDTO");
             return userMapper.toDto(foundUser.get());
         }
-        log.info("[UserFacadeImpl - getUserByEmail] - user not found. throwing user not found exception");
+        log.info("[UserFacadeImpl - getUserById] - user not found. throwing user not found exception");
         throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
     }
 
@@ -67,27 +69,20 @@ public class UserFacadeImpl implements UserFacade {
         userRepository.deleteById(id);
     }
 
-    //TODO - extract findByEmail to userValidationHandler h1 (validateUserExistsByEmail(email) returns the found user or throws
     @Override
     public UserDTO getUserByEmail(String userEmail) {
-        log.info("[UserFacadeImpl - findUserByEmail] - calling user repo to fetch user by email");
+        log.info("[UserFacadeImpl - getUserByEmail] - calling user repo to fetch user by email");
         Optional<User> foundUser = userRepository.findByEmail(userEmail);
-        if (foundUser.isPresent()) {
-            log.info("[UserFacadeImpl - findUserByEmail] - user found. returns a userDTO");
-            return userMapper.toDto(foundUser.get());
+        if (foundUser.isEmpty()) {
+            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
         }
-        log.info("[UserFacadeImpl - findUserByEmail] - user NOT found . throws USER_NOT_FOUND exception");
-        throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_EMAIL.getValue());
+            log.info("[UserFacadeImpl - getUserByEmail] - user found. returns a userDTO");
+            return userMapper.toDto(foundUser.get());
     }
 
-    //TODO - needs to be void. either throw an error or do nothing. Then there is no need to check if true in the receiving end
     @Override
-    public boolean existById(UUID userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()) {
-            throw new UserNotFoundException(ExceptionReason.USER_NOT_FOUND_BY_ID.getValue());
-        }
-        return true;
+    public void existById(UUID userId) {
+       validationHandler.validateExistsById(userId);
     }
 
     //TODO - can these be extracted to user userValidator? H1 obs - they are used in project validator. consider a mediator method
@@ -97,8 +92,8 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public boolean userExistInOrganisation(UUID userId, UUID organisationId) {
-        return  userRepository.userMemberOfOrganisation(userId, organisationId);
+    public void userExistInOrganisation(UUID userId, UUID organisationId) {
+         validationHandler.validateUserExistsInOrganisation(userId, organisationId);
     }
 }
 
